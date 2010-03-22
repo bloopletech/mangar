@@ -6,12 +6,13 @@ class AddBooks < ActiveRecord::Migration
       t.text :directory #Directory of book
       t.text :filename #File name of first file
 
-      t.text :preview_file_name
-      t.text :preview_content_type
-      t.text :preview_file_size
-      t.text :preview_updated_at
+      t.text :preview
+#      t.text :preview_content_type
+#      t.text :preview_file_size
+#      t.text :preview_updated_at
 
       t.integer :opens, :default => 0
+      t.integer :pages, :default => 0
 
       t.timestamp :published_on
 

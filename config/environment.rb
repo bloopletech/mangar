@@ -6,6 +6,33 @@ RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+DIR = ENV['DIR'] || '/Users/bloopletech/Pictures/Manga'
+MANGAR_DIR = "#{DIR}/.mangar"
+
+new_app = !File.exists?(MANGAR_DIR)
+
+if new_app
+  Dir.mkdir(MANGAR_DIR)
+  Dir.mkdir("#{MANGAR_DIR}/public")
+end
+
+require 'fileutils'
+FileUtils.ln_s(Dir.glob("#{RAILS_ROOT}/public/*"), "#{MANGAR_DIR}/public")
+
+Rails.public_path = "#{MANGAR_DIR}/public"
+
+#Sigh. This patch is only needed because rails-2.3.4/lib/rails/rack/static.rb uses RAILS_ROOT/public instead of Rails.public_path.
+module Rails
+  module Rack
+    class Static
+      def initialize(app)
+        @app = app
+        @file_server = ::Rack::File.new(Rails.public_path)
+      end
+    end
+  end
+end
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -22,7 +49,8 @@ Rails::Initializer.run do |config|
   config.gem 'will_paginate', :version => '2.3.12', :source => 'http://gemcutter.org'
   config.gem 'formtastic', :version => '0.9.7', :source => 'http://gemcutter.org'
   config.gem 'acts-as-taggable-on', :version => '1.1.6', :source => 'http://gemcutter.org'
-  config.gem 'paperclip', :version => '2.3.1', :source => 'http://gemcutter.org'
+  config.gem 'carrierwave', :version => '0.4.5', :source => 'http://gemcutter.org'
+#  config.gem 'paperclip', :version => '2.3.1', :source => 'http://gemcutter.org'
 #  config.gem 'directory_watcher', :version => '1.1.3', :source => 'http://gemcutter.org'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
@@ -45,6 +73,12 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
 end
 
-MONITOR_DIR = '/Volumes/Disk Image/Manga'
+ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => "#{MANGAR_DIR}/db.sqlite3", :pool => 5, :timeout => 5000)
 
-#require 'directory_monitor'
+require 'file_extensions'
+
+TagList.delimiter = ' '
+
+CarrierWave.root = Rails.public_path
+
+`rake db:migrate` if new_app

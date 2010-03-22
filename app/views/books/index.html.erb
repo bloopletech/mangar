@@ -1,7 +1,11 @@
-<ul>
+<p><%= link_to("Import and Update", import_and_update_books_path) %></p>
+<% form_remote_tag :url => { :action => 'index' }, :method => 'get' do %>
+  <%= text_field_tag 'tag' %>
+<% end %>
+<div class="clear"></div>
+<ul id="books">
   <% @books.each do |b| %>
-    <li>
-      <%= h b.title %>
-    </li>
+    <%= render :partial => 'book', :locals => { :book => b } %>
   <% end %>
 </ul>
+<div class="clear"></div>

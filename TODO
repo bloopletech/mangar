@@ -1,0 +1,2 @@
+Change so can track multiple directories in some fashion.
+Use file:// urls for thumbnails, for faster loading (or use different front-end server).

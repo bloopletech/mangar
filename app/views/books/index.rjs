@@ -1,0 +1,5 @@
+page.replace_html("books", "")
+@books.each do |b|
+  page.insert_html(:bottom, "books", :partial => 'book', :locals => { :book => b })
+end
+page << "update_books()"

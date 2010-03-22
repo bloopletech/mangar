@@ -12,14 +12,12 @@
 ActiveRecord::Schema.define(:version => 20100306094116) do
 
   create_table "books", :force => true do |t|
-    t.string   "title",                :limit => 500
+    t.string   "title",        :limit => 500
     t.text     "directory"
     t.text     "filename"
-    t.text     "preview_file_name"
-    t.text     "preview_content_type"
-    t.text     "preview_file_size"
-    t.text     "preview_updated_at"
-    t.integer  "opens",                               :default => 0
+    t.text     "preview"
+    t.integer  "opens",                       :default => 0
+    t.integer  "pages",                       :default => 0
     t.datetime "published_on"
     t.datetime "created_at"
     t.datetime "updated_at"
