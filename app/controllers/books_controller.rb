@@ -1,9 +1,10 @@
 class BooksController < ApplicationController
   def index
-    if params[:tag] && params[:tag].present?
-      @books = Book.tagged_with(params[:tag])
+    @books = if params[:tag] || params[:sort] || params[:sort_direction]
+#      raise StandardError.new("Bad input") unless ['']
+      (!params[:tag].blank? ? Book.tagged_with(params[:tag]) : Book).find(:all, :order => "#{params[:sort]} #{params[:sort_direction]}")
     else
-      @books = Book.all
+      Book.all
     end
   end
 

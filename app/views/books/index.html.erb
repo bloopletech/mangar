@@ -3,12 +3,12 @@
     <%= link_to("Import and Update", import_and_update_books_path) %>
   </div>
 
-  <% form_remote_tag :url => { :action => 'index' }, :method => 'get', :html => { :id => 'search_form' } do %>
+  <% form_tag({}, { :id => 'search_form' }) do %>
     <%= text_field_tag 'tag' %>
-    <%= select_tag 'sort', options_for_select([['Published', 'published_at'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
+    <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']]) %>
   <% end %>
-  <%= observe_form("search_form", :frequency => 0.5) %>
+  <%= observe_form("search_form", :frequency => 1.0, :url => { :action => :index }, :method => 'get') %>
 </div>
 
 <div class="clear"></div>
