@@ -28,6 +28,6 @@ class BooksController < ApplicationController
     Thread.new do
       Book.import_and_update
     end
-    render :action => 'import_and_update_started'
+    render :text => ""
   end
 end

@@ -1,6 +1,6 @@
 var update_books = function()
 {
-  $$("a.open").each(function(link)
+  $$("a.open, #import_and_update > a").each(function(link)
   {
     link.observe("click", function(event)
     {

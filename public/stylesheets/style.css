@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; }
 body {  padding: 20px; }
-body, input, select, textarea, table, tr, td { font: 100%/1.4em Helvetica, Arial, sans-serif; }
+body, input, select, textarea, table, tr, td { font: 100%/1.3em Helvetica, Arial, sans-serif; }
 
 #header { margin-bottom: 20px; }
 #tag { width: 300px; }
