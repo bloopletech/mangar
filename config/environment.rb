@@ -36,8 +36,8 @@ end
 
 #Normal rails init
 Rails::Initializer.run do |config|
-  config.gem 'will_paginate', :version => '2.3.12', :source => 'http://gemcutter.org'
-  config.gem 'formtastic', :version => '0.9.7', :source => 'http://gemcutter.org'
+#  config.gem 'will_paginate', :version => '2.3.12', :source => 'http://gemcutter.org'
+#  config.gem 'formtastic', :version => '0.9.7', :source => 'http://gemcutter.org'
   config.gem 'acts-as-taggable-on', :version => '1.1.6', :source => 'http://gemcutter.org'
   config.gem 'carrierwave', :version => '0.4.5', :source => 'http://gemcutter.org'
 #  config.gem 'paperclip', :version => '2.3.1', :source => 'http://gemcutter.org'
