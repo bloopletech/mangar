@@ -1,6 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :books
-#  map.system_resource '/system/:path', :controller => 'system', :action => 'show', :path => /.*/
+  map.resources :books, :collection => { :import_and_update => :get }
+  
+  map.root :controller => 'books', :action => 'index'
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

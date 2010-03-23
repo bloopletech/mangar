@@ -1,6 +1,9 @@
 * { margin: 0; padding: 0; }
 body {  padding: 20px; }
-body, input, select, textarea, table, tr, td { font: 100%/1.2em Helvetica, Arial, sans-serif; }
+body, input, select, textarea, table, tr, td { font: 100%/1.4em Helvetica, Arial, sans-serif; }
+
+#header { margin-bottom: 20px; }
+#tag { width: 300px; }
 
 #books li { width: 200px; height: 420px; margin: 0 20px 20px 0; float: left; list-style-type: none; }
 #books .title { font-weight: bold; }
@@ -8,3 +11,5 @@ body, input, select, textarea, table, tr, td { font: 100%/1.2em Helvetica, Arial
 #books .tag_list:hover { background-color: #ffffdd; }
 #books input { width: 100%; }
 /*#books .tags form { display: none; }*/
+
+#import_and_update { float: right; }
