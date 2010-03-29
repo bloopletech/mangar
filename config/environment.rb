@@ -53,6 +53,7 @@ require 'file_extensions'
 #Other config
 TagList.delimiter = ' '
 
-CarrierWave.root = Rails.public_path
+#Possible bug in carrier_wave? Should we have to set BookPreviewUploader.root ourselves?
+BookPreviewUploader.root = CarrierWave.root = Rails.public_path
 
 `rake db:migrate` if new_app

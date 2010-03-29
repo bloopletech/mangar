@@ -2,8 +2,7 @@
   <%= link_to(image_tag(book.preview.url), book_url(book), :class => 'open') %>
   <span class="title"><%= link_to(h(book.title), book_url(book), :class => 'open') %></span>
   <div class="more_info">
-    <span class="pages"><%= pluralize(book.pages, 'Page') %></span>
-    <span class="opens"><%= pluralize(book.opens, 'Open') %></span>
+    <%= book.pages %> P, <span class='opens'><%= book.opens %></span> O
   </div>
   <div class="tags">
     <div class="tag_list"><%= h book.tag_list %></div>

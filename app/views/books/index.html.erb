@@ -4,7 +4,7 @@
   </div>
 
   <% form_tag({}, { :id => 'search_form' }) do %>
-    <%= text_field_tag 'tag' %>
+    <%= text_field_tag 'search' %>
     <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']]) %>
   <% end %>

@@ -1,0 +1,1 @@
+page << "$$('##{dom_id @book} span.opens')[0].update('#{@book.opens}');"

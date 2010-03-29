@@ -3,7 +3,7 @@ body {  padding: 20px; }
 body, input, select, textarea, table, tr, td { font: 100%/1.3em Helvetica, Arial, sans-serif; }
 
 #header { margin-bottom: 20px; }
-#tag { width: 300px; }
+#search { width: 300px; }
 
 #books li { width: 200px; height: 420px; margin: 0 20px 20px 0; float: left; list-style-type: none; }
 #books .title { font-weight: bold; }
