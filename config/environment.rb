@@ -57,3 +57,6 @@ TagList.delimiter = ' '
 BookPreviewUploader.root = CarrierWave.root = Rails.public_path
 
 `rake db:migrate` if new_app
+
+#Change so cross platform, and to use correct port number, and to only run if called from script/server
+`open http://localhost:3000/`
