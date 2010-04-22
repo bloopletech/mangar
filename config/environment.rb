@@ -15,10 +15,13 @@ new_app = !File.exists?(MANGAR_DIR)
 if new_app
   Dir.mkdir(MANGAR_DIR)
   Dir.mkdir("#{MANGAR_DIR}/public")
-
-  require 'fileutils'
-  FileUtils.ln_s(Dir.glob("#{RAILS_ROOT}/public/*"), "#{MANGAR_DIR}/public")
 end
+
+require 'fileutils'
+
+#NOTE: Removes files in MANGAR_DIR, if it's wrong could remove user files
+Dir.glob("#{RAILS_ROOT}/public/*").each { |f| FileUtils.rm_f("#{MANGAR_DIR}/#{File.basename(f)}") }
+FileUtils.ln_sf(Dir.glob("#{RAILS_ROOT}/public/*"), "#{MANGAR_DIR}/public")
 
 Rails.public_path = "#{MANGAR_DIR}/public"
 
