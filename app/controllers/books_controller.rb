@@ -28,8 +28,7 @@ class BooksController < ApplicationController
 
   def show
     @book = Book.find(params[:id])
-    @book.increment!(:opens)
-    system("open -a /Applications/Xee.app/Contents/MacOS/Xee #{File.escape_name(@book.real_directory)}")
+    @book.open
   end
 
   def update

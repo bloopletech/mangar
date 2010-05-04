@@ -8,21 +8,32 @@ class Book < ActiveRecord::Base
 
   mount_uploader :preview, BookPreviewUploader
 
-
   default_scope :order => 'published_on DESC'
-
-
 
   def real_directory
     File.expand_path("#{DIR}/#{directory}")
   end
 
+  def open
+    increment!(:opens)
+
+    if RUBY_PLATFORM =~ /darwin/
+      apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
+    elsif RUBY_PLATFORM =~ /linux/
+      apps, background = ["gqview -f", "eog"], true
+    end
+
+    apps.detect { |app| system("#{app} #{File.escape_name(real_directory)} #{background ? '&' : ''}") }
+  end
 
   IMAGE_EXTENSIONS = %w(.png .jpg .jpeg .gif)
 
   def self.import_and_update
     dir_list = IO.popen("cd #{File.escape_name(DIR)} && find . -type d") { |s| s.read }
-    dir_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }.each { |e| import_directory(e) }
+    dir_list = dir_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
+
+    (Book.all.map { |b| b.directory } - dir_list).each { |dir| Book.find_by_directory(dir).destroy }
+    dir_list.each { |e| import_directory(e) }
   end
 
   #dir should be findable from CWD or absolute; no trailing slash
