@@ -2,6 +2,7 @@ class BooksController < ApplicationController
   def index
     @books = if !params[:search].blank? || params[:sort] || params[:sort_direction]
       opts = { :order => "#{params[:sort]} #{params[:sort_direction]}" }
+      conn = ActiveRecord::Base.connection
 
       unless params[:search].blank?
         included_tags, excluded_tags = TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
@@ -16,7 +17,7 @@ class BooksController < ApplicationController
 
         [:joins, :group].each { |k| opts.delete(k) if opts[k] == '' } #note that impl. of tag lib is it always returns conditions
 
-        opts[:conditions] = "(#{opts[:conditions]}) OR (#{included_tags.map { |t| "title LIKE '#{t}%'" }.join(" OR ")})" unless included_tags.empty?
+        opts[:conditions] = "(#{opts[:conditions]}) OR (#{included_tags.map { |t| "title LIKE #{conn.quote "%#{t}%"}" }.join(" OR ")})" unless included_tags.empty?
         opts[:readonly] = false
       end
 
