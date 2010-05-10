@@ -9,6 +9,21 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 #Set up manga dir
 DIR = ENV['DIR']
+
+unless DIR
+  puts <<-EOF
+Please run this application like so:
+
+~$ DIR=<your manga directory> script/server -e production -p 30813
+
+So if you stored your manga in ~/Pictures/Manga/<manga name>/*.jpg, you would run:
+
+~$ DIR=~/Pictures/Manga/ script/server -e production -p 30813
+
+EOF
+  exit
+end
+
 MANGAR_DIR = "#{DIR}/.mangar"
 
 new_app = !File.exists?(MANGAR_DIR)

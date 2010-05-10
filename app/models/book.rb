@@ -20,7 +20,7 @@ class Book < ActiveRecord::Base
     if RUBY_PLATFORM =~ /darwin/
       apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
     elsif RUBY_PLATFORM =~ /linux/
-      apps, background = ["gqview -f", "eog"], true
+      apps, background = ["comix", "geeqie -f", "gqview -f", "eog"], true
     end
 
     apps.detect { |app| system("#{app} #{File.escape_name(real_directory)} #{background ? '&' : ''}") }
