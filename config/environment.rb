@@ -55,12 +55,13 @@ end
 
 #Normal rails init
 Rails::Initializer.run do |config|
-#  config.gem 'will_paginate', :version => '2.3.12', :source => 'http://gemcutter.org'
-#  config.gem 'formtastic', :version => '0.9.7', :source => 'http://gemcutter.org'
-  config.gem 'acts-as-taggable-on', :version => '1.1.6', :source => 'http://gemcutter.org'
-  config.gem 'carrierwave', :version => '0.4.5', :source => 'http://gemcutter.org'
-#  config.gem 'paperclip', :version => '2.3.1', :source => 'http://gemcutter.org'
-#  config.gem 'directory_watcher', :version => '1.1.3', :source => 'http://gemcutter.org'
+#  config.gem 'will_paginate', :version => '2.3.12'
+#  config.gem 'formtastic', :version => '0.9.7'
+  config.gem 'acts-as-taggable-on', :version => '1.1.6'
+  config.gem 'carrierwave', :version => '0.4.5'
+  config.gem 'rubyzip', :version => '0.9.4', :lib => false
+#  config.gem 'paperclip', :version => '2.3.1'
+#  config.gem 'directory_watcher', :version => '1.1.3'
 
   config.time_zone = 'UTC'
 end
@@ -77,4 +78,4 @@ BookPreviewUploader.root = CarrierWave.root = Rails.public_path
 
 `rake db:migrate` if new_app
 
-%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") }
+%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/

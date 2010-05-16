@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100306094116) do
+ActiveRecord::Schema.define(:version => 20100514111448) do
 
   create_table "books", :force => true do |t|
     t.string   "title",        :limit => 500
-    t.text     "directory"
+    t.text     "path"
     t.text     "filename"
     t.text     "preview"
     t.integer  "opens",                       :default => 0
