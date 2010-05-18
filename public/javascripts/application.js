@@ -1,14 +1,5 @@
 var update_books = function()
 {
-  $$("a.open, #import_and_update > a").each(function(link)
-  {
-    link.observe("click", function(event)
-    {
-      event.preventDefault();
-      new Ajax.Request(link.getAttribute("href"), { method: "get" });
-    })
-  });
-
   $$("#books .tag_list").each(function(div)
   {
     div.observe("click", function(event)
@@ -19,6 +10,7 @@ var update_books = function()
 
     div.next().hide();
   });
+//  $$("#books li").observe("hover)
 };
 
 document.observe("dom:loaded", update_books);

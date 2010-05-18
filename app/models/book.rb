@@ -26,6 +26,10 @@ class Book < ActiveRecord::Base
     apps.detect { |app| system("#{app} #{File.escape_name(real_path)} #{background ? '&' : ''}") }
   end
 
+  def delete_original
+    `rm -rf #{File.escape_name(real_path)}`
+  end
+
   #Iterate recursively over all files/dirs
   #If current item is a zip/rar/cbr/cbz file, pull out first image and store zipe filename as manga name and zip filename as filename to load.
   #Else if current item is a dir, and it contains images but no directories, store the dir name as the manga name as well as the load filename.

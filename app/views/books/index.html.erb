@@ -1,11 +1,11 @@
 <div id="header">
   <div id="import_and_update">
-    <%= link_to("Import and Update", import_and_update_books_path) %>
+    <%= link_to_remote("Import and Update", :url => import_and_update_books_path, :method => 'get') %>
   </div>
 
   <% form_tag({}, { :id => 'search_form' }) do %>
     <%= text_field_tag 'search' %>
-    <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
+    <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Added', 'created_at'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']]) %>
   <% end %>
   <%= observe_form("search_form", :frequency => 1.0, :url => { :action => :index }, :method => 'get') %>

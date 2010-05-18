@@ -41,6 +41,16 @@ class BooksController < ApplicationController
     end
   end
 
+  def destroy
+    @book = Book.find(params[:id])
+
+    #if params[:delete]
+      @book.delete_original
+    #end
+
+    @book.destroy
+  end
+
   def import_and_update
     Thread.new do
       #Fix so we don't have to do this.

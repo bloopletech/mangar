@@ -1,8 +1,9 @@
 <li id="<%= dom_id book %>">
-  <%= link_to(image_tag(book.preview.url), book_url(book), :class => 'open') %>
-  <span class="title"><%= link_to(h(book.title), book_url(book), :class => 'open') %></span>
+  <span class="pages <% if book.pages >= 50 %>long<% end %>"><%= book.pages %></span>
+  <%= link_to_remote(image_tag(book.preview.url) + "<span class='title'>#{h book.title}</span>", :url => book_url(book), :method => 'get') %>
   <div class="more_info">
-    <%= book.pages %> P, <span class='opens'><%= book.opens %></span> O
+    <span class='opens'><%= book.opens %></span> O <%= link_to_remote("X", :url => book_url(book), :method => 'delete', :confirm => "Are you sure you want to delete #{book.title}?") %>
+    <!-- on hover show delete icon, create / published date. -->
   </div>
   <div class="tags">
     <div class="tag_list"><%= h book.tag_list %></div>
