@@ -66,6 +66,10 @@ Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
 end
 
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(:default => '%e %B %Y')
+
+#More special config
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => "#{MANGAR_DIR}/db.sqlite3", :pool => 5, :timeout => 5000)
 
 require 'file_extensions'

@@ -7,11 +7,12 @@ img { border: none; }
 #search { width: 300px; }
 
 #books li { width: 200px; height: 420px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
-#books li > .pages { display: block; position: absolute; top: 0; right: 0; padding: 2px; line-height: 1em;
+#books li > .emblems { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 1em;
  background-color: #ffffff; }
-#books li > .long { font-weight: bold; font-size: 16px; }
 #books .title { font-weight: bold; }
 #books li > a { color: #000000; text-decoration: none; }
+
+#books li .more_info img { vertical-align: middle; }
 #books .tag_list { min-height: 1.2em; }
 #books .tag_list:hover { background-color: #ffffdd; }
 #books input { width: 100%; }
