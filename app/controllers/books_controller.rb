@@ -1,27 +1,17 @@
 class BooksController < ApplicationController
   def index
     @books = if !params[:search].blank? || params[:sort] || params[:sort_direction]
-      opts = { :order => "#{params[:sort]} #{params[:sort_direction]}" }
-      conn = ActiveRecord::Base.connection
-
       unless params[:search].blank?
-        included_tags, excluded_tags = TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
+        included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
-        opts.merge!(:conditions => [], :joins => [], :group => [], :readonly => [])
-        
-        ([Book.find_options_for_find_tagged_with(excluded_tags, :exclude => true)] + included_tags.map { |t| Book.find_options_for_find_tagged_with(t) }).each { |c| c.each_pair { |k, v| opts[k] << v } }
-
-        opts[:conditions] = opts[:conditions].reject { |c| c.blank? }.map { |c| "(#{c})" }.join(" AND ")
-        opts[:joins] = opts[:joins].reject { |j| j.blank? }.join(" ")
-        opts[:group] = opts[:group].reject { |g| g.blank? }.join(", ")
-
-        [:joins, :group].each { |k| opts.delete(k) if opts[k] == '' } #note that impl. of tag lib is it always returns conditions
-
-        opts[:conditions] = "(#{opts[:conditions]}) OR (#{included_tags.map { |t| "title LIKE #{conn.quote "%#{t}%"}" }.join(" OR ")})" unless included_tags.empty?
-        opts[:readonly] = false
+        results = Book
+        results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
+        results = results.tagged_with(included_tags) unless included_tags.empty?
+        results |= Book.where(included_tags.map { |t| "title LIKE #{ActiveRecord::Base.connection.quote "%#{t}%"}" }.join(" OR ")) unless included_tags.empty?
+        results.order("#{params[:sort]} #{params[:sort_direction]}")
       end
 
-      Book.all(opts)
+      results
     else
       Book.all
     end
