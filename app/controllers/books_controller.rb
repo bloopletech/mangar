@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   def index
-    @books = if !params[:search].blank? || params[:sort] || params[:sort_direction]
+    @books = if !params[:search].blank?
       unless params[:search].blank?
         included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
@@ -8,13 +8,13 @@ class BooksController < ApplicationController
         results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
         results = results.tagged_with(included_tags) unless included_tags.empty?
         #results |= Book.where(included_tags.map { |t| "title LIKE #{ActiveRecord::Base.connection.quote "%#{t}%"}" }.join(" OR ")) unless included_tags.empty?
-        results.order("#{params[:sort]} #{params[:sort_direction]}")
+        results
       end
 
       results
     else
-      Book.all
-    end
+      Book.scoped
+    end.order("#{params[:sort]} #{params[:sort_direction]}")
   end
 
   def show
