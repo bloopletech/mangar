@@ -12,7 +12,7 @@
     new Form.Observer('search_form', 1.0, function(element, value)
     {
       new Ajax.Request('/books', { asynchronous: true, evalScripts: true, method:'get',
-       parameters: value + '&authenticity_token=' + encodeURIComponent('') });
+       parameters: value });
     });
   </script>
 </div>
