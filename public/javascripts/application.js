@@ -10,15 +10,6 @@ var update_books = function()
 
     div.next().hide();
   });
-  /*
-  $$("#books .delete").each(function(a)
-  {
-    a.observe("click", function(event)
-    {
-      if(
-      event.stop();
-    });
-  });*/
 };
 
 document.observe("dom:loaded", update_books);

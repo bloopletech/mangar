@@ -1,6 +1,6 @@
 <div id="header">
   <div id="import_and_update">
-    <%= link_to("Import and Update", :url => import_and_update_books_path, :method => 'get', :remote => true) %>
+    <%= link_to("Import and Update", import_and_update_books_path, :method => 'get', :remote => true) %>
   </div>
 
   <%= form_tag({}, { :id => 'search_form' }) do %>

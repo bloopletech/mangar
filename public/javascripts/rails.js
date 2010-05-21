@@ -59,7 +59,8 @@ document.observe("dom:loaded", function() {
   }
 
   $(document.body).observe("click", function(event) {
-    var message = event.findElement("a[data-confirm], form[data-confirm]").readAttribute('data-confirm');
+    var message = event.findElement("*[data-confirm]");
+    if(message) message = message.readAttribute('data-confirm');
     if (message && !confirm(message)) {
       event.stop();
       return false;

@@ -47,6 +47,5 @@ class BooksController < ApplicationController
       BookPreviewUploader.root = CarrierWave.root = Rails.public_path
       Book.import_and_update
     end
-    render :text => ""
   end
 end
