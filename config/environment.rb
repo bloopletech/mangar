@@ -8,3 +8,5 @@ ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => "#{M
 
 #Possible bug in carrier_wave? Should we have to set BookPreviewUploader.root ourselves?
 BookPreviewUploader.root = CarrierWave.root = Rails.public_path
+
+#%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/

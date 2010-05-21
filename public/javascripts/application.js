@@ -10,19 +10,15 @@ var update_books = function()
 
     div.next().hide();
   });
-
-  $$("#books li").each(function(book)
+  /*
+  $$("#books .delete").each(function(a)
   {
-    book.select(".more_info").invoke('hide');
-    book.observe("mouseenter", function(event)
+    a.observe("click", function(event)
     {
-      this.select(".more_info").invoke('show');
+      if(
+      event.stop();
     });
-    book.observe("mouseleave", function(event)
-    {
-      this.select(".more_info").invoke('hide');
-    });
-  });
+  });*/
 };
 
 document.observe("dom:loaded", update_books);

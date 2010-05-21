@@ -91,6 +91,3 @@ Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 require Rails.root.join('lib/file_extensions')
 
 `rake db:migrate` if new_app
-
-#%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/
-

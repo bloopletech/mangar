@@ -16,6 +16,7 @@ class Book < ActiveRecord::Base
 
   def open
     increment!(:opens)
+    last_opened_at = DateTime.now
 
     if RUBY_PLATFORM =~ /darwin/
       apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
