@@ -20,6 +20,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
 gem 'mongrel', '1.2.0.pre2'
+gem 'will_paginate', '3.0.pre'
 gem 'rmagick', :require => 'RMagick'
 gem 'acts-as-taggable-on', '2.0.6'
 gem 'carrierwave', :git => 'http://github.com/jnicklas/carrierwave.git' #need to fix to a specific commit or lock gems or something

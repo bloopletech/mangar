@@ -3,18 +3,11 @@
     <%= link_to("Import and Update", import_and_update_books_path, :method => 'get', :remote => true) %>
   </div>
 
-  <%= form_tag({}, { :id => 'search_form' }) do %>
-    <%= text_field_tag 'search' %>
+  <%= form_tag(books_url, { :method => :get, :id => 'search_form' }) do %>
+    <%= text_field_tag 'search', params[:search] %>
     <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Added', 'created_at'], ['Pages', 'pages'], ['Opens', 'opens']]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']]) %>
   <% end %>
-  <script type="text/javascript">
-    new Form.Observer('search_form', 1.0, function(element, value)
-    {
-      new Ajax.Request('/books', { asynchronous: true, evalScripts: true, method:'get',
-       parameters: value });
-    });
-  </script>
 </div>
 
 <div class="clear"></div>

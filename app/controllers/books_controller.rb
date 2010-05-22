@@ -2,6 +2,8 @@ class BooksController < ApplicationController
   def index
     @books = if !params[:search].blank?
       unless params[:search].blank?
+        params[:page] = '1'
+
         included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
         results = Book
@@ -14,7 +16,7 @@ class BooksController < ApplicationController
       results
     else
       Book.scoped
-    end.order("#{params[:sort]} #{params[:sort_direction]}")
+    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 50)
   end
 
   def show
