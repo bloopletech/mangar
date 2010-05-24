@@ -1,7 +1,6 @@
-page.replace_html("books", "") if params[:page] == '1'
 page.insert_html(:bottom, "books", :partial => 'book', :collection => @books)
 page << "update_books()"
-puts "@books.total_pages: #{@books.total_pages}, params[:page]: #{params[:page]}"
-if @books.total_pages == params[:page].to_i
+if is_last_page?(@books)
   page << "last_page = true;"
+  #page.insert_html(:bottom, "books", :partial => 'end_of_results')
 end

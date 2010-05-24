@@ -15,5 +15,8 @@
   <% @books.each do |b| %>
     <%= render :partial => 'book', :locals => { :book => b } %>
   <% end %>
+  <% if is_last_page?(@books) %>
+    <%= render :partial => 'end_of_results' %>
+  <% end %>
 </ul>
 <div class="clear"></div>

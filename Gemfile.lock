@@ -1,0 +1,120 @@
+--- 
+hash: 7ec69ba0031d1a4206273c04fbaffe69f55013ae
+sources: 
+- Git: 
+    git: http://github.com/jnicklas/carrierwave.git
+    uri: http://github.com/jnicklas/carrierwave.git
+    ref: 9349c1d8e520f165420d8eeed1fa5df5c036f724
+- Rubygems: 
+    uri: http://rubygems.org
+specs: 
+- rake: 
+    version: 0.8.7
+- abstract: 
+    version: 1.0.0
+- builder: 
+    version: 2.1.2
+- i18n: 
+    version: 0.3.7
+- memcache-client: 
+    version: 1.8.3
+- tzinfo: 
+    version: 0.3.20
+- activesupport: 
+    version: 3.0.0.beta3
+- activemodel: 
+    version: 3.0.0.beta3
+- erubis: 
+    version: 2.6.5
+- rack: 
+    version: 1.1.0
+- rack-mount: 
+    version: 0.6.3
+- rack-test: 
+    version: 0.5.3
+- actionpack: 
+    version: 3.0.0.beta3
+- mime-types: 
+    version: "1.16"
+- polyglot: 
+    version: 0.3.1
+- treetop: 
+    version: 1.4.5
+- mail: 
+    version: 2.2.1
+- text-hyphen: 
+    version: 1.0.0
+- text-format: 
+    version: 1.0.0
+- actionmailer: 
+    version: 3.0.0.beta3
+- arel: 
+    version: 0.3.3
+- activerecord: 
+    version: 3.0.0.beta3
+- activeresource: 
+    version: 3.0.0.beta3
+- acts-as-taggable-on: 
+    version: 2.0.6
+- bundler: 
+    version: 0.9.25
+- carrierwave: 
+    version: 0.4.4
+    source: 0
+- daemons: 
+    version: 1.0.10
+- gem_plugin: 
+    version: 0.2.3
+- mongrel: 
+    version: 1.2.0.pre2
+- thor: 
+    version: 0.13.6
+- railties: 
+    version: 3.0.0.beta3
+- rails: 
+    version: 3.0.0.beta3
+- rmagick: 
+    version: 2.13.1
+- rubyzip: 
+    version: 0.9.4
+- sqlite3-ruby: 
+    version: 1.2.5
+- will_paginate: 
+    version: 3.0.pre
+dependencies: 
+  rails: 
+    version: = 3.0.0.beta3
+    group: 
+    - :default
+  sqlite3-ruby: 
+    version: ">= 0"
+    group: 
+    - :default
+    require: 
+    - sqlite3
+  mongrel: 
+    version: = 1.2.0.pre2
+    group: 
+    - :default
+  will_paginate: 
+    version: = 3.0.pre
+    group: 
+    - :default
+  rmagick: 
+    version: ">= 0"
+    group: 
+    - :default
+    require: 
+    - RMagick
+  acts-as-taggable-on: 
+    version: = 2.0.6
+    group: 
+    - :default
+  carrierwave: 
+    version: ">= 0"
+    group: 
+    - :default
+  rubyzip: 
+    version: = 0.9.4
+    group: 
+    - :default
