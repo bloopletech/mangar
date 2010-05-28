@@ -1,20 +1,25 @@
 class BooksController < ApplicationController
   def index
+    params[:sort] ||= 'published_on'
+    params[:sort_direction] ||= 'DESC' #TODO: these should be a default scope on book, but alas, arel is made of fail
     @books = if !params[:search].blank?
-      unless params[:search].blank?
-        included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
+      included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
-        results = Book
-        results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
-        results = results.tagged_with(included_tags) unless included_tags.empty?
-        #results |= Book.where(included_tags.map { |t| "title LIKE #{ActiveRecord::Base.connection.quote "%#{t}%"}" }.join(" OR ")) unless included_tags.empty?
-        results
+      results = Book
+      results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
+      results = results.tagged_with(included_tags) unless included_tags.empty?
+      
+      #This next part makes me want to becomean hero
+      unless included_tags.empty?
+        tagging_sql = results.order(' ').to_sql
+        search_sql = Book.where(included_tags.map { |t| "books.title LIKE #{Book.connection.quote "%#{t}%"}" }.join(" OR ")).order(' ').to_sql
+        results = Book.find_by_sql("#{tagging_sql} UNION #{search_sql} ORDER BY #{params[:sort]} #{params[:sort_direction]}")
       end
 
       results
     else
-      Book.scoped
-    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 50)
+      Book.order("#{params[:sort]} #{params[:sort_direction]}")
+    end.paginate(:page => params[:page], :per_page => 50)
   end
 
   def show
