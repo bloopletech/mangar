@@ -13,14 +13,6 @@ var update_books = function()
 };
 
 document.observe("dom:loaded", update_books);
-/*
-document.observe("dom:loaded", function()
-{
-  $("search_form").observe("submit", function(event)
-  {
-    event.preventDefault();
-  });
-});*/
 
 document.observe('dom:loaded', function()
 {

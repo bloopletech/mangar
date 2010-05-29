@@ -8,12 +8,24 @@ function checkScroll()
   {
     current_page++;
 
-    var url = location.pathname + "?" + $H(location.search.toQueryParams()).merge({ 'page' : current_page }).toQueryString();
+    var qs = $H(location.search.toQueryParams());
+    qs.each(function(pair)
+    {
+      qs.set(pair.key, pair.value.replace("+", " "));
+    });
+
+    var url = location.pathname + "?" + qs.merge({ 'page' : current_page }).toQueryString();
 
     scroll_lock = true;
     new Ajax.Request(url, { asynchronous: true, evalScripts: true, method: 'get', onSuccess: function(req)
     {
-      if(!last_page) scroll_lock = false;
+      if(!last_page)
+      {
+        setTimeout(function()
+        {
+          scroll_lock = false;
+        }, 500);
+      }
     } });
   }
 }

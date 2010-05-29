@@ -1,5 +1,5 @@
 --- 
-hash: 7ec69ba0031d1a4206273c04fbaffe69f55013ae
+hash: 6f1a330b085dd5d340671f758fd878f8fd57deee
 sources: 
 - Git: 
     git: http://github.com/jnicklas/carrierwave.git
@@ -19,7 +19,7 @@ specs:
 - memcache-client: 
     version: 1.8.3
 - tzinfo: 
-    version: 0.3.20
+    version: 0.3.22
 - activesupport: 
     version: 3.0.0.beta3
 - activemodel: 
@@ -31,7 +31,7 @@ specs:
 - rack-mount: 
     version: 0.6.3
 - rack-test: 
-    version: 0.5.3
+    version: 0.5.4
 - actionpack: 
     version: 3.0.0.beta3
 - mime-types: 
@@ -39,7 +39,7 @@ specs:
 - polyglot: 
     version: 0.3.1
 - treetop: 
-    version: 1.4.5
+    version: 1.4.7
 - mail: 
     version: 2.2.1
 - text-hyphen: 
@@ -55,7 +55,7 @@ specs:
 - activeresource: 
     version: 3.0.0.beta3
 - acts-as-taggable-on: 
-    version: 2.0.6
+    version: 2.1.0
 - bundler: 
     version: 0.9.25
 - carrierwave: 
@@ -107,7 +107,7 @@ dependencies:
     require: 
     - RMagick
   acts-as-taggable-on: 
-    version: = 2.0.6
+    version: = 2.1.0
     group: 
     - :default
   carrierwave: 

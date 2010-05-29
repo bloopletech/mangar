@@ -8,6 +8,8 @@ class Book < ActiveRecord::Base
 
   mount_uploader :preview, BookPreviewUploader
 
+  default_scope :order => 'published_on DESC'
+
   def real_path
     File.expand_path("#{DIR}/#{path}")
   end

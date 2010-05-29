@@ -1,25 +1,25 @@
 class BooksController < ApplicationController
   def index
-    params[:sort] ||= 'published_on'
-    params[:sort_direction] ||= 'DESC' #TODO: these should be a default scope on book, but alas, arel is made of fail
     @books = if !params[:search].blank?
+    puts "params[:search]: #{params[:search]}"
       included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
-
+puts "included tags: #{included_tags.inspect}, excluded tags: #{excluded_tags.inspect}"
       results = Book
       results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
       results = results.tagged_with(included_tags) unless included_tags.empty?
-      
+
+      c = Book.connection
       #This next part makes me want to becomean hero
-      unless included_tags.empty?
-        tagging_sql = results.order(' ').to_sql
-        search_sql = Book.where(included_tags.map { |t| "books.title LIKE #{Book.connection.quote "%#{t}%"}" }.join(" OR ")).order(' ').to_sql
-        results = Book.find_by_sql("#{tagging_sql} UNION #{search_sql} ORDER BY #{params[:sort]} #{params[:sort_direction]}")
-      end
+      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "books.title LIKE #{c.quote "%#{t}%"}" }.join(" OR ")
+      search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT books.title LIKE #{Book.connection.quote "%#{t}%"}" }.join(" AND ")
+      
+      results.where_values = ["(#{(results.where_values + [search_ex]).compact.map { |w| "(#{w})" }.join(" AND ")})" +
+       (search_inc.nil? ? "" : " OR (#{search_inc})")]
 
       results
     else
-      Book.order("#{params[:sort]} #{params[:sort_direction]}")
-    end.paginate(:page => params[:page], :per_page => 50)
+      Book
+    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 50)
   end
 
   def show
