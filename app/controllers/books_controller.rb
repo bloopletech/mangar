@@ -1,9 +1,8 @@
 class BooksController < ApplicationController
   def index
     @books = if !params[:search].blank?
-    puts "params[:search]: #{params[:search]}"
       included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
-puts "included tags: #{included_tags.inspect}, excluded tags: #{excluded_tags.inspect}"
+
       results = Book
       results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
       results = results.tagged_with(included_tags) unless included_tags.empty?

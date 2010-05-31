@@ -4,8 +4,10 @@ var current_page = 1;
 
 function checkScroll()
 {
-  if(!scroll_lock && nearBottomOfPage())
+  if(!last_page && !scroll_lock && nearBottomOfPage())
   {
+    scroll_lock = true;
+
     current_page++;
 
     var qs = $H(location.search.toQueryParams());
@@ -16,16 +18,12 @@ function checkScroll()
 
     var url = location.pathname + "?" + qs.merge({ 'page' : current_page }).toQueryString();
 
-    scroll_lock = true;
     new Ajax.Request(url, { asynchronous: true, evalScripts: true, method: 'get', onSuccess: function(req)
     {
-      if(!last_page)
+      setTimeout(function()
       {
-        setTimeout(function()
-        {
-          scroll_lock = false;
-        }, 500);
-      }
+        scroll_lock = false;
+      }, 500);
     } });
   }
 }

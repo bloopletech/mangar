@@ -2,5 +2,5 @@ page.insert_html(:bottom, "books", :partial => 'book', :collection => @books)
 page << "update_books()"
 if is_last_page?(@books)
   page << "last_page = true;"
-  #page.insert_html(:bottom, "books", :partial => 'end_of_results')
+  page.insert_html(:bottom, "books", :partial => 'end_of_results')
 end
