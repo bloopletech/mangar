@@ -6,6 +6,12 @@ img { border: none; }
 #header { margin-bottom: 15px; }
 #search { width: 300px; }
 
+#tag_cloud { position: absolute; top: 0; right: 0; z-index: 1000; width: 500px; background-color: #ffffff; padding: 15px; }
+#tag_cloud .size_1 { font_size: 1.0em; }
+#tag_cloud .size_2 { font_size: 1.2em; }
+#tag_cloud .size_3 { font_size: 1.4em; }
+#tag_cloud .size_4 { font-size: 1.6em; }
+
 #books li { width: 200px; height: 420px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
 #books li .emblems, #books li .delete { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
 #books li .delete { display: none; left: 0; width: 16px; }
@@ -14,7 +20,7 @@ img { border: none; }
 #books li .more_info { display: none; }
 #books li .more_info img { vertical-align: middle; }
 #books .tag_list { min-height: 1.2em; }
-#books .tag_list:hover { background-color: #ffffdd; }
+#books .tag_list:hover { background-color: #ffffaa; }
 #books input { width: 100%; }
 /*#books .tags form { display: none; }*/
 

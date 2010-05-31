@@ -20,6 +20,8 @@ puts "included tags: #{included_tags.inspect}, excluded tags: #{excluded_tags.in
     else
       Book
     end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 50)
+    
+    @tags = Book.tag_counts_on(:tags)
   end
 
   def show

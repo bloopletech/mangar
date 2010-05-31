@@ -1,5 +1,12 @@
+<div id="tag_cloud" style="display: none;">
+  <% tag_cloud(@tags, %w(size_1 size_2 size_3 size_4)) do |tag, css_class| %>
+    <%= link_to tag.name, books_path(params.except(:controller, :action).merge(:search => tag.name)), :class => css_class %>
+  <% end %>
+</div>
+
 <div id="header">
   <div id="import_and_update">
+    <%= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
     <%= link_to("Import and Update", import_and_update_books_path, :method => 'get', :remote => true) %>
   </div>
 
@@ -7,6 +14,7 @@
     <%= text_field_tag 'search', params[:search] %>
     <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Added', 'created_at'], ['Pages', 'pages'], ['Opens', 'opens']], params[:sort]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']], params[:sort_direction]) %>
+    <%= link_to("Clear search", books_path) %>
   <% end %>
 </div>
 

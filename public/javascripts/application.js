@@ -22,4 +22,19 @@ document.observe('dom:loaded', function()
   };
   new Form.Element.Observer('sort', 1.0, submit_func);
   new Form.Element.Observer('sort_direction', 1.0, submit_func);
+
+  $("tag_cloud_link").observe("click", function(event)
+  {
+    event.preventDefault();
+  });
+  
+  $("tag_cloud_link").observe("mouseenter", function(event)
+  {
+    $("tag_cloud").show();
+  });
+
+  $("tag_cloud").observe("mouseleave", function(event)
+  {
+    $("tag_cloud").hide();
+  });
 });
