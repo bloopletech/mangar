@@ -47,6 +47,14 @@ module Mangar
     paths.public              "#{MANGAR_DIR}/public"
     paths.public.javascripts  "#{MANGAR_DIR}/public/javascripts"
     paths.public.stylesheets  "#{MANGAR_DIR}/public/stylesheets"
+    
+    DB_CONNECTION = { :adapter => 'sqlite3', :database => "#{MANGAR_DIR}/db.sqlite3", :pool => 5, :timeout => 5000 }
+
+    config.instance_eval do
+      def database_configuration
+        { 'development' => DB_CONNECTION, 'production' => DB_CONNECTION }
+      end
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -84,6 +92,9 @@ module Mangar
     config.filter_parameters += [:password]
   end
 end
+
+#This shouldn't be required - Rails should be using this application's #database_configuration method automatically/
+ActiveRecord::Base.configurations = Mangar::Application.config.database_configuration
 
 Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
 Date::DATE_FORMATS.merge!(:default => '%e %B %Y')

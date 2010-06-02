@@ -9,18 +9,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100514111448) do
+ActiveRecord::Schema.define(:version => 20100602144820) do
 
   create_table "books", :force => true do |t|
-    t.string   "title",        :limit => 500
+    t.string   "title",          :limit => 500
     t.text     "path"
     t.text     "filename"
     t.text     "preview"
-    t.integer  "opens",                       :default => 0
-    t.integer  "pages",                       :default => 0
+    t.integer  "opens",                         :default => 0
+    t.integer  "pages",                         :default => 0
     t.datetime "published_on"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "win",                           :default => false
+    t.boolean  "fail",                          :default => false
+    t.datetime "last_opened_at"
   end
 
   create_table "taggings", :force => true do |t|

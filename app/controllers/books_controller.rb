@@ -4,6 +4,13 @@ class BooksController < ApplicationController
       included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
       results = Book
+      
+      results = results.where("opens > 0") if included_tags.delete 's:read'
+      results = results.where("opens = 0") if included_tags.delete 's:unread'
+      #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
+      
+
+
       results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
       results = results.tagged_with(included_tags) unless included_tags.empty?
 
