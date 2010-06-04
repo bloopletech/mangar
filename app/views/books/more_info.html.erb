@@ -1,0 +1,17 @@
+<div id="book">
+  <%= image_tag(@book.preview.url, :class => 'title_image') %>
+  <div id="info">
+    <span class="title"><%= h @book.title %></span><br>
+    Pages <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= @book.pages %><br>
+    Opens <%= image_tag("icons/application_go.png", :title => "Opens") %>: <%= @book.opens %><br>
+    Published: <%= @book.published_on %><br>
+    Added: <%= @book.created_at %><br>
+    Last Opened: <%= @book.last_opened_at || "Unknown" %>
+    <div class="actions">
+      <ul>
+        <li><%= link_to("Open book", book_path(@book), :remote => true) %></li>
+        <li><%= link_to("Search google for the title", "http://google.com/search?q=#{CGI::escape @book.title}", :target => "_blank") %></li>
+      </ul>
+    </div>
+  </div>
+</div>

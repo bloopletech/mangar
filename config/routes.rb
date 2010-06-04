@@ -1,5 +1,8 @@
 Mangar::Application.routes.draw do |map|
   resources :books do
+    member do
+      get :more_info
+    end
     collection do
       get :import_and_update
     end

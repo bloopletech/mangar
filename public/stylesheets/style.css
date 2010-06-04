@@ -2,9 +2,13 @@
 body { padding: 15px; color: #000000; }
 body, input, select, textarea, table, tr, td { font: 16px/1.3em Helvetica, Arial, sans-serif; }
 img { border: none; }
+li { margin-left: 30px; }
+
+.clear { clear: both; }
 
 #header { margin-bottom: 15px; }
 #search { width: 300px; }
+#import_and_update { float: right; }
 
 #tag_cloud { position: absolute; top: 0; right: 0; z-index: 1000; width: 500px; background-color: #ffffff; padding: 15px; }
 #tag_cloud .size_1 { font_size: 1.0em; }
@@ -12,13 +16,13 @@ img { border: none; }
 #tag_cloud .size_3 { font_size: 1.4em; }
 #tag_cloud .size_4 { font-size: 1.6em; }
 
+.title { font-weight: bold; }
 #books li { width: 200px; height: 420px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
 #books li .emblems, #books li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
 #books li .actions { display: none; right: auto; left: 0; width: 32px; }
-#books .title { font-weight: bold; }
 #books li .wrapper > a { color: #000000; text-decoration: none; }
-#books li .more_info { display: none; }
-#books li .more_info img { vertical-align: middle; }
+#books li .info { display: none; }
+#books li .info img { vertical-align: middle; }
 #books .tag_list { min-height: 1.2em; }
 #books .tag_list:hover { background-color: #ffffaa; }
 #books input { width: 100%; }
@@ -26,6 +30,8 @@ img { border: none; }
 
 #books li:hover { overflow: visible; z-index: 999; }
 #books li:hover .wrapper { position: absolute; top: 0; left: 0; background-color: #ffffff; }
-#books li:hover .actions, #books li:hover .more_info { display: block; }
+#books li:hover .actions, #books li:hover .info { display: block; }
 
-#import_and_update { float: right; }
+#book .title_image { float: left; margin-right: 15px; }
+#book #info { float: left; width: 315px; }
+#book .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }

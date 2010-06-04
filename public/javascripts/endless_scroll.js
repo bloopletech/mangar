@@ -37,7 +37,7 @@ function scrollDistanceFromBottom() {
 }
 
 function pageHeight() {
-  return Math.max(document.body.scrollHeight, document.body.offsetHeight);
+  return $$("body")[0].getHeight();
 }
 
 document.observe('dom:loaded', function()

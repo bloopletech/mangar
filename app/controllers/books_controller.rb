@@ -35,6 +35,11 @@ class BooksController < ApplicationController
     @book.open
   end
 
+  def more_info
+    @book = Book.find(params[:id])
+    render :layout => 'secondary'
+  end
+
   def update
     @book = Book.find(params[:id])
     if @book.update_attributes(params[:book])
