@@ -6,7 +6,9 @@
     Opens <%= image_tag("icons/application_go.png", :title => "Opens") %>: <%= @book.opens %><br>
     Published: <%= @book.published_on %><br>
     Added: <%= @book.created_at %><br>
-    Last Opened: <%= @book.last_opened_at || "Unknown" %>
+    Last Opened: <%= @book.last_opened_at || "Unknown" %><br>
+    Tags: <%= raw @book.tag_counts.map { |tag| link_to tag.name, books_path(params.except(:controller, :action).merge(:search => tag.name)), :title => pluralize(tag.taggings.count, "Occurence"), :target => "_top" }.join(' ') %>
+    <%# tag.taggings is a hack, if we ever tag a different mofdel, will need to restrict to books. %>
     <div class="actions">
       <ul>
         <li><%= link_to("Open book", book_path(@book), :remote => true) %></li>

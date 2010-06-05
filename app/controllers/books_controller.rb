@@ -15,7 +15,7 @@ class BooksController < ApplicationController
       results = results.tagged_with(included_tags) unless included_tags.empty?
 
       c = Book.connection
-      #This next part makes me want to becomean hero
+      #This next part makes me want to become an hero
       search_inc = included_tags.empty? ? nil : included_tags.map { |t| "books.title LIKE #{c.quote "%#{t}%"}" }.join(" OR ")
       search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT books.title LIKE #{Book.connection.quote "%#{t}%"}" }.join(" AND ")
       
