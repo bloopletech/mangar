@@ -31,21 +31,23 @@ class Book < ActiveRecord::Base
     `rm -rf #{File.escape_name(real_path)}`
   end
 
-  #Iterate recursively over all files/dirs
-  #If current item is a zip/rar/cbr/cbz file, pull out first image and store zipe filename as manga name and zip filename as filename to load.
-  #Else if current item is a dir, and it contains images but no directories, store the dir name as the manga name as well as the load filename.
-  #Else skip/recurse into dir.
 
   IMAGE_EXTENSIONS = %w(.png .jpg .jpeg .gif)
   COMPRESSED_FILE_EXTENSIONS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTENSIONS = %w(.zip .cbz)
   RAR_EXTENSIONS = %w(.rar .cbr)
 
+  #Iterate recursively over all files/dirs
+  #If current item is a zip/rar/cbr/cbz file, pull out first image and store zip filename as manga name and zip filename as filename to load.
+  #Else if current item is a dir, and it contains images but no directories, store the dir name as the manga name as well as the load filename.
+  #Else skip/recurse into dir.
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
 cd #{File.escape_name(DIR)} && find . -type d -o \\( -type f \\( #{COMPRESSED_FILE_EXTENSIONS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
+
+    $stdout.puts #This makes it actually import; fuck knows why
 
     path_list = IO.popen(cmd) { |s| s.read }
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }

@@ -17,7 +17,7 @@ li { margin-left: 30px; }
 #tag_cloud .size_4 { font-size: 1.6em; }
 
 .title { font-weight: bold; }
-#books li { width: 200px; height: 420px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
+#books li { width: 200px; height: 320px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
 #books li .emblems, #books li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
 #books li .actions { display: none; right: auto; left: 0; width: 32px; }
 #books li .wrapper > a { color: #000000; text-decoration: none; }
