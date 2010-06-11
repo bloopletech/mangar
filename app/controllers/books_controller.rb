@@ -25,7 +25,7 @@ class BooksController < ApplicationController
       results
     else
       Book
-    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 50)
+    end.order("#{params[:sort] || 'published_on'} #{params[:sort_direction] || 'DESC'}").paginate(:page => params[:page], :per_page => 50)
     
     @tags = Book.tag_counts_on(:tags)
   end
