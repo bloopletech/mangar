@@ -5,7 +5,7 @@
 </div>
 
 <div id="header">
-  <div id="import_and_update">
+  <div id="actions">
     <%= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
     <%= link_to("Import and Update", import_and_update_books_path, :method => 'get', :remote => true) %>
   </div>
@@ -23,7 +23,12 @@
   <% @books.each do |b| %>
     <%= render :partial => 'book', :locals => { :book => b } %>
   <% end %>
-  <% if is_last_page?(@books) %>
+  <% if @books.empty? %>
+    <script type="text/javascript">
+      last_page = true;
+    </script>
+    No results found.
+  <% elsif is_last_page?(@books) %>
     <script type="text/javascript">
       last_page = true;
     </script>

@@ -1,5 +1,5 @@
 --- 
-hash: 6f1a330b085dd5d340671f758fd878f8fd57deee
+hash: 0ecf39744c085dbef4dd6a50c9707a170c22d6b3
 sources: 
 - Git: 
     git: http://github.com/jnicklas/carrierwave.git
@@ -12,18 +12,14 @@ specs:
     version: 0.8.7
 - abstract: 
     version: 1.0.0
+- activesupport: 
+    version: 3.0.0.beta4
 - builder: 
     version: 2.1.2
 - i18n: 
-    version: 0.3.7
-- memcache-client: 
-    version: 1.8.3
-- tzinfo: 
-    version: 0.3.22
-- activesupport: 
-    version: 3.0.0.beta3
+    version: 0.4.1
 - activemodel: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - erubis: 
     version: 2.6.5
 - rack: 
@@ -32,8 +28,10 @@ specs:
     version: 0.6.3
 - rack-test: 
     version: 0.5.4
+- tzinfo: 
+    version: 0.3.22
 - actionpack: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - mime-types: 
     version: "1.16"
 - polyglot: 
@@ -41,23 +39,19 @@ specs:
 - treetop: 
     version: 1.4.7
 - mail: 
-    version: 2.2.1
-- text-hyphen: 
-    version: 1.0.0
-- text-format: 
-    version: 1.0.0
+    version: 2.2.3
 - actionmailer: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - arel: 
-    version: 0.3.3
+    version: 0.4.0
 - activerecord: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - activeresource: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - acts-as-taggable-on: 
     version: 2.1.0
 - bundler: 
-    version: 0.9.25
+    version: 0.9.26
 - carrierwave: 
     version: 0.4.4
     source: 0
@@ -70,9 +64,9 @@ specs:
 - thor: 
     version: 0.13.6
 - railties: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - rails: 
-    version: 3.0.0.beta3
+    version: 3.0.0.beta4
 - rmagick: 
     version: 2.13.1
 - rubyzip: 
@@ -83,7 +77,7 @@ specs:
     version: 3.0.pre
 dependencies: 
   rails: 
-    version: = 3.0.0.beta3
+    version: = 3.0.0.beta4
     group: 
     - :default
   sqlite3-ruby: 

@@ -23,15 +23,13 @@
     </div>
     <%= link_to(image_tag(book.preview.url), book_url(book), :method => 'get', :remote => true) %>
     <div class="info">
-      <span class="title"><%= h book.title %></span>
+      <div class="title"><%= h book.title %></div>
       <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= book.pages %>&nbsp;&nbsp;
       <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= book.opens %></span><br>
-      <div class="tags">
         <div class="tag_list"><%= h book.tag_list %></div>
         <%= form_for book, :remote => true do |f| %>
           <%= f.text_field :tag_list, :class => 'input' %>
         <% end %>
-      </div>
     </div>
   </div>
 </li>
