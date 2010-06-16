@@ -16,6 +16,11 @@ class BookPreviewUploader < CarrierWave::Uploader::Base
 
   def thumbnail
     manipulate! do |img|
+      #puts "checking image: #{img.columns}, #{img.rows}"
+      if (img.columns > img.rows) && img.columns > 200 && img.rows > 314 #if it's landscape-oriented
+        #puts "croppping"
+        img.crop!(Magick::EastGravity, 0.636942675159236 * img.columns, img.rows) 
+      end
       img.change_geometry!("200>") { |cols, rows, img| img.resize!(cols, rows) }
     end
   end

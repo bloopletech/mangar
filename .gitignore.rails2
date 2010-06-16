@@ -1,6 +1,0 @@
-/log/*
-/tmp/*
-/public/system/*
-.DS_Store
-**/.DS_Store
-db/*.sqlite3

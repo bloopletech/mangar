@@ -34,10 +34,6 @@ end
 
 require 'fileutils'
 
-#NOTE: Removes files in MANGAR_DIR, if it's wrong could remove user files
-Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{MANGAR_DIR}/#{File.basename(f)}") }
-#~ FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{MANGAR_DIR}/public")
-
 #More special config
 
 ActsAsTaggableOn::TagList.delimiter = ' '
@@ -100,5 +96,9 @@ Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as wel
 Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 
 require Rails.root.join('lib/file_extensions')
+
+#NOTE: Removes files in MANGAR_DIR, if it's wrong could remove user files
+Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{MANGAR_DIR}/#{File.basename(f)}") }
+FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{MANGAR_DIR}/public")
 
 `rake db:migrate` if new_app

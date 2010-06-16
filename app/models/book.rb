@@ -31,8 +31,6 @@ class Book < ActiveRecord::Base
     `rm -rf #{File.escape_name(real_path)}`
   end
 
-
-  IMAGE_EXTENSIONS = %w(.png .jpg .jpeg .gif)
   COMPRESSED_FILE_EXTENSIONS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTENSIONS = %w(.zip .cbz)
   RAR_EXTENSIONS = %w(.rar .cbr)
@@ -54,22 +52,32 @@ CMD
 
     (Book.all.map(&:path) - path_list).each { |path| Book.find_by_path(path).destroy }
 
-    path_list.reject { |e| Book.find_by_path(e) }.each do |e|
-      if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(e))
-        import_compressed_file(e)
-      else
-        import_directory(e)
-      end
-    end
+    path_list.reject { |e| Book.find_by_path(e) }.each { |e| self.import e }
   end
-  
-  def self.import_compressed_file(relative_filename)
-    real_filename = File.expand_path("#{DIR}/#{relative_filename}")
 
+  def self.import(relative_path)
+    real_path = File.expand_path("#{DIR}/#{relative_path}")
+    
+    first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
+      data_from_compressed_file(real_path)
+    else
+      data_from_directory(real_path)
+    end
+    
+    return if first_image_io.nil?
+
+    Book.create!(:title => File.basename(real_path).gsub(/_/, ' ').gsub(/#{COMPRESSED_FILE_EXTENSIONS.map { |e| Regexp.escape(e) }.join('|')}$/, ''),
+     :path => relative_path, :published_on => File.mtime(real_path), :preview => first_image_io,
+      :pages => page_count)
+  end
+
+  def self.data_from_compressed_file(real_filename)
     #TODO: We move the file data around like a million times, we ought to be able to pass the input stream
     #directly from the zip file to the model or whatever
-    temp_filename = "#{Dir.tmpdir}/#{ActiveSupport::SecureRandom.hex(20)}"
+    first_image_str = ""
     filenames = []
+    
+    first_image_io = nil
     
     if ZIP_EXTENSIONS.include?(File.extname(real_filename))
       require 'zip/zip'
@@ -77,52 +85,60 @@ CMD
       filenames = zf.entries.map(&:name)
       
       first_image_filename = get_first_file(filenames)
-      return if first_image_filename.nil?
+      return nil, 0 if first_image_filename.nil?
 
-      File.open(temp_filename, "w") { |f| f << zf.read(first_image_filename) }
+      first_image_io = zf.get_input_stream(first_image_filename)
     elsif RAR_EXTENSIONS.include?(File.extname(real_filename))
       #TODO: Very hacky, relies on compatible unrar binary
       filenames = IO.popen("cd #{File.escape_name(DIR)} && unrar vb #{File.escape_name(real_filename)}") { |s| s.read }
       filenames = filenames.split("\n")
       
       first_image_filename = get_first_file(filenames)
-      return if first_image_filename.nil?
+      return nil, 0 if first_image_filename.nil?
 
-      IO.popen("cd #{File.escape_name(DIR)} && unrar p -inul #{File.escape_name(real_filename)} #{File.escape_name(first_image_filename)}") do |s|
-        File.open(temp_filename, "w") { |f| f << s.read }
+      first_image_io = IO.popen("cd #{File.escape_name(DIR)} && unrar p -inul #{File.escape_name(real_filename)} #{File.escape_name(first_image_filename)}")
+    end
+    
+    return nil, 0 if filenames.nil?
+    
+    #Bullshit time
+    out_io = StringIO.new(first_image_io.read)
+    out_io.instance_eval do
+      def original_filename
+        @original_filename ||= ActiveSupport::SecureRandom.hex(20)
       end
     end
     
-    return if filenames.nil?
-
-    Book.create(:title => File.basename(real_filename).gsub(/_/, ' ').gsub(/#{COMPRESSED_FILE_EXTENSIONS.map { |e| Regexp.escape(e) }.join('|')}$/, ''),
-     :path => relative_filename, :published_on => File.mtime(real_filename), :preview => File.open(temp_filename),
-      :pages => filenames.count { |e| file_is_image(e) })
-
-    File.unlink(temp_filename)
+    return out_io, filenames.count { |f| File.image?(f) }
   end
 
   #dir should be findable from CWD or absolute; no trailing slash
-  def self.import_directory(relative_dir)
-    real_dir = File.expand_path("#{DIR}/#{relative_dir}")
+  def self.data_from_directory(real_dir)
+    filenames = Dir.entries(real_dir)
 
-    filename = get_first_file(Dir.entries(real_dir))
-    return if filename.nil?
+    first_image_filename = get_first_file(filenames)
+    return nil, 0 if first_image_filename.nil?
 
-    title = File.basename(real_dir).gsub(/_/, ' ')
-
-    pages = Dir.entries(real_dir).inject(0) { |sum, e| sum + (file_is_image("#{real_dir}/#{e}") ? 1 : 0) }
-
-    Book.create(:title => title, :path => relative_dir, :published_on => File.mtime(real_dir),
-     :preview => File.open("#{real_dir}/#{filename}"), :pages => pages)
+    return File.new("#{real_dir}/#{first_image_filename}", "r"), filenames.count { |f| File.image?(f) }
   end
 
+  def self.reprocess
+    Book.all.each do |book|
+      real_path = File.expand_path("#{DIR}/#{book.path}")
+    
+      first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
+        data_from_compressed_file(real_path)
+      else
+        data_from_directory(real_path)
+      end
+    
+      next if first_image_io.nil?
+
+      book.update_attribute(:preview, first_image_io)
+    end
+  end
 
   def self.get_first_file(file_list)
-    file_list.reject { |e| e[0, 1] == '.' || !file_is_image(e) }.sort.first
-  end
-  
-  def self.file_is_image(filename)
-    IMAGE_EXTENSIONS.include?(File.extname(filename).downcase)
+    file_list.reject { |e| e[0, 1] == '.' || !File.image?(e) }.sort.first
   end
 end
