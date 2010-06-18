@@ -48,11 +48,18 @@ CMD
     $stdout.puts #This makes it actually import; fuck knows why
 
     path_list = IO.popen(cmd) { |s| s.read }
+
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
 
-    (Book.all.map(&:path) - path_list).each { |path| Book.find_by_path(path).destroy }
+    existing_books = Book.all
+    existing_books.each do |book|
+      unless path_list.include?(book.path)
+        book.destroy
+        existing_books.delete(book)
+      end
+    end
 
-    path_list.reject { |e| Book.find_by_path(e) }.each { |e| self.import e }
+    (path_list - existing_books.map(&:path)).each { |path| self.import(path) }
   end
 
   def self.import(relative_path)
