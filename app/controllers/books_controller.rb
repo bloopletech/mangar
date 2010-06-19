@@ -66,4 +66,18 @@ class BooksController < ApplicationController
       Book.import_and_update
     #end
   end
+
+  def info
+    if Book.count == 0
+      render :text => 'No books yet', :layout => 'secondary'
+    end
+
+    @oldest = Book.order('published_on ASC').first
+    @newest = Book.order('published_on DESC').first
+    @longest = Book.order('pages DESC').first
+    @shortest = Book.order('pages ASC').first
+    @most_popular = Book.order('opens DESC').first
+    @least_popular = Book.order('opens ASC').first
+    render :layout => 'secondary'
+  end
 end

@@ -7,6 +7,8 @@
 <div id="header">
   <div id="actions">
     <%= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
+    <%= link_to("Info", info_books_path, :class => 'lightwindow', :params => 
+          "lightwindow_type=external,lightwindow_width=550,lightwindow_height=350") %>
     <%= link_to("Import and Update", import_and_update_books_path, :method => 'get', :remote => true) %>
   </div>
 

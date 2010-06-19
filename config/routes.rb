@@ -5,6 +5,7 @@ Mangar::Application.routes.draw do |map|
     end
     collection do
       get :import_and_update
+      get :info
     end
   end
 

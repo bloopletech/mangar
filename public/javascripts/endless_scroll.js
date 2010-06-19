@@ -27,7 +27,7 @@ function checkScroll()
 }
 
 function nearBottomOfPage() {
-  return scrollDistanceFromBottom() < 500;
+  return scrollDistanceFromBottom() < 1000;
 }
 
 function scrollDistanceFromBottom() {

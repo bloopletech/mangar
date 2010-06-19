@@ -3,6 +3,7 @@ body { padding: 15px; color: #000000; }
 body, input, select, textarea, table, tr, td { font: 16px/1.3em Helvetica, Arial, sans-serif; }
 img { border: none; }
 li { margin-left: 30px; }
+p { margin-bottom: 1.3em; }
 
 .clear { clear: both; }
 
