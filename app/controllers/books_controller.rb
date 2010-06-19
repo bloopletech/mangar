@@ -60,10 +60,10 @@ class BooksController < ApplicationController
   end
 
   def import_and_update
-    Thread.new do
+    #Thread.new do #Temporarily remopve threading as it seems to be causing import problems
       #Fix so we don't have to do this.
       BookPreviewUploader.root = CarrierWave.root = Rails.public_path
       Book.import_and_update
-    end
+    #end
   end
 end

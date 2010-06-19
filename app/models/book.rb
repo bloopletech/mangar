@@ -3,6 +3,8 @@ require 'book_preview_uploader'
 class Book < ActiveRecord::Base
   acts_as_taggable
 
+  PREVIEW_WIDTH = 200
+  PREVIEW_HEIGHT = 314
 #  has_attached_file :preview, :url => "file://#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :path => "#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
 #  has_attached_file :preview, :path => "#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
 
