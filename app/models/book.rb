@@ -44,7 +44,7 @@ class Book < ActiveRecord::Base
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(DIR)} && find . -type d -o \\( -type f \\( #{COMPRESSED_FILE_EXTENSIONS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(DIR)} && find . -type d -o \\( -type f \\( #{(File::VIDEO_EXTENSIONS + COMPRESSED_FILE_EXTENSIONS).map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -66,11 +66,16 @@ CMD
 
   def self.import(relative_path)
     real_path = File.expand_path("#{DIR}/#{relative_path}")
-    
-    first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
-      data_from_compressed_file(real_path)
-    else
-      data_from_directory(real_path)
+
+    begin
+      first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
+        data_from_compressed_file(real_path)
+      else
+        data_from_directory(real_path)
+      end
+    rescue Exception => e
+      puts e.inspect
+      puts e.backtrace
     end
     
     return if first_image_io.nil?
