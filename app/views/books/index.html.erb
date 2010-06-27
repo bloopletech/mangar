@@ -13,6 +13,7 @@
   </div>
 
   <%= form_tag(books_url, { :method => :get, :id => 'search_form' }) do %>
+  <% puts params[:search].encoding %>
     <%= text_field_tag 'search', params[:search] %>
     <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Added', 'created_at'], ['Pages', 'pages'], ['Opens', 'opens'], ['Last opened at', 'last_opened_at']], params[:sort]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']], params[:sort_direction]) %>

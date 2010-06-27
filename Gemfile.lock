@@ -1,15 +1,10 @@
 --- 
-hash: c1b6abd3278ffdbdbf641b6d6030c01877f4289e
+hash: 0ecf39744c085dbef4dd6a50c9707a170c22d6b3
 sources: 
 - Git: 
     git: http://github.com/jnicklas/carrierwave.git
     uri: http://github.com/jnicklas/carrierwave.git
     ref: ef2133d38dce5558ab8eb90b09f19de6e3d3ffc0
-- Path: 
-    path: !ruby/object:Pathname 
-      path: vendor/rails
-    name: rails
-    version: 3.0.0.beta4
 - Rubygems: 
     uri: http://rubygems.org
 specs: 
@@ -19,14 +14,12 @@ specs:
     version: 1.0.0
 - activesupport: 
     version: 3.0.0.beta4
-    source: 1
 - builder: 
     version: 2.1.2
 - i18n: 
     version: 0.4.1
 - activemodel: 
     version: 3.0.0.beta4
-    source: 1
 - erubis: 
     version: 2.6.5
 - rack: 
@@ -39,7 +32,6 @@ specs:
     version: 0.3.22
 - actionpack: 
     version: 3.0.0.beta4
-    source: 1
 - mime-types: 
     version: "1.16"
 - polyglot: 
@@ -50,15 +42,12 @@ specs:
     version: 2.2.5
 - actionmailer: 
     version: 3.0.0.beta4
-    source: 1
 - arel: 
     version: 0.4.0
 - activerecord: 
     version: 3.0.0.beta4
-    source: 1
 - activeresource: 
     version: 3.0.0.beta4
-    source: 1
 - acts-as-taggable-on: 
     version: 2.1.0
 - bundler: 
@@ -76,10 +65,8 @@ specs:
     version: 0.13.6
 - railties: 
     version: 3.0.0.beta4
-    source: 1
 - rails: 
     version: 3.0.0.beta4
-    source: 1
 - rmagick: 
     version: 2.13.1
 - rubyzip: 
