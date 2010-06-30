@@ -1,0 +1,6 @@
+<ul>
+  <% @collections.each do |c| %>
+    <li><%= link_to(c, collection_path(:path => c), :target => '_top') %></li>
+  <% end %>
+</ul>
+<p><%= link_to "Add collection...", collections_path, :method => :post %></p>

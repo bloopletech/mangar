@@ -10,7 +10,8 @@ Mangar::Application.routes.draw do |map|
   end
 
   root :to => "books#index"
-  
+
+  resources :collections  
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
