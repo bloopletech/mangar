@@ -57,8 +57,8 @@ module Mangar
 
   mattr_accessor :dir, :mangar_dir
 
-  def self.configure(path)
-    Mangar.dir = path
+  def self.configure(collection)
+    Mangar.dir = collection.path
     Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
     
     new_app = !File.exists?(Mangar.mangar_dir)
@@ -83,6 +83,8 @@ module Mangar
     #NOTE: Removes files in Mangar.mangar_dir, if it's wrong could remove user files
     Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{Mangar.mangar_dir}/#{File.basename(f)}") }
     FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{Mangar.mangar_dir}/public")
+
+    Collection.most_recently_used = collection
   end
 end
 

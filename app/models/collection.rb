@@ -7,20 +7,18 @@ class Collection
 
   def initialize(data)
     self.path = File.expand_path(data['path'])
-    self.id = data['id'] || rand(10000000).to_s #TODO: FIX
+    self.id = (data['id'] || rand(10000000)).to_i #TODO: FIX
   end
 
   def create
-    Collection.collections do |c|
-      return if c.include?(self)
-      c << self
+    Collection.with_configuration do |c|
+      return if c[:collections].include?(self)
+      c[:collections] << self
     end
   end
 
   def destroy
-    Collection.collections do |c|
-      c.delete(self)
-    end
+    Collection.with_configuration { |c| c[:collections].delete(self) }
   end
 
   def to_hash
@@ -28,34 +26,54 @@ class Collection
   end
   
   def self.find_by_path(path)
-    collections.detect { |c| c.path == path }
+    with_configuration[:collections].detect { |c| c.path == path }
   end
 
   def self.find_by_id(id)
-    collections.detect { |c| c.id == id }
+    with_configuration[:collections].detect { |c| c.id == id }
+  end
+
+  def self.collections
+    with_configuration[:collections]
+  end
+
+  def self.most_recently_used
+    mru_id = nil
+    with_configuration { |c| mru_id = c[:most_recently_used_id] }
+
+    return nil unless mru_id
+    return find_by_id(mru_id.to_i)
+  end
+
+  def self.most_recently_used=(collection)
+    with_configuration do |c|
+      c[:most_recently_used_id] = collection.id
+    end
   end
 
   CONFIGURATION_PATH = "~/.mangar"
 
-  def self.collections
+  private
+  def self.with_configuration
+    configuration = nil
+
     @@mutex ||= Mutex.new
-
-    c = nil
     @@mutex.synchronize do
-      c = get_collections
+      configuration = (File.exists?(config_path) ? YAML.load_file(config_path) : {})
 
+      configuration[:collections] ||= []
+      configuration[:collections].map! { |c| Collection.new(c) } if configuration.key? :collections
+      
       if block_given?
-        yield c
-        File.open(config_path, 'w') { |f| YAML.dump(c.map(&:to_hash), f) }
+        yield configuration
+
+        configuration[:collections].map!(&:to_hash) if configuration.key? :collections
+
+        File.open(config_path, 'w') { |f| YAML.dump(configuration, f) }
       end
     end
 
-    c unless block_given?
-  end
-
-  private
-  def self.get_collections
-    (File.exists?(config_path) ? YAML.load_file(config_path) : []).map { |c| Collection.new(c) }
+    configuration
   end
 
   def self.config_path

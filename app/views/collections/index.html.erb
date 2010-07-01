@@ -1,6 +1,7 @@
+<p>Please choose one of your collections, or add a collection to the list.</p>
 <ul>
   <% @collections.each do |c| %>
-    <li><%= link_to(c.path, collection_path(c.id), :target => '_top') %> <%= link_to("Delete", collection_path(c.id), :method => :delete) %></li>
+    <li><%= link_to(c.path, collection_path(c.id), :target => '_top') %> <%= link_to(image_tag("icons/delete.png"), collection_path(c.id), :method => :delete) %></li>
   <% end %>
 </ul>
-<p><%= link_to "Add collection...", collections_path, :method => :post %></p>
+<p><%= link_to image_tag("icons/add.png") + "Add collection...", collections_path, :method => :post %></p>

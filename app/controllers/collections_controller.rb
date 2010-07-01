@@ -6,7 +6,7 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    Mangar.configure(Collection.find_by_id(params[:id]).path)
+    Mangar.configure(Collection.find_by_id(params[:id].to_i))
     redirect_to '/'
   end
 
@@ -22,7 +22,7 @@ class CollectionsController < ApplicationController
   end
 
   def destroy
-    Collection.find_by_id(params[:id]).destroy
+    Collection.find_by_id(params[:id].to_i).destroy
     redirect_to collections_path
   end
 end
