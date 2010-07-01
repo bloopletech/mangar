@@ -51,6 +51,11 @@ module Mangar
   end
 
 
+
+
+
+  mattr_accessor :dir, :mangar_dir
+
   def self.setup(path)
     Mangar.dir = path #Temporary?
     Mangar.mangar_dir = "#{Mangar.dir}/.mangar" #Temporary?
@@ -60,31 +65,24 @@ module Mangar
 
     #...
      
-    Application.class_eval do
+    Application.instance.instance_eval do
       paths.public              "#{Mangar.mangar_dir}/public"
       paths.public.javascripts  "#{Mangar.mangar_dir}/public/javascripts"
       paths.public.stylesheets  "#{Mangar.mangar_dir}/public/stylesheets"
-
-      config.instance_eval do
-        def database_configuration
-          db_connection = { :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5,
-           :timeout => 5000 }
-          { 'development' => db_connection, 'production' => db_connection }
-        end
-      end
+#      config.middleware.swap ActionDispatch::Static, ActionDispatch::Static, paths.public.to_a.first
+      config.middleware = Rails::Configuration::MiddlewareStackProxy.new
+      @app = nil
     end
-
-    #This shouldn't be required - Rails should be using this application's #database_configuration method automatically/
-    ActiveRecord::Base.configurations = Mangar::Application.config.database_configuration
+    
+    ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
     
     #After paths have reloaded
     
     if new_app
       Dir.mkdir(Mangar.mangar_dir)
       Dir.mkdir("#{Mangar.mangar_dir}/public")
+      ActiveRecord::Migrator.migrate("db/migrate/")
     end
-    
-    #internally run the migrations on the app
     
     #NOTE: Removes files in Mangar.mangar_dir, if it's wrong could remove user files
     Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{Mangar.mangar_dir}/#{File.basename(f)}") }
@@ -97,11 +95,7 @@ module Mangar
     #Also, clear any caches etc.
     #(external to this method, but important: redirect the user to / so the user sees the new books)
   end
-
-  mattr_accessor :dir, :mangar_dir
 end
-
-Mangar.setup(".media/Yotsuba/Manga") #TODO REMOVE <================================================
 
 Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
 Date::DATE_FORMATS.merge!(:default => '%e %B %Y')

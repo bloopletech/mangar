@@ -4,10 +4,8 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    puts "path: #{params[:path]}"
-    return
-    Mangar.setup(params[:path])
-    redirect '/'
+    Mangar.setup(Collection.find_by_id(params[:id]).path)
+    redirect_to '/'
   end
 
   def create
@@ -15,13 +13,13 @@ class CollectionsController < ApplicationController
     directory = IO.popen("zenity --file-selection --directory") { |s| s.read }
     
     unless directory.blank?
-      Collection.create(directory)
+      Collection.new('path' => directory.strip).create
     end
 
     redirect_to collections_path
   end
 
   def destroy
-    Collection.destroy(params[:path])
+    Collection.find_by_id(params[:id]).destroy
   end
 end
