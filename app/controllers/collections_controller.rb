@@ -1,10 +1,12 @@
 class CollectionsController < ApplicationController
+  skip_before_filter :ensure_mangar_setup
+
   def index
     @collections = Collection.collections
   end
 
   def show
-    Mangar.setup(Collection.find_by_id(params[:id]).path)
+    Mangar.configure(Collection.find_by_id(params[:id]).path)
     redirect_to '/'
   end
 
@@ -21,5 +23,6 @@ class CollectionsController < ApplicationController
 
   def destroy
     Collection.find_by_id(params[:id]).destroy
+    redirect_to collections_path
   end
 end

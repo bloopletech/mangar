@@ -8,9 +8,10 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 require 'fileutils'
 
-#More special config
-
 ActsAsTaggableOn::TagList.delimiter = ' '
+
+Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
+Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 
 module Mangar
   class Application < Rails::Application
@@ -56,27 +57,22 @@ module Mangar
 
   mattr_accessor :dir, :mangar_dir
 
-  def self.setup(path)
-    Mangar.dir = path #Temporary?
-    Mangar.mangar_dir = "#{Mangar.dir}/.mangar" #Temporary?
+  def self.configure(path)
+    Mangar.dir = path
+    Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
     
     new_app = !File.exists?(Mangar.mangar_dir)
 
-
-    #...
-     
     Application.instance.instance_eval do
       paths.public              "#{Mangar.mangar_dir}/public"
       paths.public.javascripts  "#{Mangar.mangar_dir}/public/javascripts"
       paths.public.stylesheets  "#{Mangar.mangar_dir}/public/stylesheets"
-#      config.middleware.swap ActionDispatch::Static, ActionDispatch::Static, paths.public.to_a.first
+
       config.middleware = Rails::Configuration::MiddlewareStackProxy.new
       @app = nil
     end
     
     ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
-    
-    #After paths have reloaded
     
     if new_app
       Dir.mkdir(Mangar.mangar_dir)
@@ -87,17 +83,7 @@ module Mangar
     #NOTE: Removes files in Mangar.mangar_dir, if it's wrong could remove user files
     Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{Mangar.mangar_dir}/#{File.basename(f)}") }
     FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{Mangar.mangar_dir}/public")
-
-    ActionDispatch::Callbacks.new(Proc.new {}, false).call({})
-    #...
-
-    #reload middleware so that paths.public etc. get reloaded
-    #Also, clear any caches etc.
-    #(external to this method, but important: redirect the user to / so the user sees the new books)
   end
 end
-
-Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
-Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 
 require Rails.root.join('lib/file_extensions')
