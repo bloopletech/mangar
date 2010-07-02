@@ -80,4 +80,10 @@ class BooksController < ApplicationController
     @least_popular = Book.order('opens ASC').first
     render :layout => 'secondary'
   end
+
+
+  #TODO: Move someplace better
+  def quit
+    Process.exit!(0) #TODO: This skips at_exit stuff, should we be running them?
+  end
 end
