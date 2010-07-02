@@ -84,6 +84,6 @@ class BooksController < ApplicationController
 
   #TODO: Move someplace better
   def quit
-    Process.exit!(0) #TODO: This skips at_exit stuff, should we be running them?
+    Process.kill("TERM", $$)
   end
 end
