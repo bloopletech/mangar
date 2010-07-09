@@ -16,15 +16,6 @@ class BookPreviewUploader < CarrierWave::Uploader::Base
 
   def thumbnail
     manipulate! do |img|
-      if File.video?(model.path)
-        puts "it's a vid!"
-        dir = Dir.tempdir
-        system("mplayer -frames 1 -ss 30 -vo png outdir=#{File.escape_name(dir)} #{File.escape_name("#{DIR}/#{model.path}")}")
-        puts File.size("#{dir}/00000001.png")
-        #take shot, put into file
-        #run img.store_pixels(0, 0, vid_img.columns, vid_img.rows, vid_img.get_pixels(0, 0, vid_img.columns, vid_img.rows))
-      end
-    
       if (img.columns > img.rows) && img.columns > Book::PREVIEW_WIDTH && img.rows > Book::PREVIEW_HEIGHT #if it's landscape-oriented
         img.crop!(Magick::EastGravity, img.rows / (Book::PREVIEW_HEIGHT / Book::PREVIEW_WIDTH.to_f), img.rows) #Resize it so the right-most part of the image is shown
       end

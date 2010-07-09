@@ -9,4 +9,4 @@ BookPreviewUploader.root = CarrierWave.root = Rails.public_path
 
 #%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/
 
-Mangar.configure(Collection.most_recently_used) if Collection.most_recently_used
+Mangar.configure(Collection.most_recently_used) if Collection.most_recently_used && File.exists?(Collection.most_recently_used.path)

@@ -23,7 +23,7 @@
     </div>
     <%= link_to(image_tag(book.preview.url), book_url(book), :method => 'get', :remote => true) %>
     <div class="info">
-      <div class="title"><%= h book.title %></div>
+      <div class="title"><%= wbrize(book.title) %></div>
       <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= book.pages %>&nbsp;&nbsp;
       <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= book.opens %></span><br>
         <div class="tag_list"><%= h book.tag_list %></div>

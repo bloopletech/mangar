@@ -36,6 +36,8 @@ class Book < ActiveRecord::Base
   COMPRESSED_FILE_EXTENSIONS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTENSIONS = %w(.zip .cbz)
   RAR_EXTENSIONS = %w(.rar .cbr)
+  
+  INTERESTING_EXTENSIONS = COMPRESSED_FILE_EXTENSIONS + File::VIDEO_EXTENSIONS
 
   #Iterate recursively over all files/dirs
   #If current item is a zip/rar/cbr/cbz file, pull out first image and store zip filename as manga name and zip filename as filename to load.
@@ -44,7 +46,7 @@ class Book < ActiveRecord::Base
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.dir)} && find . -type d -o \\( -type f \\( #{(File::VIDEO_EXTENSIONS + COMPRESSED_FILE_EXTENSIONS).map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.dir)} && find . -type d -o \\( -type f \\( #{INTERESTING_EXTENSIONS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -66,18 +68,36 @@ CMD
 
   def self.import(relative_path)
     real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
-    
-    first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
-      data_from_compressed_file(real_path)
-    else
-      data_from_directory(real_path)
+
+    begin
+      raise "Won't be able to read #{real_path}" unless File.readable?(real_path)
+
+      first_image_io, page_count = if File.video?(real_path)
+        data_from_video_file(real_path)
+      elsif COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
+        data_from_compressed_file(real_path)
+      else
+        data_from_directory(real_path)
+      end
+    rescue Exception => e
+      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      return
     end
     
     return if first_image_io.nil?
 
-    Book.create!(:title => File.basename(real_path).gsub(/_/, ' ').gsub(/#{COMPRESSED_FILE_EXTENSIONS.map { |e| Regexp.escape(e) }.join('|')}$/, ''),
+    Book.create!(:title => File.basename(real_path).gsub(/_/, ' ').gsub(/#{INTERESTING_EXTENSIONS.map { |e| Regexp.escape(e) }.join('|')}$/, ''),
      :path => relative_path, :published_on => File.mtime(real_path), :preview => first_image_io,
       :pages => page_count)
+  end
+
+  def self.data_from_video_file(real_filename)
+    frame_filename = "#{Dir.tmpdir}/#{ActiveSupport::SecureRandom.hex(20)}"
+    system("totem-video-thumbnailer -r #{File.escape_name(real_filename)} #{File.escape_name(frame_filename)}")
+    raise "Couldn't thumbnail #{real_filename}" unless File.exists?(frame_filename)
+    at_exit { File.delete(frame_filename) if File.exists?(frame_filename) }
+
+    return File.open(frame_filename, "r"), 1
   end
 
   def self.data_from_compressed_file(real_filename)
