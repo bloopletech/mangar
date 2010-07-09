@@ -1,8 +1,9 @@
 * { margin: 0; padding: 0; }
 body { padding: 15px; color: #000000; }
 body, input, select, textarea, table, tr, td { font: 16px/1.3em Helvetica, Arial, sans-serif; }
-img { border: none; }
+img { border: none; vertical-align: middle; }
 li { margin-left: 30px; }
+p, ul { margin-bottom: 1.3em; }
 
 .clear { clear: both; }
 

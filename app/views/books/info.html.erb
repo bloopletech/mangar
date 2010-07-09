@@ -1,0 +1,19 @@
+<p>You have <%= pluralize(Book.count, 'book') %> and <%= pluralize(ActsAsTaggableOn::Tag.count, 'tag') %>.</p>
+
+<p>The oldest book was published on <%= link_to(@oldest.published_on, @oldest, :method => :get, :remote => true) %>
+and the newest book was published <%= link_to(@newest.published_on, @newest, :method => :get, :remote => true) %>.</p>
+
+<p>The longest book has <%= link_to(pluralize(@longest.pages, 'page'), @longest, :method => :get, :remote => true) %> and the
+shortest has <%= link_to(pluralize(@shortest.pages, 'page'), @shortest, :method => :get, :remote => true) %>, with an average
+of <%= pluralize(number_with_precision(Book.average('pages'), :precision => 1), 'page') %>.</p>
+
+<p>The most popular book in your collection has been opened
+<%= link_to(pluralize(@most_popular.opens, 'time'), @most_popular, :method => :get, :remote => true) %>,
+and the least popular opened <%= link_to(pluralize(@least_popular.opens, 'time'), @least_popular, :method => :get, :remote => true) %>,
+with an average of <%= pluralize(number_with_precision(Book.average('opens'), :precision => 1), 'open') %> per book.</p>
+
+<p><%= link_to(pluralize(Book.count(:conditions => 'opens > 0'), 'book has', 'books have'), books_with(:search => 's:read'), :target => "_blank") %>
+been opened at least once, and <%= link_to(pluralize(Book.count(:conditions => 'opens = 0'), 'book has', 'books have'), books_with(:search => 's:unread'), :target => '_blank') %>
+never been opened at all.</p>
+
+<!-- add most and least popular tags -->

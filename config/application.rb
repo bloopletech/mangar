@@ -6,52 +6,15 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-#Set up manga dir
-DIR = ENV['DIR']
-
-unless DIR
-  puts <<-EOF
-Please run this application like so:
-
-~$ DIR=<your manga directory> rails server -e production -p 30813
-
-So if you stored your manga in ~/Pictures/Manga/<manga name>/*.jpg, you would run:
-
-~$ DIR=~/Pictures/Manga/ rails server -e production -p 30813
-
-EOF
-  exit
-end
-
-MANGAR_DIR = "#{DIR}/.mangar"
-
-new_app = !File.exists?(MANGAR_DIR)
-
-if new_app
-  Dir.mkdir(MANGAR_DIR)
-  Dir.mkdir("#{MANGAR_DIR}/public")
-end
-
 require 'fileutils'
-
-#More special config
 
 ActsAsTaggableOn::TagList.delimiter = ' '
 
+Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
+Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
+
 module Mangar
   class Application < Rails::Application
-    paths.public              "#{MANGAR_DIR}/public"
-    paths.public.javascripts  "#{MANGAR_DIR}/public/javascripts"
-    paths.public.stylesheets  "#{MANGAR_DIR}/public/stylesheets"
-    
-    DB_CONNECTION = { :adapter => 'sqlite3', :database => "#{MANGAR_DIR}/db.sqlite3", :pool => 5, :timeout => 5000 }
-
-    config.instance_eval do
-      def database_configuration
-        { 'development' => DB_CONNECTION, 'production' => DB_CONNECTION }
-      end
-    end
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -87,18 +50,42 @@ module Mangar
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
   end
+
+
+
+
+
+  mattr_accessor :dir, :mangar_dir
+
+  def self.configure(collection)
+    Mangar.dir = collection.path
+    Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
+    
+    new_app = !File.exists?(Mangar.mangar_dir)
+
+    Application.instance.instance_eval do
+      paths.public              "#{Mangar.mangar_dir}/public"
+      paths.public.javascripts  "#{Mangar.mangar_dir}/public/javascripts"
+      paths.public.stylesheets  "#{Mangar.mangar_dir}/public/stylesheets"
+
+      config.middleware = Rails::Configuration::MiddlewareStackProxy.new
+      @app = nil
+    end
+    
+    ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
+    
+    if new_app
+      Dir.mkdir(Mangar.mangar_dir)
+      Dir.mkdir("#{Mangar.mangar_dir}/public")
+      ActiveRecord::Migrator.migrate("db/migrate/")
+    end
+    
+    #NOTE: Removes files in Mangar.mangar_dir, if it's wrong could remove user files
+    Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{Mangar.mangar_dir}/#{File.basename(f)}") }
+    FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{Mangar.mangar_dir}/public")
+
+    Collection.most_recently_used = collection
+  end
 end
 
-#This shouldn't be required - Rails should be using this application's #database_configuration method automatically/
-ActiveRecord::Base.configurations = Mangar::Application.config.database_configuration
-
-Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
-Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
-
 require Rails.root.join('lib/file_extensions')
-
-#NOTE: Removes files in MANGAR_DIR, if it's wrong could remove user files
-Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{MANGAR_DIR}/#{File.basename(f)}") }
-FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{MANGAR_DIR}/public")
-
-`rake db:migrate` if new_app

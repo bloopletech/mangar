@@ -5,15 +5,15 @@ class Book < ActiveRecord::Base
 
   PREVIEW_WIDTH = 200
   PREVIEW_HEIGHT = 314
-#  has_attached_file :preview, :url => "file://#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :path => "#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
-#  has_attached_file :preview, :path => "#{MANGAR_DIR}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
+#  has_attached_file :preview, :url => "file://#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :path => "#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
+#  has_attached_file :preview, :path => "#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
 
   mount_uploader :preview, BookPreviewUploader
 
   #default_scope :order => 'published_on DESC'
 
   def real_path
-    File.expand_path("#{DIR}/#{path}")
+    File.expand_path("#{Mangar.dir}/#{path}")
   end
 
   def open
@@ -44,7 +44,7 @@ class Book < ActiveRecord::Base
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(DIR)} && find . -type d -o \\( -type f \\( #{(File::VIDEO_EXTENSIONS + COMPRESSED_FILE_EXTENSIONS).map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.dir)} && find . -type d -o \\( -type f \\( #{(File::VIDEO_EXTENSIONS + COMPRESSED_FILE_EXTENSIONS).map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -65,17 +65,12 @@ CMD
   end
 
   def self.import(relative_path)
-    real_path = File.expand_path("#{DIR}/#{relative_path}")
-
-    begin
-      first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
-        data_from_compressed_file(real_path)
-      else
-        data_from_directory(real_path)
-      end
-    rescue Exception => e
-      puts e.inspect
-      puts e.backtrace
+    real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
+    
+    first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
+      data_from_compressed_file(real_path)
+    else
+      data_from_directory(real_path)
     end
     
     return if first_image_io.nil?
@@ -104,13 +99,13 @@ CMD
       first_image_io = zf.get_input_stream(first_image_filename)
     elsif RAR_EXTENSIONS.include?(File.extname(real_filename))
       #TODO: Very hacky, relies on compatible unrar binary
-      filenames = IO.popen("cd #{File.escape_name(DIR)} && unrar vb #{File.escape_name(real_filename)}") { |s| s.read }
+      filenames = IO.popen("cd #{File.escape_name(Mangar.dir)} && unrar vb #{File.escape_name(real_filename)}") { |s| s.read }
       filenames = filenames.split("\n")
       
       first_image_filename = get_first_file(filenames)
       return nil, 0 if first_image_filename.nil?
 
-      first_image_io = IO.popen("cd #{File.escape_name(DIR)} && unrar p -inul #{File.escape_name(real_filename)} #{File.escape_name(first_image_filename)}")
+      first_image_io = IO.popen("cd #{File.escape_name(Mangar.dir)} && unrar p -inul #{File.escape_name(real_filename)} #{File.escape_name(first_image_filename)}")
     end
     
     return nil, 0 if filenames.nil?
@@ -138,7 +133,7 @@ CMD
 
   def self.reprocess
     Book.all.each do |book|
-      real_path = File.expand_path("#{DIR}/#{book.path}")
+      real_path = File.expand_path("#{Mangar.dir}/#{book.path}")
     
       first_image_io, page_count = if COMPRESSED_FILE_EXTENSIONS.include?(File.extname(real_path))
         data_from_compressed_file(real_path)
