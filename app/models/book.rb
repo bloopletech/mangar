@@ -19,11 +19,15 @@ class Book < ActiveRecord::Base
   def open
     increment!(:opens)
     update_attribute(:last_opened_at, DateTime.now)
-
-    if RUBY_PLATFORM =~ /darwin/
-      apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
-    elsif RUBY_PLATFORM =~ /linux/
-      apps, background = ["comix -f", "geeqie -f", "gqview -f", "eog"], true
+    
+    if File.video?(self.path)
+      apps, background = ["gnome-mplayer", "mplayer"], false
+    else
+      if RUBY_PLATFORM =~ /darwin/
+        apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
+      elsif RUBY_PLATFORM =~ /linux/
+        apps, background = ["comix -f", "geeqie -f", "gqview -f", "eog"], true
+      end
     end
 
     apps.detect { |app| system("#{app} #{File.escape_name(real_path)} #{background ? '&' : ''}") }
