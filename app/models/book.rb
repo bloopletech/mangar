@@ -21,10 +21,10 @@ class Book < ActiveRecord::Base
     update_attribute(:last_opened_at, DateTime.now)
     
     if File.video?(self.path)
-      apps, background = ["gnome-mplayer", "mplayer"], false
+      apps, background = ["gnome-mplayer", "mplayer"], true
     else
       if RUBY_PLATFORM =~ /darwin/
-        apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], false
+        apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], true
       elsif RUBY_PLATFORM =~ /linux/
         apps, background = ["comix -f", "geeqie -f", "gqview -f", "eog"], true
       end
