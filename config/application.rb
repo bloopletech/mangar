@@ -68,8 +68,11 @@ module Mangar
       paths.public.javascripts  "#{Mangar.mangar_dir}/public/javascripts"
       paths.public.stylesheets  "#{Mangar.mangar_dir}/public/stylesheets"
 
-      config.middleware = Rails::Configuration::MiddlewareStackProxy.new
-      @app = nil
+      #Assumes ::ActionDispatch::Static is the first middleware, adjust if needed
+      config.middleware.insert_before 0, ::ActionDispatch::Static, paths.public.to_a.first
+      config.middleware.delete_at(1)
+
+      @app = config.middleware.build(routes)
     end
     
     ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
