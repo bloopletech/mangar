@@ -13,8 +13,11 @@ ActsAsTaggableOn::TagList.delimiter = ' '
 Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
 Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
 
+require File.dirname(__FILE__) + '/../lib/system_static_middleware'
+
 module Mangar
   class Application < Rails::Application
+    config.middleware.insert_before ::ActionDispatch::Static, ::Mangar::SystemStaticMiddleware
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -53,39 +56,22 @@ module Mangar
 
 
 
-
-
   mattr_accessor :dir, :mangar_dir
 
   def self.configure(collection)
     Mangar.dir = collection.path
     Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
-    
+
     new_app = !File.exists?(Mangar.mangar_dir)
-
-    Application.instance.instance_eval do
-      paths.public              "#{Mangar.mangar_dir}/public"
-      paths.public.javascripts  "#{Mangar.mangar_dir}/public/javascripts"
-      paths.public.stylesheets  "#{Mangar.mangar_dir}/public/stylesheets"
-
-      #Assumes ::ActionDispatch::Static is the first middleware, adjust if needed
-      config.middleware.insert_before 0, ::ActionDispatch::Static, paths.public.to_a.first
-      config.middleware.delete_at(1)
-
-      @app = config.middleware.build(routes)
-    end
-    
-    ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
     
     if new_app
       Dir.mkdir(Mangar.mangar_dir)
       Dir.mkdir("#{Mangar.mangar_dir}/public")
-      ActiveRecord::Migrator.migrate("db/migrate/")
     end
-    
-    #NOTE: Removes files in Mangar.mangar_dir, if it's wrong could remove user files
-    Dir.glob("#{Rails.root}/public/*").each { |f| FileUtils.rm_f("#{Mangar.mangar_dir}/#{File.basename(f)}") }
-    FileUtils.ln_sf(Dir.glob("#{Rails.root}/public/*"), "#{Mangar.mangar_dir}/public")
+
+    ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
+
+    ActiveRecord::Migrator.migrate("db/migrate/") if new_app
 
     Collection.most_recently_used = collection
   end

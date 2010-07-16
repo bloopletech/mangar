@@ -174,4 +174,7 @@ CMD
   def self.get_first_file(file_list)
     file_list.reject { |e| e[0, 1] == '.' || !File.image?(e) }.sort.first
   end
+
+  #def self.sort_key(title)
+  #  title.
 end
