@@ -62,16 +62,14 @@ module Mangar
     Mangar.dir = collection.path
     Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
 
-    new_app = !File.exists?(Mangar.mangar_dir)
-    
-    if new_app
+    if !File.exists?(Mangar.mangar_dir)
       Dir.mkdir(Mangar.mangar_dir)
       Dir.mkdir("#{Mangar.mangar_dir}/public")
     end
 
     ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
 
-    ActiveRecord::Migrator.migrate("db/migrate/") if new_app
+    ActiveRecord::Migrator.migrate("db/migrate/")
 
     Collection.most_recently_used = collection
   end

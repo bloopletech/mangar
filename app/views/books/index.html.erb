@@ -20,7 +20,7 @@
 
   <%= form_tag(books_url, { :method => :get, :id => 'search_form' }) do %>
     <%= text_field_tag 'search', params[:search] %>
-    <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Alphabetically', 'LOWER(title)'], ['Last opened at', 'last_opened_at'], ['Added', 'created_at'], ['Pages', 'pages'], ['Opens', 'opens']], params[:sort]) %>
+    <%= select_tag 'sort', options_for_select([['Published', 'published_on'], ['Alphabetically', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']], params[:sort]) %>
     <%= select_tag 'sort_direction', options_for_select([['Descending', 'DESC'], ['Ascending', 'ASC']], params[:sort_direction]) %>
     <%= link_to("Clear search", books_path) %>
   <% end %>
