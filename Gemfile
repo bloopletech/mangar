@@ -10,3 +10,4 @@ gem 'rmagick', :require => 'RMagick'
 gem 'acts-as-taggable-on', '2.1.0'
 gem 'carrierwave', :git => 'http://github.com/jnicklas/carrierwave.git' #need to fix to a specific commit or lock gems or something
 gem 'rubyzip', '0.9.4'
+gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git', :branch => 'rails3'

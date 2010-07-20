@@ -55,6 +55,8 @@ module Mangar
   end
 
 
+  DEFAULT_DB_CONFIG = { :adapter => 'sqlite3', :pool => 5, :timeout => 5000 }
+  COLLECTION_DB_CONFIG = DEFAULT_DB_CONFIG.merge(:database => File.expand_path("~/.mangar.sqlite3"))
 
   mattr_accessor :dir, :mangar_dir
 
@@ -66,12 +68,14 @@ module Mangar
       Dir.mkdir(Mangar.mangar_dir)
       Dir.mkdir("#{Mangar.mangar_dir}/public")
     end
+    
+    db_config = DEFAULT_DB_CONFIG.merge(:database => "#{Mangar.mangar_dir}/db.sqlite3")
 
-    ActiveRecord::Base.establish_connection({ :adapter => 'sqlite3', :database => "#{Mangar.mangar_dir}/db.sqlite3", :pool => 5, :timeout => 5000 })
-
+    ActiveRecord::Base.establish_connection(db_config)
     ActiveRecord::Migrator.migrate("db/migrate/")
+    ActiveRecord::Base.establish_connection(db_config)
 
-    Collection.most_recently_used = collection
+    collection.opened!
   end
 end
 

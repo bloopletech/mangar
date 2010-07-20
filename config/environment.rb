@@ -9,4 +9,9 @@ BookPreviewUploader.root = CarrierWave.root = Rails.public_path
 
 #%w(open gnome-open).detect { |app| system("#{app} http://localhost:30813/") } unless $0 =~ /^rake|irb$/
 
-Mangar.configure(Collection.most_recently_used) if Collection.most_recently_used && File.exists?(Collection.most_recently_used.path)
+#Migrate collections
+ActiveRecord::Base.establish_connection(Mangar::COLLECTION_DB_CONFIG)
+ActiveRecord::Migrator.migrate("db/collections_migrate/")
+ActiveRecord::Base.establish_connection(nil)
+
+Mangar.configure(Collection.most_recently_used) if Collection.most_recently_used && Collection.most_recently_used.exists?

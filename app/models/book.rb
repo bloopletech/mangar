@@ -118,6 +118,7 @@ CMD
       filenames = zf.entries.map(&:name)
       
       first_image_filename = get_first_file(filenames)
+      puts "Processing #{first_image_filename} from #{real_filename}"
       return nil, 0 if first_image_filename.nil?
 
       first_image_io = zf.get_input_stream(first_image_filename)
@@ -127,6 +128,7 @@ CMD
       filenames = filenames.split("\n")
       
       first_image_filename = get_first_file(filenames)
+      puts "Processing #{first_image_filename} from #{real_filename}"
       return nil, 0 if first_image_filename.nil?
 
       first_image_io = IO.popen("cd #{File.escape_name(Mangar.dir)} && unrar p -inul #{File.escape_name(real_filename)} #{File.escape_name(first_image_filename)}")
@@ -150,6 +152,7 @@ CMD
     filenames = Dir.entries(real_dir)
 
     first_image_filename = get_first_file(filenames)
+    puts "Processing #{first_image_filename} from #{real_dir}"
     return nil, 0 if first_image_filename.nil?
 
     return File.new("#{real_dir}/#{first_image_filename}", "r"), filenames.count { |f| File.image?(f) }
