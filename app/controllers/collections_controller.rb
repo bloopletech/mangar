@@ -23,7 +23,20 @@ class CollectionsController < ApplicationController
 
   def edit
     @collection = Collection.find(params[:id])
-    @config = @collection.config || {}
+    render :layout => 'secondary'
+  end
+
+  def update
+    @collection = Collection.find(params[:id])
+    
+    if @collection.update_attributes(params[:collection])
+      Mangar.collection = @collection
+
+      flash[:success] = "Settings changed successfully."
+      redirect_to collections_path
+    else
+      render :action => 'edit'
+    end
   end
 
   def destroy

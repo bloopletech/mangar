@@ -58,11 +58,12 @@ module Mangar
   DEFAULT_DB_CONFIG = { :adapter => 'sqlite3', :pool => 5, :timeout => 5000 }
   COLLECTION_DB_CONFIG = DEFAULT_DB_CONFIG.merge(:database => File.expand_path("~/.mangar.sqlite3"))
 
-  mattr_accessor :dir, :mangar_dir
+  mattr_accessor :collection, :dir, :mangar_dir
 
   def self.configure(collection)
+    Mangar.collection = collection
     Mangar.dir = collection.path
-    Mangar.mangar_dir = "#{Mangar.dir}/.mangar"
+    Mangar.mangar_dir = collection.mangar_path
 
     if !File.exists?(Mangar.mangar_dir)
       Dir.mkdir(Mangar.mangar_dir)
@@ -76,6 +77,14 @@ module Mangar
     ActiveRecord::Base.establish_connection(db_config)
 
     collection.opened!
+  end
+end
+
+module CarrierWave
+  class << self
+    def root
+      "#{Mangar.mangar_dir}/public"
+    end
   end
 end
 

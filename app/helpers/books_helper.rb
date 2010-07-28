@@ -13,4 +13,8 @@ module BooksHelper
     str
     #str.split(' ').map { |sub_str| sub_str.split(/.{,30}/).join("<wbr>") }.join(' ')
   end
+
+  def book_title(book, show)
+    raw (show ? "<div class='title'>#{h wbrize(book.title)}</div>" : "")
+  end
 end

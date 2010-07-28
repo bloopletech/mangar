@@ -16,7 +16,7 @@ class BooksController < ApplicationController
 
       c = Book.connection
       #This next part makes me want to become an hero
-      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "books.title LIKE #{c.quote "%#{t}%"}" }.join(" OR ")
+      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "books.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
       search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT books.title LIKE #{Book.connection.quote "%#{t}%"}" }.join(" AND ")
       
       results.where_values = ["(#{(results.where_values + [search_ex]).compact.map { |w| "(#{w})" }.join(" AND ")})" +
@@ -25,7 +25,7 @@ class BooksController < ApplicationController
       results
     else
       Book
-    end.order("#{params[:sort] || 'published_on'} #{params[:sort_direction] || 'DESC'}").paginate(:page => params[:page], :per_page => 50)
+    end.order("#{params[:sort] || 'published_on'} #{params[:sort_direction] || 'DESC'}").paginate(:page => params[:page], :per_page => 10)
     
     @tags = Book.tag_counts_on(:tags)
   end
@@ -61,8 +61,6 @@ class BooksController < ApplicationController
 
   def import_and_update
     #Thread.new do #Temporarily remopve threading as it seems to be causing import problems
-      #Fix so we don't have to do this.
-      BookPreviewUploader.root = CarrierWave.root = Rails.public_path
       Book.import_and_update
     #end
   end
