@@ -138,11 +138,11 @@ CMD
     
     #Bullshit time
     out_io = StringIO.new(first_image_io.read)
-    out_io.instance_eval do
+    out_io.instance_eval <<-EOF
       def original_filename
-        @original_filename ||= ActiveSupport::SecureRandom.hex(20)
+        "#{ActiveSupport::SecureRandom.hex(20)}#{File.extname(first_image_filename)}"
       end
-    end
+EOF
     
     return out_io, filenames.count { |f| File.image?(f) }
   end

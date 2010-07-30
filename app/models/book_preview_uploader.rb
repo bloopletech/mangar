@@ -19,7 +19,11 @@ class BookPreviewUploader < CarrierWave::Uploader::Base
       if (img.columns > img.rows) && img.columns > Book::PREVIEW_WIDTH && img.rows > Book::PREVIEW_HEIGHT #if it's landscape-oriented
         img.crop!(Magick::EastGravity, img.rows / (Book::PREVIEW_HEIGHT / Book::PREVIEW_WIDTH.to_f), img.rows) #Resize it so the right-most part of the image is shown
       end
+
       img.change_geometry!("#{Book::PREVIEW_WIDTH}>") { |cols, rows, img| img.resize!(cols, rows) }
+      img.page = Magick::Rectangle.new(img.columns, img.rows, 0, 0)
+
+      img
     end
   end
 end
