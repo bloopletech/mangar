@@ -21,7 +21,6 @@ function checkScroll()
     new Ajax.Request(url, { asynchronous: true, evalScripts: true, method: 'get', onSuccess: function(req)
     {
       scroll_lock = false;
-      myLightWindow._setupLinks();
     } });
   }
 }
