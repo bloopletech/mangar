@@ -8,6 +8,7 @@ Mangar::Application.routes.draw do |map|
       get :info
       get :quit
     end
+    resources :pages, :only => [:show]
   end
 
   root :to => "books#index"

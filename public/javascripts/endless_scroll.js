@@ -29,14 +29,6 @@ function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 1000;
 }
 
-function scrollDistanceFromBottom() {
-  return pageHeight() - (window.pageYOffset + self.innerHeight);
-}
-
-function pageHeight() {
-  return $$("body")[0].getHeight();
-}
-
 document.observe('dom:loaded', function()
 {
   setInterval("checkScroll()", 250);

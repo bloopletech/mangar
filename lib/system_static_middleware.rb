@@ -6,28 +6,36 @@ module Mangar
 
     def initialize(app)
       @app = app
-      @file_server = ::Rack::File.new(root)
+      @system_file_server = ::Rack::File.new('.')
+      @books_server = ::Rack::File.new('.')
     end
 
     def call(env)
-      @file_server.root = root
+      @system_file_server.root = system_root
+      @books_server.root = books_root
 
       path   = env['PATH_INFO'].chomp('/')
       method = env['REQUEST_METHOD']
 
-      return @file_server.call(env) if FILE_METHODS.include?(method) && path =~ /^\/system\// && file_exist?(path)
+      if FILE_METHODS.include?(method)
+        return @system_file_server.call(env) if path =~ /^\/system\//
+
+        if path =~ /^\/book_images\//
+          env['PATH_INFO'].gsub!(/^\/book_images/, '')
+          return @books_server.call(env)
+        end
+      end
 
       @app.call(env)
     end
 
     private
-      def file_exist?(path)
-        full_path = "#{root}/#{::Rack::Utils.unescape(path)}"
-        File.file?(full_path) && File.readable?(full_path)
+      def system_root
+        "#{Mangar.mangar_dir}/public"
       end
 
-      def root
-        "#{Mangar.mangar_dir}/public"
+      def books_root
+        "#{Mangar.dir}/"
       end
   end
 end

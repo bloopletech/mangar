@@ -16,21 +16,13 @@ class Book < ActiveRecord::Base
     File.expand_path("#{Mangar.dir}/#{path}")
   end
 
+  def page_urls
+    Dir.entries(real_path).reject { |e| e[0, 1] == '.' }.sort.map { |e| "/book_images/#{path}/#{e}" }
+  end
+
   def open
     increment!(:opens)
     update_attribute(:last_opened_at, DateTime.now)
-    
-    if File.video?(self.path)
-      apps, background = ["gnome-mplayer", "mplayer"], true
-    else
-      if RUBY_PLATFORM =~ /darwin/
-        apps, background = ["open -a /Applications/Xee.app/Contents/MacOS/Xee"], true
-      elsif RUBY_PLATFORM =~ /linux/
-        apps, background = ["comix -f", "geeqie -f", "gqview -f", "eog"], true
-      end
-    end
-
-    apps.detect { |app| system("#{app} #{File.escape_name(real_path)} #{background ? '&' : ''}") }
   end
 
   def delete_original
