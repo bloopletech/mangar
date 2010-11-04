@@ -1,7 +1,7 @@
 page.insert_html(:bottom, "books", :partial => 'book', :collection => @books)
 page << "update_books()"
 page << <<-EOF
-$$('li.page_#{@books.current_page} a').each(function(link)
+$$('li.page_#{@books.current_page} a.lightwindow').each(function(link)
 {
   this._processLink(link);
 }.bind(myLightWindow));
