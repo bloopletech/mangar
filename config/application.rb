@@ -58,16 +58,17 @@ module Mangar
   DEFAULT_DB_CONFIG = { :adapter => 'sqlite3', :pool => 5, :timeout => 5000 }
   COLLECTION_DB_CONFIG = DEFAULT_DB_CONFIG.merge(:database => File.expand_path("~/.mangar.sqlite3"))
 
-  mattr_accessor :collection, :dir, :mangar_dir
+  mattr_accessor :collection, :dir, :mangar_dir, :book_images_dir
 
   def self.configure(collection)
     Mangar.collection = collection
     Mangar.dir = collection.path
     Mangar.mangar_dir = collection.mangar_path
+    Mangar.book_images_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/book_images")
 
     if !File.exists?(Mangar.mangar_dir)
       Dir.mkdir(Mangar.mangar_dir)
-      Dir.mkdir("#{Mangar.mangar_dir}/public")
+      FileUtils.mkdir_p(Mangar.book_images_dir)
     end
     
     db_config = DEFAULT_DB_CONFIG.merge(:database => "#{Mangar.mangar_dir}/db.sqlite3")
