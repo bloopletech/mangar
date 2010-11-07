@@ -71,6 +71,12 @@ module Mangar
       FileUtils.mkdir_p(Mangar.book_images_dir)
     end
     
+    if !File.exists?("#{Mangar.dir}/IMPORTANT.txt")
+      File.open("#{Mangar.dir}/IMPORTANT.txt", "w") do |f|
+        f << "THIS DIRECTORY IS NOT EMPTY - THERE IS MANGA STORED IN THE HIDDEN FOLDER ./.mangar/public/system/book_images/ - DELETING THIS DIRECTORY WILL DELETE THIS MANGA."
+      end
+    end
+    
     db_config = DEFAULT_DB_CONFIG.merge(:database => "#{Mangar.mangar_dir}/db.sqlite3")
 
     ActiveRecord::Base.establish_connection(db_config)

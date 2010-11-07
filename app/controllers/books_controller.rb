@@ -54,7 +54,7 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
 
     #if params[:delete]
-      @book.delete_original
+      #@book.delete_original
     #end
 
     @book.destroy
