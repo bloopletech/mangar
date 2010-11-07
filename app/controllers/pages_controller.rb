@@ -3,9 +3,9 @@ class PagesController < ApplicationController
 
   def show
     id = params[:id].to_i - 1
-    @page_url = @book.page_urls[id]
+    @page_url = @book.page_paths[id]
     @previous_page_url = book_page_path(@book, id) if id > 0
-    @next_page_url = book_page_path(@book, id + 2) if id < (@book.page_urls.length - 1)   
+    @next_page_url = book_page_path(@book, id + 2) if id < (@book.page_paths.length - 1)   
 
     @title = @book.title
   end

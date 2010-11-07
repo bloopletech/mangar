@@ -17,11 +17,7 @@ class Book < ActiveRecord::Base
   end
 
   def page_paths
-    self.class.image_file_list(Dir.entries(real_path)).map { |e| "#{path}/#{e}" }
-  end
-
-  def page_urls    
-    page_paths.map { |e| "/system/book_images/#{e}" }
+    self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/book_images/#{path}/#{e}" }
   end
 
   def open
@@ -37,7 +33,7 @@ class Book < ActiveRecord::Base
   ZIP_EXTS = %w(.zip .cbz)
   RAR_EXTS = %w(.rar .cbr)
   
-  VALID_EXTS = COMPRESSED_FILE_EXTS + File::VIDEO_EXTS
+  VALID_EXTS = COMPRESSED_FILE_EXTS# + File::VIDEO_EXTS
 
   #Iterate recursively over all files/dirs
   #If current item is a zip/rar/cbr/cbz file, pull out first image and store zip filename as manga name and zip filename as filename to load.
@@ -47,17 +43,15 @@ class Book < ActiveRecord::Base
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.dir)} && find . -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
 
     path_list = IO.popen(cmd) { |s| s.read }
-
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
 
     path_list.each { |path| self.import(path) }
-    path_list.each { |path| FileUtils.rm_r("#{Mangar.dir}/#{path}") if File.exists?("#{Mangar.dir}/#{path}") }
   end
 
   def self.import(relative_path) 
@@ -65,15 +59,11 @@ CMD
     relative_dir = relative_path.gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')    
     destination_dir = File.expand_path("#{Mangar.book_images_dir}/#{relative_dir}")
     
+    last_modified = File.mtime(real_path)
+    
     FileUtils.mkdir_p(destination_dir)
 
-    begin
-      #raise "Won't be able to read #{real_import_path}" unless File.readable?(real_import_path)
-      
-      #return if File.video?(real_import_path) #TEMP HACK
-
-      #if File.video?(real_import_path)
-      #  data_from_video_file(real_import_path)
+    begin      
       if COMPRESSED_FILE_EXTS.include?(File.extname(relative_path))
         data_from_compressed_file(real_path, destination_dir)
       else
@@ -87,17 +77,10 @@ CMD
     images = image_file_list(Dir.entries(destination_dir))
 
     title = File.basename(relative_dir).gsub(/_/, ' ')
-    Book.create!(:title => title, :path => relative_dir, :published_on => File.mtime(real_path),
+    Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Book.sort_key(title)) unless images.empty?
-  end
 
-  def self.data_from_video_file(real_filename)
-    frame_filename = "#{Dir.tmpdir}/#{ActiveSupport::SecureRandom.hex(20)}"
-    system("totem-video-thumbnailer -r #{File.escape_name(real_filename)} #{File.escape_name(frame_filename)}")
-    raise "Couldn't thumbnail #{real_filename}" unless File.exists?(frame_filename)
-    at_exit { File.delete(frame_filename) if File.exists?(frame_filename) }
-
-    return File.open(frame_filename, "r"), 1
+    FileUtils.rm_r(real_path) if File.exists?(real_path) 
   end
 
   def self.data_from_compressed_file(real_path, destination_dir)    
@@ -109,11 +92,11 @@ CMD
   end
 
   #dir should be findable from CWD or absolute; no trailing slash
-  def self.data_from_directory(real_path, destination_dir)    
-    puts "copying from #{real_path}"
-    FileUtils.cp_r("#{real_path}/.", destination_dir)    
+  def self.data_from_directory(real_path, destination_dir)          
+    File.rename(real_path, destination_dir)    
   end
 
+  #Needs rewrite
   def self.reprocess
     Book.all.each do |book|
       real_path = File.expand_path("#{Mangar.dir}/#{book.path}")
