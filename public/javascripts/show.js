@@ -6,10 +6,10 @@ document.observe("dom:loaded", function()
   {
     if((index + 1) == pages.length) return;
 
-    index++;
-    $("image").src = pages[index];
-
     window.scrollTo(0, 0);
+
+    index++;  
+    $("image").src = pages[index];    
   }
 
   function previous_page()
@@ -28,10 +28,18 @@ document.observe("dom:loaded", function()
     previous_page();
   });
 
-  window.onkeydown = function()
+  window.onkeydown = function(event)
   {
-    if(event.keyCode == 32 && scrollDistanceFromBottom() == 0) next_page();
-    else if(event.keyCode == 8) previous_page();
+    if(event.keyCode == 32 && scrollDistanceFromBottom() == 0)
+    {
+      Event.stop(event);
+      next_page();
+    }
+    else if(event.keyCode == 8)
+    {
+      Event.stop(event);
+      previous_page();
+    }
   };
 
   next_page();
