@@ -4,7 +4,11 @@ document.observe("dom:loaded", function()
 
   function next_page()
   {
-    if((index + 1) == pages.length) return;
+    if((index + 1) == pages.length)
+    {
+      window.close();
+      return;
+    }
 
     window.scrollTo(0, 0);
 
@@ -42,5 +46,15 @@ document.observe("dom:loaded", function()
     }
   };
 
-  next_page();
+  /*
+  window.setTimeout(function()
+  {
+    images.each(function(image)
+    {
+      new Image(image);
+    });
+  }, 250);
+  */
+
+  next_page();  
 });
