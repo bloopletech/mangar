@@ -10,7 +10,7 @@ module Mangar
     end
 
     def call(env)
-      @file_server.root = root      
+      @file_server.root = "#{Mangar.mangar_dir}/public"      
 
       path   = env['PATH_INFO'].chomp('/')
       method = env['REQUEST_METHOD']
@@ -18,11 +18,6 @@ module Mangar
       return @file_server.call(env) if FILE_METHODS.include?(method) && path =~ /^\/system\//
 
       @app.call(env)
-    end
-
-    private
-    def root
-      "#{Mangar.mangar_dir}/public"
     end
   end
 end

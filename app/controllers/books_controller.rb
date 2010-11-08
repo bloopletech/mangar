@@ -33,7 +33,6 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @book.open
-    redirect_to book_page_path(@book, 1)
   end
 
   def more_info

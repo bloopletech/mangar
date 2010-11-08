@@ -7,8 +7,7 @@ Mangar::Application.routes.draw do |map|
       get :import_and_update
       get :info
       get :quit
-    end
-    resources :pages, :only => [:show]
+    end    
   end
 
   root :to => "books#index"
