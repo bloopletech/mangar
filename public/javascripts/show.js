@@ -10,18 +10,24 @@ document.observe("dom:loaded", function()
       return;
     }
 
-    $("image").src = "";
+    $("image").src = "/images/blank.png";
     window.scrollTo(0, 0);    
 
     index++;  
-    $("image").src = pages[index];    
+    $("image").src = pages[index];
+
+    if((index + 1) < pages.length)
+    {
+      preload = new Image();
+      preload.src = pages[index + 1];
+    }
   }
 
   function previous_page()
   {
     if(index == 0) return;
 
-    $("image").src = "";
+    $("image").src = "/images/blank.png";
     window.scrollTo(0, 0); 
 
     index--;
