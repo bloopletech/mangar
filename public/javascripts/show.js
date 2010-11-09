@@ -10,7 +10,8 @@ document.observe("dom:loaded", function()
       return;
     }
 
-    window.scrollTo(0, 0);
+    $("image").src = "";
+    window.scrollTo(0, 0);    
 
     index++;  
     $("image").src = pages[index];    
@@ -19,6 +20,9 @@ document.observe("dom:loaded", function()
   function previous_page()
   {
     if(index == 0) return;
+
+    $("image").src = "";
+    window.scrollTo(0, 0); 
 
     index--;
     $("image").src = pages[index];
