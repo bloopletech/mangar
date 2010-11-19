@@ -1,0 +1,12 @@
+page.insert_html(:bottom, "items", :partial => 'item', :collection => @items)
+page << "update_items()"
+page << <<-EOF
+$$('li.page_#{@items.current_page} a.lightwindow').each(function(link)
+{
+  this._processLink(link);
+}.bind(myLightWindow));
+EOF
+if is_last_page?(@items)
+  page << "last_page = true;"
+  page.insert_html(:bottom, "items", :partial => 'end_of_results')
+end

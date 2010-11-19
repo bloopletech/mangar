@@ -18,21 +18,37 @@ p, ul { margin-bottom: 1.3em; }
 #tag_cloud .size_4 { font-size: 1.6em; }
 
 .title { font-weight: bold; }
-#books li { width: 200px; height: 320px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
-#books li .emblems, #books li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
-#books li .actions { display: none; right: auto; left: 0; width: 32px; }
-#books li .wrapper > a { color: #000000; text-decoration: none; }
-#books li .info { display: none; }
-#books li .info img { vertical-align: middle; }
-#books .tag_list { min-height: 1.2em; }
-#books .tag_list:hover { background-color: #ffffaa; }
-#books input { width: 100%; }
-/*#books .tags form { display: none; }*/
+#items li { width: 200px; height: 320px; margin: 0 15px 15px 0; float: left; list-style-type: none; position: relative; }
+#items li .emblems, #items li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
+#items li .actions { display: none; right: auto; left: 0; width: 32px; }
+#items li .wrapper > a { color: #000000; text-decoration: none; }
+#items li .info { display: none; }
+#items li .info img { vertical-align: middle; }
+#items .tag_list { min-height: 1.2em; }
+#items .tag_list:hover { background-color: #ffffaa; }
+#items input { width: 100%; }
+/*#items .tags form { display: none; }*/
 
-#books li:hover { overflow: visible; z-index: 999; }
-#books li:hover .wrapper { position: absolute; top: 0; left: 0; background-color: #ffffff; }
-#books li:hover .actions, #books li:hover .info { display: block; }
+#items li:hover { overflow: visible; z-index: 999; }
+#items li:hover .wrapper { position: absolute; top: 0; left: 0; background-color: #ffffff; }
+#items li:hover .actions, #items li:hover .info { display: block; }
 
-#book .title_image { float: left; margin-right: 15px; }
-#book #info { float: left; width: 315px; }
-#book .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }
+#item .title_image { float: left; margin-right: 15px; }
+#item #info { float: left; width: 315px; }
+#item .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }
+
+/*
+#items-index body {
+ background-image: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    color-stop(0.39, rgb(0,0,0)),
+    color-stop(0.73, rgb(46,46,46))
+);
+ background-image: -moz-linear-gradient(
+    left top,
+    rgb(0,0,0) 39%,
+    rgb(46,46,46) 73%
+);
+}*/

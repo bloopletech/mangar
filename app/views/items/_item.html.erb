@@ -1,0 +1,35 @@
+<li id="<%= dom_id item %>" class="page_<%= @items.current_page %>">
+  <div class="wrapper">
+    <%
+    many_opens = item.opens >= 10
+    many_pages = item.pages >= 50
+    %>
+    <% if many_opens || many_pages %>
+      <div class="emblems">
+        <% if many_opens %><%= image_tag("icons/award_star_bronze_1.png", :title => "Has been read 10 or more times.") %><% end %>
+        <% if many_pages %><%= image_tag("icons/book.png", :title => "Has 50 or more pages") %><% end %>
+      </div>
+    <% end %>
+      <div class="actions">
+        <%= link_to(image_tag("icons/zoom.png", :title => "More information about this item"),
+        more_info_item_path(item), :class => 'lightwindow', :params => 
+        "lightwindow_type=external,lightwindow_width=550,lightwindow_height=350") %><%#= image_tag("icons/" + if item.win?
+        #  "thumbs_up.png"
+        #elsif item.fail?
+        #  "thumbs_down.png"
+        #else
+        #  "shading.png"
+        #end) %><%= link_to(image_tag("icons/delete.png", :title => 'Delete this item'), item_url(item), :method => 'delete', :confirm => "Are you sure you want to delete #{item.title}?", :remote => true) %>
+    </div>
+    <%= link_to(image_tag(item.preview.url) + item_title(item, Mangar.collection.always_show_title?), send("#{item.type.downcase}_url", item), :target => '_blank') %>
+    <div class="info">
+      <%= item_title(item, !Mangar.collection.always_show_title?) %>
+      <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.pages %>&nbsp;&nbsp;
+      <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
+      <div class="tag_list"><%= h item.tag_list %></div>
+      <%= form_for item.becomes(Item), :remote => true do |f| %>
+          <%= f.text_field :tag_list, :class => 'input' %>
+        <% end %>
+    </div>
+  </div>
+</li>

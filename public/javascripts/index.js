@@ -1,6 +1,6 @@
-var update_books = function()
+var update_items = function()
 {
-  $$("#books .tag_list").each(function(div)
+  $$("#items .tag_list").each(function(div)
   {
     div.observe("click", function(event)
     {
@@ -12,7 +12,7 @@ var update_books = function()
   });
 };
 
-document.observe("dom:loaded", update_books);
+document.observe("dom:loaded", update_items);
 
 document.observe('dom:loaded', function()
 {

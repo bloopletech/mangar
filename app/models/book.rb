@@ -1,39 +1,22 @@
-require 'book_preview_uploader'
+require 'item_preview_uploader'
 
-class Book < ActiveRecord::Base
-  acts_as_taggable
-
+class Book < Item
   PREVIEW_WIDTH = 200
   PREVIEW_HEIGHT = 314
-#  has_attached_file :preview, :url => "file://#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :path => "#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
-#  has_attached_file :preview, :path => "#{Mangar.mangar_dir}/system/:attachment/:id/:style/:filename", :styles => { :medium => "200>" }, :default_style => :medium
-
-  mount_uploader :preview, BookPreviewUploader
+  
+  mount_uploader :preview, ItemPreviewUploader
 
   #default_scope :order => 'published_on DESC'
 
-  def real_path
-    File.expand_path("#{Mangar.book_images_dir}/#{path}")
-  end
-
   def page_paths
-    self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/book_images/#{path}/#{e}" }
-  end
-
-  def open
-    increment!(:opens)
-    update_attribute(:last_opened_at, DateTime.now)
-  end
-
-  def delete_original
-    `rm -rf #{File.escape_name(real_path)}`
-  end
+    self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
+  end  
 
   COMPRESSED_FILE_EXTS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTS = %w(.zip .cbz)
   RAR_EXTS = %w(.rar .cbr)
   
-  VALID_EXTS = COMPRESSED_FILE_EXTS# + File::VIDEO_EXTS
+  VALID_EXTS = COMPRESSED_FILE_EXTS
 
   #Iterate recursively over all files/dirs
   #If current item is a zip/rar/cbr/cbz file, pull out first image and store zip filename as manga name and zip filename as filename to load.
@@ -57,7 +40,7 @@ CMD
   def self.import(relative_path) 
     real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
     relative_dir = relative_path.gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')    
-    destination_dir = File.expand_path("#{Mangar.book_images_dir}/#{relative_dir}")
+    destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
     
     last_modified = File.mtime(real_path)
     
@@ -78,7 +61,7 @@ CMD
 
     title = File.basename(relative_dir).gsub(/_/, ' ')
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
-     :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Book.sort_key(title)) unless images.empty?
+     :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 
     FileUtils.rm_r(real_path) if File.exists?(real_path) 
   end
@@ -115,9 +98,5 @@ CMD
 
   def self.image_file_list(file_list)
     file_list.reject { |e| e[0, 1] == '.' || !File.image?(e) }.sort
-  end
-
-  def self.sort_key(title)
-    title.gsub(/[^A-Za-z0-9]+/, '').downcase
-  end
+  end  
 end
