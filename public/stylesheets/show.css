@@ -1,6 +1,2 @@
 body { padding: 0; }
 img { display: block; margin: 0 auto 0 auto; }
-#previous_page_link { display: block; position: absolute; top: 0; left: 0; z-index: 100; width: 100px; height: 100%; text-decoration: none; }
-#previous_page_link:hover { background-color: #000000; color: #ffffff; opacity: 0.6;  }
-#previous_page_link > span { display: none; }
-#previous_page_link:hover > span { display: block; }

@@ -1,19 +1,27 @@
 document.observe("dom:loaded", function()
 {
-  var index = -1;
-
-  function next_page()
+  function get_index()
   {
-    if((index + 1) == pages.length)
-    {
-      window.close();
-      return;
-    }
+    var index = parseInt(location.hash.substr(1));    
+    if(isNaN(index)) index = 0;
+    return index;
+  }
+
+  function go_next_page()
+  {
+    var index = get_index();
+    index += 1;
+
+    if(index >= pages.length) index = pages.length - 1;
+    location.hash = "#" + index;
+  }
+
+  window.onhashchange = function()
+  {    
+    var index = get_index();
 
     $("image").src = "/images/blank.png";
     window.scrollTo(0, 0);    
-
-    index++;  
     $("image").src = pages[index];
 
     if((index + 1) < pages.length)
@@ -23,48 +31,15 @@ document.observe("dom:loaded", function()
     }
   }
 
-  function previous_page()
-  {
-    if(index == 0) return;
-
-    $("image").src = "/images/blank.png";
-    window.scrollTo(0, 0); 
-
-    index--;
-    $("image").src = pages[index];
-  }
-
-  $("image").observe("click", next_page);
-
-  $("previous_page_link").observe("click", function(event)
-  {
-    Event.stop(event);
-    previous_page();
-  });
-
   window.onkeydown = function(event)
   {
     if(event.keyCode == 32 && scrollDistanceFromBottom() == 0)
     {
       Event.stop(event);
-      next_page();
-    }
-    else if(event.keyCode == 8)
-    {
-      Event.stop(event);
-      previous_page();
-    }
+      go_next_page();      
+    }    
   };
 
-  /*
-  window.setTimeout(function()
-  {
-    images.each(function(image)
-    {
-      new Image(image);
-    });
-  }, 250);
-  */
-
-  next_page();  
+  $("image").onclick = go_next_page;
+  location.hash = "#0";
 });
