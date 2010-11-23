@@ -37,7 +37,12 @@ document.observe("dom:loaded", function()
     {
       Event.stop(event);
       go_next_page();      
-    }    
+    }
+    else if(event.keyCode == 8)
+    {
+      Event.stop(event);
+      history.back();
+    }
   };
 
   $("image").onclick = go_next_page;
