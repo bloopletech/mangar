@@ -1,8 +1,8 @@
-document.observe("dom:loaded", function()
+$(function()
 {
   function get_index()
   {
-    var index = parseInt(location.hash.substr(1));    
+    var index = parseInt(location.hash.substr(1)); 
     if(isNaN(index)) index = 0;
     return index;
   }
@@ -16,35 +16,34 @@ document.observe("dom:loaded", function()
     location.hash = "#" + index;
   }
 
-  window.onhashchange = function()
-  {    
+  $(window).bind('hashchange', function()
+  {
     var index = get_index();
 
-    $("image").src = "/images/blank.png";
+    $("#image").attr('src', "/images/blank.png");
     window.scrollTo(0, 0);    
-    $("image").src = pages[index];
+    $("#image").attr('src', pages[index]);
 
     if((index + 1) < pages.length)
     {
       preload = new Image();
-      preload.src = pages[index + 1];
+      preload.src = pages[index + 1];      
     }
-  }
+    }).trigger('hashchange');
 
-  window.onkeydown = function(event)
+  $(window).keydown(function(event)
   {
-    if(event.keyCode == 32 && scrollDistanceFromBottom() == 0)
+    if(event.keyCode == 32 && scrollDistanceFromBottom() <= 0)
     {
-      Event.stop(event);
+      event.preventDefault();
       go_next_page();      
     }
     else if(event.keyCode == 8)
     {
-      Event.stop(event);
+      event.preventDefault();
       history.back();
     }
-  };
+  });
 
-  $("image").onclick = go_next_page;
-  location.hash = "#0";
+  $("body").click(go_next_page);  
 });

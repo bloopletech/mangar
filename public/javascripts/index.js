@@ -1,10 +1,11 @@
 var update_items = function()
 {
-  $$("#items .tag_list").each(function(div)
+  $("#items .tag_list").each(function()
   {
-    div.observe("click", function(event)
+    var div = $(this);
+    div.click(function(event)
     {
-      div.next().show().down(".input").focus();
+      div.next().show().find(".input").focus();
       div.hide();
     });
 
@@ -12,29 +13,29 @@ var update_items = function()
   });
 };
 
-document.observe("dom:loaded", update_items);
+$(update_items);
 
-document.observe('dom:loaded', function()
-{
-  var submit_func = function(element, value)
+$(function()
+{  
+  $("#sort, #sort_direction").delayedObserver(1.0, function()
   {
-   $('search_form').submit();
-  };
-  new Form.Element.Observer('sort', 1.0, submit_func);
-  new Form.Element.Observer('sort_direction', 1.0, submit_func);
+    $('#search_form').submit();
+  });
 
-  $("tag_cloud_link").observe("click", function(event)
+  $("#tag_cloud_link").click(function(event)
   {
     event.preventDefault();
   });
   
-  $("tag_cloud_link").observe("mouseenter", function(event)
+  $("#tag_cloud_link").mouseenter(function(event)
   {
-    $("tag_cloud").show();
+    $("#tag_cloud").show();
   });
 
-  $("tag_cloud").observe("mouseleave", function(event)
+  $("#tag_cloud").mouseleave(function(event)
   {
-    $("tag_cloud").hide();
+    $("#tag_cloud").hide();
   });
+
+  $("#items .colorbox").colorbox({ width: 590, height: 390 });
 });

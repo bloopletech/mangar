@@ -1,10 +1,11 @@
 require 'item_preview_uploader'
+require 'book_preview_uploader'
 
 class Book < Item
   PREVIEW_WIDTH = 200
   PREVIEW_HEIGHT = 314
   
-  mount_uploader :preview, ItemPreviewUploader
+  mount_uploader :preview, BookPreviewUploader
 
   #default_scope :order => 'published_on DESC'
 
@@ -50,6 +51,8 @@ CMD
       if COMPRESSED_FILE_EXTS.include?(File.extname(relative_path))
         data_from_compressed_file(real_path, destination_dir)
       else
+        puts "Dir.entries(real_path): #{Dir.entries(real_path).inspect}"
+        return if Dir.entries(real_path).length == 2
         data_from_directory(real_path, destination_dir)
       end      
     rescue Exception => e

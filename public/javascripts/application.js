@@ -3,5 +3,5 @@ function scrollDistanceFromBottom() {
 }
 
 function pageHeight() {
-  return $$("body")[0].getHeight();
+  return $("body").height();
 }

@@ -58,8 +58,8 @@ class ItemsController < ApplicationController
 
   def import_and_update
     #Thread.new do #Temporarily remopve threading as it seems to be causing import problems
-      Book.import_and_update
       Video.import_and_update
+      Book.import_and_update
     #end
   end
 
