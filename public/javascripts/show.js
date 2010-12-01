@@ -20,8 +20,8 @@ $(function()
   {
     var index = get_index();
 
-    $("#image").attr('src', "/images/blank.png");
-    window.scrollTo(0, 0);    
+    $("#image").attr('src', "/images/blank.png");    
+    window.scrollTo(0, 0);
     $("#image").attr('src', pages[index]);
 
     if((index + 1) < pages.length)
@@ -29,7 +29,8 @@ $(function()
       preload = new Image();
       preload.src = pages[index + 1];      
     }
-    }).trigger('hashchange');
+      
+  }).trigger('hashchange');
 
   $(window).keydown(function(event)
   {
