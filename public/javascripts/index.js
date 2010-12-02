@@ -17,10 +17,8 @@ $(update_items);
 
 $(function()
 {  
-  $("#sort, #sort_direction").delayedObserver(1.0, function()
-  {
-    $('#search_form').submit();
-  });
+  $("#sort").delayedObserver(1.0, function() { $('#search_form').submit(); });
+  $("#sort_direction").delayedObserver(1.0, function() { $('#search_form').submit(); });
 
   $("#tag_cloud_link").click(function(event)
   {
