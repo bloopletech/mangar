@@ -1,11 +1,9 @@
 require 'item_preview_uploader'
-require 'book_preview_uploader'
+#require 'book_preview_uploader'
 
 class Book < Item
   PREVIEW_WIDTH = 200
-  PREVIEW_HEIGHT = 314
-  
-  mount_uploader :preview, BookPreviewUploader
+  PREVIEW_HEIGHT = 314  
 
   #default_scope :order => 'published_on DESC'
 
@@ -63,6 +61,8 @@ CMD
     images = image_file_list(Dir.entries(destination_dir))
 
     title = File.basename(relative_dir).gsub(/_/, ' ')
+    puts "f: #{File.open("#{destination_dir}/#{images.first}").inspect}"
+puts File.read("#{destination_dir}/#{images.first}").length
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 

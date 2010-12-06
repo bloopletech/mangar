@@ -1,7 +1,10 @@
 class Item < ActiveRecord::Base
   acts_as_taggable
 
+  mount_uploader :preview, ItemPreviewUploader
+
   def real_path
+    puts "asking for real_path: #{Mangar.send("#{self.class.name.underscore.pluralize}_dir")}/#{path}"
     File.expand_path("#{Mangar.send("#{self.class.name.underscore.pluralize}_dir")}/#{path}")
   end
 

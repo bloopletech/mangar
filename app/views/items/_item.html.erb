@@ -1,4 +1,4 @@
-<li id="<%= dom_id item %>" class="page_<%= @items.current_page %>">
+<li id="<%= dom_id item %>" class="page_<%= @items.current_page %> <%= item.class.name.downcase %>">
   <div class="wrapper">
     <%
     many_opens = item.opens >= 10

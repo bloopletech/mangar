@@ -36,4 +36,5 @@ $(function()
   });
 
   $("#items .colorbox").colorbox({ width: 590, height: 390 });
+  $("#header .colorbox").colorbox({ width: 590, height: 390 });
 });

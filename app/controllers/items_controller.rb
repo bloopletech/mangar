@@ -30,7 +30,7 @@ class ItemsController < ApplicationController
     end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 10)
     
     @tags = Item.tag_counts_on(:tags)
-  end  
+  end
 
   def more_info
     @item = Item.find(params[:id])
