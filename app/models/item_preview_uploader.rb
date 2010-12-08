@@ -16,28 +16,30 @@ class ItemPreviewUploader < CarrierWave::Uploader::Base
 
   def thumbnail
     manipulate! do |img|
-      puts "img.columns: #{img.columns}, img.rows: #{img.rows}"
-      img = send("handle_#{model.class.name.downcase}_image", img, model.class::PREVIEW_WIDTH, model.class::PREVIEW_HEIGHT)
+      p_width = model.class::PREVIEW_WIDTH
+      p_height = model.class::PREVIEW_HEIGHT
+      img = send("handle_#{model.class.name.downcase}_image", img, p_width, p_height)
       img.page = Magick::Rectangle.new(img.columns, img.rows, 0, 0)
+      img.excerpt!(0, 0, p_width, p_height)
 
       img
     end
   end
 
   def handle_book_image(img, p_width, p_height)
-    puts "p_width: #{p_width}, p_height: #{p_height}"
     if (img.columns > img.rows) && img.columns > p_width && img.rows > p_height #if it's landscape-oriented
       img.crop!(Magick::EastGravity, img.rows / (p_height / p_width.to_f), img.rows) #Resize it so the right-most part of the image is shown
     end
 
-    img.change_geometry!("#{p_width}>") { |cols, rows, img| img.resize!(cols, rows) }
-    #img
+    img.change_geometry!("#{p_width}>") { |cols, rows, _img| _img.resize!(cols, rows) }
+
+    img
   end
 
-    def handle_video_image(img, p_width, p_height)
+  def handle_video_image(img, p_width, p_height)
     puts "p_width: #{p_width}, p_height: #{p_height}"
     if (img.rows > img.columns) && img.columns > p_width && img.rows > p_height #if it's portrait-oriented
-      img.crop!(Magick::CenterGravity, img.columns, img.columns / (p_width / p_height.to_f)) #Resize it so the right-most part of the image is shown
+      img.crop!(Magick::CenterGravity, img.columns, img.coluchange_geometrymns / (p_width / p_height.to_f)) #Resize it so the right-most part of the image is shown
     end
 
     img.change_geometry!("#{p_width}>") { |cols, rows, img| img.resize!(cols, rows) }

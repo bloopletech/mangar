@@ -2,14 +2,14 @@ require 'item_preview_uploader'
 #require 'book_preview_uploader'
 
 class Book < Item
-  PREVIEW_WIDTH = 200
-  PREVIEW_HEIGHT = 314  
+  PREVIEW_WIDTH = 167
+  PREVIEW_HEIGHT = 262
 
   #default_scope :order => 'published_on DESC'
 
   def page_paths
     self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
-  end  
+  end
 
   COMPRESSED_FILE_EXTS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTS = %w(.zip .cbz)
@@ -36,23 +36,23 @@ CMD
     path_list.each { |path| self.import(path) }
   end
 
-  def self.import(relative_path) 
+  def self.import(relative_path)
     real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
-    relative_dir = relative_path.gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')    
+    relative_dir = relative_path.gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
     destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
     
     last_modified = File.mtime(real_path)
     
     FileUtils.mkdir_p(destination_dir)
 
-    begin      
+    begin
       if COMPRESSED_FILE_EXTS.include?(File.extname(relative_path))
         data_from_compressed_file(real_path, destination_dir)
       else
         puts "Dir.entries(real_path): #{Dir.entries(real_path).inspect}"
         return if Dir.entries(real_path).length == 2
         data_from_directory(real_path, destination_dir)
-      end      
+      end
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
       return
@@ -66,40 +66,35 @@ puts File.read("#{destination_dir}/#{images.first}").length
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 
-    FileUtils.rm_r(real_path) if File.exists?(real_path) 
+    FileUtils.rm_r(real_path) if File.exists?(real_path)
   end
 
-  def self.data_from_compressed_file(real_path, destination_dir)    
+  def self.data_from_compressed_file(real_path, destination_dir)
     if ZIP_EXTS.include?(File.extname(real_path))
-      system("unzip #{File.escape_name(real_path)} -d #{File.escape_name(destination_dir)}")      
+      system("unzip #{File.escape_name(real_path)} -d #{File.escape_name(destination_dir)}")
     elsif RAR_EXTS.include?(File.extname(real_path))
-      system("cd #{File.escape_name(destination_dir)} && unrar e #{File.escape_name(real_path)}")      
-    end    
+      system("cd #{File.escape_name(destination_dir)} && unrar e #{File.escape_name(real_path)}")
+    end
   end
 
   #dir should be findable from CWD or absolute; no trailing slash
-  def self.data_from_directory(real_path, destination_dir)          
-    File.rename(real_path, destination_dir)    
+  def self.data_from_directory(real_path, destination_dir)
+    File.rename(real_path, destination_dir)
   end
 
   #Needs rewrite
-  def self.reprocess
-    Book.all.each do |book|
-      real_path = File.expand_path("#{Mangar.dir}/#{book.path}")
-    
-      first_image_io, page_count = if COMPRESSED_FILE_EXTS.include?(File.extname(real_path))
-        data_from_compressed_file(real_path)
-      else
-        data_from_directory(real_path)
-      end
-    
-      next if first_image_io.nil?
+  def rethumbnail
+    book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
+    puts "book_dir: #{book_dir.inspect}"
+    images = self.class.image_file_list(Dir.entries(book_dir))
+    update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
+  end
 
-      book.update_attribute(:preview, first_image_io)
-    end
+  def self.rethumbnail
+    Book.all.each(&:rethumbnail)
   end
 
   def self.image_file_list(file_list)
     file_list.reject { |e| e[0, 1] == '.' || !File.image?(e) }.sort
-  end  
+  end
 end
