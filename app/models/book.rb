@@ -82,12 +82,15 @@ puts File.read("#{destination_dir}/#{images.first}").length
     File.rename(real_path, destination_dir)
   end
 
-  #Needs rewrite
   def rethumbnail
-    book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
-    puts "book_dir: #{book_dir.inspect}"
-    images = self.class.image_file_list(Dir.entries(book_dir))
-    update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
+    begin
+      book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
+      images = self.class.image_file_list(Dir.entries(book_dir))
+      update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
+    rescue Exception => e
+      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      return
+    end
   end
 
   def self.rethumbnail
