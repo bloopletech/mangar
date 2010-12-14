@@ -1,3 +1,0 @@
-class VideoPreviewUploader < ItemPreviewUploader
-  
-end

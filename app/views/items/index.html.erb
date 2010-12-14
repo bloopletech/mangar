@@ -27,19 +27,18 @@
   </div>
   
   <div class="clear"></div>
+  <% if @items.empty? || is_last_page?(@items) %>
+    <script type="text/javascript">
+      last_page = true;
+    </script>
+  <% end %>
   <ul id="items">
     <% @items.each do |b| %>
       <%= render :partial => 'item', :locals => { :item => b } %>
     <% end %>
     <% if @items.empty? %>
-    <script type="text/javascript">
-        last_page = true;
-      </script>
-      No results found.
-      <% elsif is_last_page?(@items) %>
-    <script type="text/javascript">
-        last_page = true;
-      </script>
+      <li class='no_results'>No results found.</li>
+    <% elsif is_last_page?(@items) %>
       <%= render :partial => 'end_of_results' %>
     <% end %>
   </ul>

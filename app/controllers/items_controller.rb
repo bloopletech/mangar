@@ -27,7 +27,7 @@ class ItemsController < ApplicationController
       results
     else
       Item
-    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 10)
+    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 60)
     
     @tags = Item.tag_counts_on(:tags)
   end

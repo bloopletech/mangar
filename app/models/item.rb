@@ -14,8 +14,13 @@ class Item < ActiveRecord::Base
   end
 
   def delete_original
-    FileUtils.mkdir_p(File.dirname("#{Mangar.deleted_dir}/#{path}"))
-    File.rename(real_path, "#{Mangar.deleted_dir}/#{path}")    
+    begin
+      FileUtils.mkdir_p(File.dirname("#{Mangar.deleted_dir}/#{path}"))
+      File.rename(real_path, "#{Mangar.deleted_dir}/#{path}")
+    rescue Exception => e
+      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      return
+    end
   end
 
   def self.sort_key(title)

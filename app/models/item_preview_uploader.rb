@@ -20,6 +20,7 @@ class ItemPreviewUploader < CarrierWave::Uploader::Base
       p_height = model.class::PREVIEW_HEIGHT
       img = send("handle_#{model.class.name.downcase}_image", img, p_width, p_height)
       img.page = Magick::Rectangle.new(img.columns, img.rows, 0, 0)
+      img = img.extent(p_width, p_height, 0, 0)
       img.excerpt!(0, 0, p_width, p_height)
 
       img

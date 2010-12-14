@@ -1,3 +1,0 @@
-class BookPreviewUploader < ItemPreviewUploader
-  
-end

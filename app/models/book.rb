@@ -1,5 +1,4 @@
 require 'item_preview_uploader'
-#require 'book_preview_uploader'
 
 class Book < Item
   PREVIEW_WIDTH = 167
@@ -34,11 +33,13 @@ CMD
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
 
     path_list.each { |path| self.import(path) }
+    
+    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \;")
   end
 
   def self.import(relative_path)
     real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
-    relative_dir = relative_path.gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
+    relative_dir = relative_path.gsub('/', '__').gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
     destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
     
     last_modified = File.mtime(real_path)
@@ -49,7 +50,6 @@ CMD
       if COMPRESSED_FILE_EXTS.include?(File.extname(relative_path))
         data_from_compressed_file(real_path, destination_dir)
       else
-        puts "Dir.entries(real_path): #{Dir.entries(real_path).inspect}"
         return if Dir.entries(real_path).length == 2
         data_from_directory(real_path, destination_dir)
       end
@@ -60,13 +60,12 @@ CMD
 
     images = image_file_list(Dir.entries(destination_dir))
 
-    title = File.basename(relative_dir).gsub(/_/, ' ')
-    puts "f: #{File.open("#{destination_dir}/#{images.first}").inspect}"
-puts File.read("#{destination_dir}/#{images.first}").length
+    title = File.basename(relative_dir).gsub(/_/, ' ').gsub(/ +/, ' ').strip
+    
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 
-    FileUtils.rm_r(real_path) if File.exists?(real_path)
+    #FileUtils.rm_r(real_path) if File.exists?(real_path)
   end
 
   def self.data_from_compressed_file(real_path, destination_dir)

@@ -25,7 +25,7 @@ module Mangar
 
     def initialize(app)
       @app = app
-      @file_server = ::Rack::File.new('.')      
+      @file_server = ::Rack::File.new('.')
     end
 
     def call(env)
@@ -33,6 +33,11 @@ module Mangar
 
       path   = env['PATH_INFO'].chomp('/')
       method = env['REQUEST_METHOD']
+      
+      
+  #s = TCPSocket.new 'yourdomain.com', 5000
+  #File.open 'somefile.txt' { |f| s.sendfile f }
+  #s.close
       
       return @file_server.call(env) if FILE_METHODS.include?(method) && path =~ /^\/system\//
 
