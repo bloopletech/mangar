@@ -17,6 +17,8 @@ puts "cmd: #{cmd.inspect}"
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
 
     path_list.each { |path| self.import(path) }
+    
+    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
   def self.import(relative_path)

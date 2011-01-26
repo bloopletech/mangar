@@ -7,7 +7,8 @@
     Published: <%= @item.published_on %><br>
     Added: <%= @item.created_at %><br>
     Last Opened: <%= @item.last_opened_at || "Unknown" %><br>
-    Tags: <%= raw @item.tag_counts.map { |tag| link_to tag.name, items_path(params.except(:controller, :action).merge(:search => tag.name)), :title => pluralize(tag.taggings.count, "Occurence"), :target => "_top" }.join(' ') %>
+    Tags: <%= raw @item.tag_counts.map { |tag| link_to tag.name, items_path(params.except(:controller, :action).merge(:search => tag.name)), :title => pluralize(tag.taggings.count, "Occurence"), :target => "_top" }.join(' ') %><br>
+    Path: ./<%= @item.path %>
     <%# tag.taggings is a hack, if we ever tag a different mofdel, will need to restrict to books. %>
     <div class="actions">
       <ul>

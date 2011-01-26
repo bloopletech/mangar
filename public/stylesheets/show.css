@@ -1,2 +1,6 @@
 body { padding: 0; }
 img { display: block; margin: 0 auto 0 auto; }
+
+@media screen and (max-width: 800px) {
+  img { max-width: 800px; }
+}

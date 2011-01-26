@@ -34,7 +34,7 @@ CMD
 
     path_list.each { |path| self.import(path) }
     
-    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \;")
+    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
   def self.import(relative_path)
