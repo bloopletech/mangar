@@ -59,3 +59,7 @@ p, ul { margin-bottom: 1.3em; }
     rgb(46,46,46) 73%
 );
 }*/
+
+@media screen and (max-width: 844px) {
+  .desktop-only { display: none; }
+}

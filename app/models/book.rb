@@ -65,7 +65,7 @@ CMD
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 
-    #FileUtils.rm_r(real_path) if File.exists?(real_path)
+    FileUtils.rm_r(real_path) if File.exists?(real_path)
   end
 
   def self.data_from_compressed_file(real_path, destination_dir)
