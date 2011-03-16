@@ -1,0 +1,1 @@
+page << "if(window.opener.$('##{dom_id @item} span.opens').length > 0) window.opener.$('##{dom_id @item} span.opens').text('#{@item.opens}');"

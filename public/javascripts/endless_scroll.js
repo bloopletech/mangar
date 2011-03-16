@@ -10,18 +10,10 @@ function checkScroll()
 
     current_page++;
 
-    var qs = $H(location.search.toQueryParams());
-    qs.each(function(pair)
-    {
-      qs.set(pair.key, pair.value.replace("+", " "));
-    });
-
-    var url = location.pathname + "?" + qs.merge({ 'page' : current_page }).toQueryString();
-
-    new Ajax.Request(url, { asynchronous: true, evalScripts: true, method: 'get', onSuccess: function(req)
+    $.get($.param.querystring(location.href, { 'page' : current_page }), {}, function(req)
     {
       scroll_lock = false;
-    } });
+    }, 'script');
   }
 }
 
@@ -29,15 +21,7 @@ function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 1000;
 }
 
-function scrollDistanceFromBottom() {
-  return pageHeight() - (window.pageYOffset + self.innerHeight);
-}
-
-function pageHeight() {
-  return $$("body")[0].getHeight();
-}
-
-document.observe('dom:loaded', function()
+$(function()
 {
   setInterval("checkScroll()", 250);
 });

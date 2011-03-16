@@ -58,17 +58,30 @@ module Mangar
   DEFAULT_DB_CONFIG = { :adapter => 'sqlite3', :pool => 5, :timeout => 5000 }
   COLLECTION_DB_CONFIG = DEFAULT_DB_CONFIG.merge(:database => File.expand_path("~/.mangar.sqlite3"))
 
-  mattr_accessor :collection, :dir, :mangar_dir
+  mattr_accessor :collection, :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir
 
   def self.configure(collection)
     Mangar.collection = collection
     Mangar.dir = collection.path
     Mangar.mangar_dir = collection.mangar_path
+    Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
+    Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
+    Mangar.deleted_dir = File.expand_path("#{Mangar.mangar_dir}/deleted")
 
-    if !File.exists?(Mangar.mangar_dir)
-      Dir.mkdir(Mangar.mangar_dir)
-      Dir.mkdir("#{Mangar.mangar_dir}/public")
-    end
+    Dir.mkdir(Mangar.mangar_dir) if !File.exists?(Mangar.mangar_dir)
+    [Mangar.books_dir, Mangar.videos_dir, Mangar.deleted_dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
+
+    important_filename = "#{Mangar.dir}/IMPORTANT!!! - DO NOT DELETE.txt"
+    #if !File.exists?(important_filename)
+      File.open(important_filename, "w") do |f|
+        f << <<-EOF
+THIS DIRECTORY IS NOT EMPTY.
+
+THERE IS MANGA STORED IN THE HIDDEN FOLDER #{Mangar.books_dir} - DELETING THIS DIRECTORY WILL DELETE THIS MANGA.
+THERE ARE VIDEOS STORED IN THE HIDDEN FOLDER #{Mangar.videos_dir} - DELETING THIS DIRECTORY WILL DELETE THESE VIDEOS.
+EOF
+      end
+    #end
     
     db_config = DEFAULT_DB_CONFIG.merge(:database => "#{Mangar.mangar_dir}/db.sqlite3")
 

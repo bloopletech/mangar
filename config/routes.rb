@@ -1,5 +1,5 @@
 Mangar::Application.routes.draw do |map|
-  resources :books do
+  resources :items do
     member do
       get :more_info
     end
@@ -7,10 +7,13 @@ Mangar::Application.routes.draw do |map|
       get :import_and_update
       get :info
       get :quit
-    end
+    end    
   end
 
-  root :to => "books#index"
+  resources :books, :only => [:show]
+  resources :videos, :only => [:show]
+
+  root :to => "items#index"
 
   resources :collections  
   
