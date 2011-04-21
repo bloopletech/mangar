@@ -9,7 +9,6 @@ class Video < Item
     cmd = <<-CMD
 cd #{File.escape_name(Mangar.dir)} && find . -depth \\( -type f \\( #{File::VIDEO_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
-puts "cmd: #{cmd.inspect}"
 
     $stdout.puts #This makes it actually import; fuck knows why
 
