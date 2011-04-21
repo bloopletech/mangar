@@ -23,6 +23,7 @@ puts "cmd: #{cmd.inspect}"
 
   def self.import(relative_path)
     real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
+    relative_path = relative_path.gsub('/', '__')
     destination_path = File.expand_path("#{Mangar.videos_dir}/#{relative_path}")
     
     last_modified = File.mtime(real_path)
@@ -54,11 +55,10 @@ puts "cmd: #{cmd.inspect}"
 
   def rethumbnail
     begin
-      puts "real_path: #{real_path.inspect}"
       update_attribute(:preview, Video.preview_from_video_file(real_path))
-  #  rescue Exception => e
-    #  ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
-    #  return
+    rescue Exception => e
+      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      return
     end
   end
 

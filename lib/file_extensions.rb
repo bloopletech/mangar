@@ -4,7 +4,7 @@ class File
   end
 
   IMAGE_EXTS = %w(.png .jpg .jpeg .gif)
-  VIDEO_EXTS = %w(.avi .mkv .mp4 .mpg .ogm)
+  VIDEO_EXTS = %w(.avi .mkv .mp4 .mpg .ogm .wmv .flv)
 
   def self.image?(filename)
     IMAGE_EXTS.include?(File.extname(filename).downcase)
