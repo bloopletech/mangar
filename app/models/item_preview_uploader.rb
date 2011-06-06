@@ -3,6 +3,10 @@ class ItemPreviewUploader < CarrierWave::Uploader::Base
 
   storage :file
 
+  def root
+    CarrierWave.root
+  end
+
   def store_dir
     "system/#{model.class.to_s.underscore}_previews/#{mounted_as}/#{model.id}"
   end
