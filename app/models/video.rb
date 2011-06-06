@@ -3,7 +3,10 @@ require 'item_preview_uploader'
 class Video < Item
   PREVIEW_WIDTH = 349
   PREVIEW_HEIGHT = 262
-  
+
+  PREVIEW_SMALL_WIDTH = 349
+  PREVIEW_SMALL_HEIGHT = 262
+
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD

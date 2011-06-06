@@ -4,6 +4,8 @@
     <title><%= @title ? "#{@title}: " : "" %>Manga Reader</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <%= stylesheet_link_tag %w(style colorbox formtastic formtastic_changes) %>
+    <%= stylesheet_link_tag 'dynamic' %>
+    <%= stylesheet_link_tag 'mobile' if is_mobile_device? %>
     <%= javascript_include_tag 'lib/jquery-1.4.4', 'lib/rails', 'lib/jrails', 'lib/jquery.ba-bbq', 'lib/jquery.colorbox', 'application' %>
     <%= csrf_meta_tag %>
     <meta name="HandheldFriendly" content="true" />

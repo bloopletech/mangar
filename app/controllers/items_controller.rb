@@ -1,4 +1,4 @@
-class ItemsController < ApplicationController
+class ItemsController < ApplicationController  
   def index
     params[:sort] ||= 'created_at'
     params[:sort_direction] ||= 'DESC'
@@ -88,5 +88,9 @@ class ItemsController < ApplicationController
   #TODO: Move someplace better
   def quit
     Process.kill("TERM", $$)
+  end
+
+  def dynamic_stylesheet
+    self.formats = [:css]
   end
 end

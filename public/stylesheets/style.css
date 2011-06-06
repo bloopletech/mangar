@@ -21,9 +21,7 @@ p, ul { margin-bottom: 1.3em; }
 
 .title { font-weight: bold; }
 #items { padding: 1px 0 1px 0; }
-#items li { margin: 0 1px 1px 0; float: left; list-style-type: none; position: relative; }
-#items li.book { width: 167px; height: 262px; }
-#items li.video { width: 349px; height: 262px; }
+#items li { margin: 0 1px 1px 0; float: left; list-style-type: none; position: relative; overflow: hidden; }
 #items li .emblems, #items li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
 #items li .actions { display: none; right: auto; left: 0; width: 32px; }
 #items li .wrapper > a { color: #000000; text-decoration: none; }

@@ -4,6 +4,9 @@ class Book < Item
   PREVIEW_WIDTH = 167
   PREVIEW_HEIGHT = 262
 
+  PREVIEW_SMALL_WIDTH = 90
+  PREVIEW_SMALL_HEIGHT = 141
+
   #default_scope :order => 'published_on DESC'
 
   def page_paths
