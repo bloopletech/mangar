@@ -4,8 +4,8 @@ class Book < Item
   PREVIEW_WIDTH = 167
   PREVIEW_HEIGHT = 262
 
-  PREVIEW_SMALL_WIDTH = 100
-  PREVIEW_SMALL_HEIGHT = 157
+  PREVIEW_SMALL_WIDTH = 98
+  PREVIEW_SMALL_HEIGHT = 154
 
   #default_scope :order => 'published_on DESC'
 
