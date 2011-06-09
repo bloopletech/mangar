@@ -1,5 +1,5 @@
 <div id="item">
-  <%= image_tag(@item.preview.url, :class => 'title_image') %>
+  <%= image_tag(@item.preview.thumbnail.url, :class => 'title_image') %>
   <div id="info">
     <span class="title"><%= h @item.title %></span><br>
     Pages <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= @item.pages %><br>
@@ -9,7 +9,7 @@
     Last Opened: <%= @item.last_opened_at || "Unknown" %><br>
     Tags: <%= raw @item.tag_counts.map { |tag| link_to tag.name, items_path(params.except(:controller, :action).merge(:search => tag.name)), :title => pluralize(tag.taggings.count, "Occurence"), :target => "_top" }.join(' ') %><br>
     Path: ./<%= @item.path %>
-    <%# tag.taggings is a hack, if we ever tag a different mofdel, will need to restrict to books. %>
+    <%# tag.taggings is a hack, if we ever tag a different model, will need to restrict to books. %>
     <div class="actions">
       <ul>
         <li><%= link_to("Open item", send("#{@item.type.downcase}_url", @item), :remote => true) %></li>
