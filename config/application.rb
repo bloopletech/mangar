@@ -102,3 +102,4 @@ module CarrierWave
 end
 
 require Rails.root.join('lib/file_extensions')
+require Rails.root.join('lib/dir_extensions')

@@ -10,7 +10,7 @@ class Book < Item
   #default_scope :order => 'published_on DESC'
 
   def page_paths
-    self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
+    self.class.image_file_list(Dir.deep_entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
   end
 
   COMPRESSED_FILE_EXTS = %w(.zip .rar .cbz .cbr)
@@ -53,7 +53,7 @@ CMD
       if COMPRESSED_FILE_EXTS.include?(File.extname(relative_path))
         data_from_compressed_file(real_path, destination_dir)
       else
-        return if Dir.entries(real_path).length == 2
+        return if Dir.deep_entries(real_path).empty?
         data_from_directory(real_path, destination_dir)
       end
     rescue Exception => e
@@ -61,7 +61,7 @@ CMD
       return
     end
 
-    images = image_file_list(Dir.entries(destination_dir))
+    images = image_file_list(Dir.deep_entries(destination_dir))
 
     title = File.basename(relative_dir).gsub(/_/, ' ').gsub(/ +/, ' ').strip
     
@@ -87,7 +87,7 @@ CMD
   def rethumbnail
     begin
       book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
-      images = self.class.image_file_list(Dir.entries(book_dir))
+      images = self.class.image_file_list(Dir.deep_entries(book_dir))
       update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
@@ -100,6 +100,6 @@ CMD
   end
 
   def self.image_file_list(file_list)
-    file_list.reject { |e| e[0, 1] == '.' || !File.image?(e) }.sort
+    file_list.select { |e| File.image?(e) }.sort
   end
 end
