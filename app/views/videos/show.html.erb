@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'show' %>
+<% end %>
+<% if is_mobile_device? %>
+  <%= link_to("Play video", @video.public_path, :id => 'video-link') %>
+<% else %>
+  <video src="<%= raw URI.escape(@video.public_path).gsub('+', '%2B') %>" controls preload autoplay id="video"></video>
+<% end %>

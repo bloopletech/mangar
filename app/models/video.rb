@@ -7,6 +7,10 @@ class Video < Item
   PREVIEW_SMALL_WIDTH = 349
   PREVIEW_SMALL_HEIGHT = 262
 
+  def public_path
+    "/system/videos/#{path}"
+  end
+
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
