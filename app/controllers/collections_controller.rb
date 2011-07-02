@@ -3,6 +3,7 @@ class CollectionsController < ApplicationController
 
   def index
     @collections = Collection.all
+    render(:layout => 'secondary') if params[:from_items]
   end
 
   def show
@@ -15,10 +16,11 @@ class CollectionsController < ApplicationController
     directory = IO.popen("env -u WINDOWID zenity --file-selection --directory") { |s| s.read }
     
     unless directory.blank?
-      Collection.create!(:path => directory.strip)
+      params[:id] = Collection.create!(:path => directory.strip).id
+      show
+    else
+      render :text => ''
     end
-
-    redirect_to collections_path
   end
 
   def edit
@@ -40,7 +42,7 @@ class CollectionsController < ApplicationController
   end
 
   def destroy
-    Collection.find(params[:id]).destroy
-    redirect_to collections_path
+    @collection = Collection.find(params[:id])
+    @collection.destroy
   end
 end
