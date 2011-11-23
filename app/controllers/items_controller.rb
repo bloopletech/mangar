@@ -1,35 +1,12 @@
 class ItemsController < ApplicationController  
   def index
-    params[:sort] ||= 'created_at'
-    params[:sort_direction] ||= 'DESC'
-    @items = if !params[:search].blank?
-      included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
-
-      results = Item
-      
-      results = results.where("opens > 0") if included_tags.delete 's:read'
-      results = results.where("opens = 0") if included_tags.delete 's:unread'
-      #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
-      
-
-
-      results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
-      results = results.tagged_with(included_tags) unless included_tags.empty?
-
-      c = Item.connection
-      #This next part makes me want to become an hero
-      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
-      search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT items.title LIKE #{Item.connection.quote "%#{t}%"}" }.join(" AND ")
-      
-      results.where_values = ["(#{(results.where_values + [search_ex]).compact.map { |w| "(#{w})" }.join(" AND ")})" +
-       (search_inc.nil? ? "" : " OR (#{search_inc})")]
-
-      results
-    else
-      Item
-    end.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 60)
+    @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 60)
     
     @tags = Item.tag_counts_on(:tags)
+  end
+
+  def bulk_export
+    _search_results.each { |i| i.export }
   end
 
   def more_info
@@ -92,5 +69,37 @@ class ItemsController < ApplicationController
 
   def dynamic_stylesheet
     self.formats = [:css]
+  end
+
+  private
+  def _search_results
+    params[:sort] ||= 'created_at'
+    params[:sort_direction] ||= 'DESC'
+    if !params[:search].blank?
+      included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
+
+      results = Item
+      
+      results = results.where("opens > 0") if included_tags.delete 's:read'
+      results = results.where("opens = 0") if included_tags.delete 's:unread'
+      #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
+      
+
+
+      results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
+      results = results.tagged_with(included_tags) unless included_tags.empty?
+
+      c = Item.connection
+      #This next part makes me want to become an hero
+      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
+      search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT items.title LIKE #{Item.connection.quote "%#{t}%"}" }.join(" AND ")
+      
+      results.where_values = ["(#{(results.where_values + [search_ex]).compact.map { |w| "(#{w})" }.join(" AND ")})" +
+       (search_inc.nil? ? "" : " OR (#{search_inc})")]
+
+      results
+    else
+      Item
+    end
   end
 end

@@ -11,6 +11,7 @@
   
   <div id="header">
     <div id="actions" class="desktop-only">
+      <%= link_to("Bulk Export", bulk_export_items_path(params.except(:action)), :method => 'get', :remote => true) %>
       <%= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
       <%= link_to(image_tag("icons/information.png") + "Info", info_items_path, :class => 'colorbox') %>
             <%= link_to(image_tag("icons/add.png") + "Import and Update", import_and_update_items_path, :method => 'get', :remote => true) %>

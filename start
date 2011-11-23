@@ -1,0 +1,4 @@
+#!/bin/bash -l
+
+rvm use 1.9.2
+rails server -p 30813 -d >/dev/null 2>&1

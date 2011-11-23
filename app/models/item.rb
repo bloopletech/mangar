@@ -22,6 +22,16 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def export
+    begin
+      FileUtils.mkdir_p(File.dirname("#{Mangar.exported_dir}/#{path}"))
+      FileUtils.cp_r(real_path, "#{Mangar.exported_dir}/#{path}")
+    rescue Exception => e
+      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
+      return
+    end
+  end
+
   def self.sort_key(title)
     title.gsub(/[^A-Za-z0-9]+/, '').downcase
   end
