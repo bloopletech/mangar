@@ -1,5 +1,7 @@
 body { padding: 0; }
 #videos-show body { background-color: #000000; }
-img { display: block; max-width: 100%; margin: 0 auto 0 auto; }
+img { display: block; max-height: 100%; margin: 0 auto 0 auto; }
+#image_wrapper_left { position: absolute; left: 0; top: 0; width: 50%; }
+#image_wrapper_right { position: absolute; left: 50%; top: 0; width: 50%; }
 #videos-show #video-link { display: block; font-size: 200%; color: #ffffff; text-align: center; margin-top: 200px; }
 video { width: 100%; max-height: 100%; }
