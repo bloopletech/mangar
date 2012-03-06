@@ -7,10 +7,6 @@ class Collection < ActiveRecord::Base
     self[:path] = File.expand_path(p)
   end
 
-  def mangar_path
-    "#{path}/.mangar"
-  end
-
   def exists?
     File.exists?(path) && File.exists?(mangar_path)
   end

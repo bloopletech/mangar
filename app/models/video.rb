@@ -14,7 +14,7 @@ class Video < Item
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.dir)} && find . -depth \\( -type f \\( #{File::VIDEO_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.import_dir)} && find . -depth \\( -type f \\( #{File::VIDEO_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -24,11 +24,11 @@ CMD
 
     path_list.each { |path| self.import(path) }
     
-    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
+    system("cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
   def self.import(relative_path)
-    real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
+    real_path = File.expand_path("#{Mangar.import_dir}/#{relative_path}")
     relative_path = relative_path.gsub('/', '__')
     destination_path = File.expand_path("#{Mangar.videos_dir}/#{relative_path}")
     
