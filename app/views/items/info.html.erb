@@ -1,17 +1,19 @@
+<% prec_opts = { :precision => 1, :delimiter => ',', :strip_insignificant_zeros => true } %>
+
 <p>You have <%= pluralize(Book.count, 'book') %>, <%= pluralize(Video.count, 'video') %> and <%= pluralize(ActsAsTaggableOn::Tag.count, 'tag') %>.</p>
 
 <% unless Book.count.zero? %>
-  <p>The oldest book was published on <%= link_to(@oldest_book.published_on, @oldest_book, :method => :get, :remote => true) %>
-  and the newest book was published <%= link_to(@newest_book.published_on, @newest_book, :method => :get, :remote => true) %>.</p>
-  
-  <p>The longest book has <%= link_to(pluralize(@longest_book.pages, 'page'), @longest_book, :method => :get, :remote => true) %> and the
-  shortest has <%= link_to(pluralize(@shortest_book.pages, 'page'), @shortest_book, :method => :get, :remote => true) %>, with an average
-  of <%= pluralize(number_with_precision(Book.average('pages'), :precision => 1), 'page') %>.</p>
+  <p>The oldest book was published on <%= link_to(@oldest_book.published_on, @oldest_book, :target => "_blank") %>
+  and the newest book was published <%= link_to(@newest_book.published_on, @newest_book, :target => "_blank") %>.</p>
+
+  <p>The longest book has <%= link_to(pluralize(@longest_book.pages, 'page'), @longest_book, :target => "_blank") %> and the
+  shortest has <%= link_to(pluralize(@shortest_book.pages, 'page'), @shortest_book, :target => "_blank") %>.</p>
+  <p>Together, your books have <%= pluralize(number_with_precision(Book.sum('pages'), prec_opts), 'page') %>. The average number of pages is <%= number_with_precision(Book.average('pages'), prec_opts) %>, and the most common page count for a book is <%= number_with_precision(Book.average('pages'), prec_opts) %>.</p>
   
   <p>The most popular book in your collection has been opened
-  <%= link_to(pluralize(@most_popular_book.opens, 'time'), @most_popular_book, :method => :get, :remote => true) %>,
-  and the least popular opened <%= link_to(pluralize(@least_popular_book.opens, 'time'), @least_popular_book, :method => :get, :remote => true) %>,
-  with an average of <%= pluralize(number_with_precision(Book.average('opens'), :precision => 1), 'open') %> per book.</p>
+  <%= link_to(pluralize(@most_popular_book.opens, 'time'), @most_popular_book, :target => "_blank") %>,
+  and the least popular opened <%= link_to(pluralize(@least_popular_book.opens, 'time'), @least_popular_book, :target => "_blank") %>,
+  with an average of <%= pluralize(number_with_precision(Book.average('opens'), prec_opts), 'open') %> per book.</p>
   
   <p><%= link_to(pluralize(Book.count(:conditions => 'opens > 0'), 'book has', 'books have'), items_with(:search => 's:read'), :target => "_blank") %>
     been opened at least once, and <%= link_to(pluralize(Book.count(:conditions => 'opens = 0'), 'book has', 'books have'), items_with(:search => 's:unread'), :target => '_blank') %>
@@ -19,13 +21,13 @@
 <% end %>
 
 <% unless Video.count.zero? %>
-  <p>The oldest video was published on <%= link_to(@oldest_video.published_on, @oldest_video, :method => :get, :remote => true) %>
-  and the newest video was published <%= link_to(@newest_video.published_on, @newest_video, :method => :get, :remote => true) %>.</p>
+  <p>The oldest video was published on <%= link_to(@oldest_video.published_on, @oldest_video, :target => "_blank") %>
+  and the newest video was published <%= link_to(@newest_video.published_on, @newest_video, :target => "_blank") %>.</p>
   
   <p>The most popular video in your collection has been opened
-  <%= link_to(pluralize(@most_popular_video.opens, 'time'), @most_popular_video, :method => :get, :remote => true) %>,
-  and the least popular opened <%= link_to(pluralize(@least_popular_video.opens, 'time'), @least_popular_video, :method => :get, :remote => true) %>,
-  with an average of <%= pluralize(number_with_precision(Video.average('opens'), :precision => 1), 'open') %> per video.</p>
+  <%= link_to(pluralize(@most_popular_video.opens, 'time'), @most_popular_video, :target => "_blank") %>,
+  and the least popular opened <%= link_to(pluralize(@least_popular_video.opens, 'time'), @least_popular_video, :target => "_blank") %>,
+  with an average of <%= pluralize(number_with_precision(Video.average('opens'), prec_opts), 'open') %> per video.</p>
   
   <p><%= link_to(pluralize(Video.count(:conditions => 'opens > 0'), 'video has', 'videos have'), videos_with(:search => 's:read'), :target => "_blank") %>
   been opened at least once, and <%= link_to(pluralize(Video.count(:conditions => 'opens = 0'), 'video has', 'videos have'), videos_with(:search => 's:unread'), :target => '_blank') %>

@@ -27,7 +27,7 @@ class Book < Item
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.dir)} && find . -depth \( \! -wholename .mangar \) -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
