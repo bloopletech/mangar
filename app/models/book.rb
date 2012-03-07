@@ -27,7 +27,7 @@ class Book < Item
   def self.import_and_update
     #Requires GNU find 3.8 or above
     cmd = <<-CMD
-cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
+cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -o \\( -type f \\( #{VALID_EXTS.map { |ext| "-iname '*#{ext}'" }.join(' -o ')} \\) \\)
 CMD
 
     $stdout.puts #This makes it actually import; fuck knows why
@@ -37,11 +37,11 @@ CMD
 
     path_list.each { |path| self.import(path) }
     
-    system("cd #{File.escape_name(Mangar.dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
+    system("cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
   def self.import(relative_path)
-    real_path = File.expand_path("#{Mangar.dir}/#{relative_path}")
+    real_path = File.expand_path("#{Mangar.import_dir}/#{relative_path}")
     relative_dir = relative_path.gsub('/', '__').gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
     destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
     
