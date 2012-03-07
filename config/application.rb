@@ -63,7 +63,7 @@ module Mangar
   def self.configure(collection)
     Mangar.collection = collection
     Mangar.dir = collection.path
-    Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
+    Mangar.mangar_dir = collection.mangar_path
     Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
     Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
     Mangar.import_dir = File.expand_path("#{Mangar.dir}/import")

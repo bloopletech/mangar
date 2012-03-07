@@ -34,7 +34,7 @@ $(function()
 
   $(window).keydown(function(event)
   {
-    if(event.keyCode == 32 && scrollDistanceFromBottom() <= 0)
+    if(event.keyCode == 32)
     {
       event.preventDefault();
       go_next_page();      
