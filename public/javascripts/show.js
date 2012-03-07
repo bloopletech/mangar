@@ -12,7 +12,7 @@ $(function()
     var index = get_index();
     index += 2;
 
-    if(index >= (pages.length - 1)) index = pages.length - 1;
+    if(index >= (pages.length - 2)) index = pages.length - 2;
     location.hash = "#" + index;
   }
 
