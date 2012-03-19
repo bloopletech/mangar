@@ -1,8 +1,8 @@
 require 'item_preview_uploader'
 
 class Book < Item
-  PREVIEW_WIDTH = 167
-  PREVIEW_HEIGHT = 262
+  PREVIEW_WIDTH = 173
+  PREVIEW_HEIGHT = 271
 
   PREVIEW_SMALL_WIDTH = 98
   PREVIEW_SMALL_HEIGHT = 154
