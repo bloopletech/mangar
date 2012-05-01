@@ -2,7 +2,11 @@ class Collection < ActiveRecord::Base
   self.establish_connection Mangar::COLLECTION_DB_CONFIG
   
   serialize :config
-  
+
+  def mangar_path
+    "#{path}/mangar-data"
+  end
+
   def path=(p)
     self[:path] = File.expand_path(p)
   end
