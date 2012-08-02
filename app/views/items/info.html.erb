@@ -29,8 +29,8 @@
   and the least popular opened <%= link_to(pluralize(@least_popular_video.opens, 'time'), @least_popular_video, :target => "_blank") %>,
   with an average of <%= pluralize(number_with_precision(Video.average('opens'), prec_opts), 'open') %> per video.</p>
   
-  <p><%= link_to(pluralize(Video.count(:conditions => 'opens > 0'), 'video has', 'videos have'), videos_with(:search => 's:read'), :target => "_blank") %>
-  been opened at least once, and <%= link_to(pluralize(Video.count(:conditions => 'opens = 0'), 'video has', 'videos have'), videos_with(:search => 's:unread'), :target => '_blank') %>
+  <p><%= link_to(pluralize(Video.count(:conditions => 'opens > 0'), 'video has', 'videos have'), items_with(:search => 's:read'), :target => "_blank") %>
+  been opened at least once, and <%= link_to(pluralize(Video.count(:conditions => 'opens = 0'), 'video has', 'videos have'), items_with(:search => 's:unread'), :target => '_blank') %>
   never been opened at all.</p>
 <% end %>
 
