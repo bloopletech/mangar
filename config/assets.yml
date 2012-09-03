@@ -1,0 +1,19 @@
+embed_assets: off
+
+javascripts:
+  common:
+    - public/javascripts/lib/jquery-1.4.4.js
+    - public/javascripts/lib/rails.js
+    - public/javascripts/lib/jrails.js
+    - public/javascripts/lib/jquery.ba-bbq.js
+    - public/javascripts/lib/jquery.colorbox.js
+    - public/javascripts/application.js
+    - public/javascripts/show.js
+
+stylesheets:
+  common:
+    - public/stylesheets/style.css
+    - public/stylesheets/colorbox.css
+    - public/stylesheets/formtastic.css
+    - public/stylesheets/formtastic_changes.css
+    - public/stylesheets/show.css
