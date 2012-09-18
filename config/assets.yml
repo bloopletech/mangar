@@ -8,6 +8,8 @@ javascripts:
     - public/javascripts/lib/jquery.ba-bbq.js
     - public/javascripts/lib/jquery.colorbox.js
     - public/javascripts/application.js
+
+  show:
     - public/javascripts/show.js
 
 stylesheets:
