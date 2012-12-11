@@ -1,4 +1,7 @@
-class ItemsController < ApplicationController  
+require 'acts-as-taggable-on/version'
+raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3.3" #Needed to ensure our joins_values hack doesn't fail silently in new versions of AATO
+
+class ItemsController < ApplicationController
   def index
     @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 60)
     
@@ -78,24 +81,27 @@ class ItemsController < ApplicationController
     if !params[:search].blank?
       included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
 
+      c = Item.connection
+
       results = Item
-      
+
       results = results.where("opens > 0") if included_tags.delete 's:read'
       results = results.where("opens = 0") if included_tags.delete 's:unread'
       #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
-      
+     
+      unless excluded_tags.empty?
+        results = results.tagged_with(excluded_tags, :exclude => true)
+        excluded_tags_sql = excluded_tags.map { |t| "NOT items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
+        results = results.where(excluded_tags_sql)
+      end
 
+      unless included_tags.empty?
+        results = results.tagged_with(included_tags)
+        included_tags_sql = included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
+        results = results.where("tag_id IS NOT NULL OR (#{included_tags_sql})")
+      end
 
-      results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
-      results = results.tagged_with(included_tags) unless included_tags.empty?
-
-      c = Item.connection
-      #This next part makes me want to become an hero
-      search_inc = included_tags.empty? ? nil : included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
-      search_ex = excluded_tags.empty? ? nil : excluded_tags.map { |t| "NOT items.title LIKE #{Item.connection.quote "%#{t}%"}" }.join(" AND ")
-      
-      results.where_values = ["(#{(results.where_values + [search_ex]).compact.map { |w| "(#{w})" }.join(" AND ")})" +
-       (search_inc.nil? ? "" : " OR (#{search_inc})")]
+      results.joins_values.first.insert(0, "LEFT ") unless included_tags.empty? && excluded_tags.empty?
 
       results
     else

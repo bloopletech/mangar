@@ -8,7 +8,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 require 'fileutils'
 
-ActsAsTaggableOn::TagList.delimiter = ' '
+ActsAsTaggableOn.delimiter = ' '
 
 Time::DATE_FORMATS.merge!(:default => '%e %B %Y') #TODO fix so shows time as well
 Date::DATE_FORMATS.merge!(:default => '%e %B %Y')
