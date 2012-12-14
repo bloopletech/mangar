@@ -98,10 +98,10 @@ class ItemsController < ApplicationController
       unless included_tags.empty?
         results = results.tagged_with(included_tags)
         included_tags_sql = included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
-        results = results.where("tag_id IS NOT NULL OR (#{included_tags_sql})")
+        results = results.where(results.joins_values.empty? ? included_tags_sql : "tag_id IS NOT NULL OR (#{included_tags_sql})")
       end
 
-      results.joins_values.first.insert(0, "LEFT ") unless included_tags.empty? && excluded_tags.empty?
+      results.joins_values.first.insert(0, "LEFT ") unless (included_tags.empty? && excluded_tags.empty?) || results.joins_values.empty?
 
       results
     else
