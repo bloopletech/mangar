@@ -79,33 +79,39 @@ class ItemsController < ApplicationController
     params[:sort] ||= 'created_at'
     params[:sort_direction] ||= 'DESC'
     if !params[:search].blank?
-      included_tags, excluded_tags = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
-
-      c = Item.connection
+      included_terms, excluded_terms = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
+      included_tags = included_terms.empty? ? [] : ActsAsTaggableOn::Tag.named_any(included_terms)
+      excluded_tags = excluded_terms.empty? ? [] : ActsAsTaggableOn::Tag.named_any(excluded_terms)
 
       results = Item
 
-      results = results.where("opens > 0") if included_tags.delete 's:read'
-      results = results.where("opens = 0") if included_tags.delete 's:unread'
+      results = results.where("opens > 0") if included_terms.delete 's:read'
+      results = results.where("opens = 0") if included_terms.delete 's:unread'
       #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
-     
-      unless excluded_tags.empty?
-        results = results.tagged_with(excluded_tags, :exclude => true)
-        excluded_tags_sql = excluded_tags.map { |t| "NOT items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
-        results = results.where(excluded_tags_sql)
+
+      unless excluded_terms.empty?
+        results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
+        results = results.where(excluded_terms.map { |t| "NOT items.title LIKE #{qt t}" }.join(" AND "))
       end
 
-      unless included_tags.empty?
-        results = results.tagged_with(included_tags)
-        included_tags_sql = included_tags.map { |t| "items.title LIKE #{c.quote "%#{t}%"}" }.join(" AND ")
-        results = results.where(results.joins_values.empty? ? included_tags_sql : "tag_id IS NOT NULL OR (#{included_tags_sql})")
+      unless included_terms.empty?
+        included_terms_sql = included_terms.map { |t| "items.title LIKE #{qt t}" }.join(" AND ")
+        if included_tags.empty?
+          results = results.where(included_terms_sql)
+        else
+          results = results.tagged_with(included_tags)
+          results.joins_values.first.insert(0, "LEFT ")
+          results = results.where("tag_id NOTNULL OR (#{included_terms_sql})")
+        end
       end
-
-      results.joins_values.first.insert(0, "LEFT ") unless (included_tags.empty? && excluded_tags.empty?) || results.joins_values.empty?
 
       results
     else
       Item
     end
+  end
+
+  def qt(term)
+    Item.connection.quote("%#{term}%")
   end
 end
