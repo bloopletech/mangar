@@ -2,6 +2,8 @@ require 'acts-as-taggable-on/version'
 raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3.3" #Needed to ensure our joins_values hack doesn't fail silently in new versions of AATO
 
 class ItemsController < ApplicationController
+  SORT_OPTIONS = [['Published', 'published_on'], ['A-Z', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']]
+
   def index
     @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
     

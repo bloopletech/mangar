@@ -16,9 +16,14 @@ var update_items = function()
 $(update_items);
 
 $(function()
-{  
-  $("#sort").delayedObserver(1.0, function() { $('#search_form').submit(); });
-  $("#sort_direction").delayedObserver(1.0, function() { $('#search_form').submit(); });
+{ 
+  $(".selector li a").click(function(event) {
+    event.preventDefault();
+  });
+  $(".selector li").click(function(event) {
+    $("#" + $(this).parent().data("name")).val($(this).data("value"));
+    $('#search_form').submit();
+  });
 
   $("#tag_cloud_link").click(function(event)
   {

@@ -17,4 +17,14 @@ module ItemsHelper
   def item_title(item, show)
     raw (show ? "<div class='title'>#{h wbrize(item.title)}</div>" : "")
   end
+
+  def selector(name, options)
+    out = %Q{<ul class="selector" data-name="#{name}">}
+    options.each do |(description, value)|
+      out << %Q{<li data-value="#{value}"#{params[name] == value ? " class='selected'" : ""}>#{link_to(description, items_path(name.to_sym => value))}</li>}
+    end
+    out << %Q{</ul>}
+    out << hidden_field_tag(name, params[name])
+    raw out
+  end
 end

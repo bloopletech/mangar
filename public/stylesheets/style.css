@@ -7,9 +7,14 @@ p, ul { margin-bottom: 1.3em; }
 .clear { clear: both; }
 
 #header { padding: 10px; }
-input[type="text"], select { padding: 1px; }
 #search { width: 300px; border: 1px solid #a0a0a0; }
 #actions { float: right; }
+
+input[type="text"], select { padding: 1px; }
+.selector { display: inline; margin-right: 20px; }
+.selector li { display: inline; margin-left: 0; margin-right: 5px; }
+.selector li:last-child { margin-right: 0; }
+.selector li.selected a { font-weight: bold; text-decoration: none; color: #000000; }
 
 #wrapper { position: relative; background-color: #000000; }
 
