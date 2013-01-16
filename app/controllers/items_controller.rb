@@ -3,9 +3,9 @@ raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3
 
 class ItemsController < ApplicationController
   def index
-    @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 60)
+    @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
     
-    @tags = Item.tag_counts_on(:tags)
+    @tags = Item.tag_counts_on(:tags).order("name ASC")
   end
 
   def bulk_export
