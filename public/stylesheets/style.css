@@ -6,8 +6,9 @@ p, ul { margin-bottom: 1.3em; }
 
 .clear { clear: both; }
 
-#header { padding: 1px 1px 15px 1px; }
-#search { width: 300px; }
+#header { padding: 10px; }
+input[type="text"], select { padding: 1px; }
+#search { width: 300px; border: 1px solid #a0a0a0; }
 #actions { float: right; }
 
 #wrapper { position: relative; background-color: #000000; }

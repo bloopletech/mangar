@@ -1,8 +1,8 @@
 require 'item_preview_uploader'
 
 class Book < Item
-  PREVIEW_WIDTH = 167
-  PREVIEW_HEIGHT = 262
+  PREVIEW_WIDTH = 212
+  PREVIEW_HEIGHT = 333
 
   PREVIEW_SMALL_WIDTH = 98
   PREVIEW_SMALL_HEIGHT = 154
@@ -86,9 +86,14 @@ CMD
 
   def rethumbnail
     begin
+      start = Time.now
+      puts "Rethumbnailing #{self.id}"
       book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
+      puts "After step 1, #{Time.now - start}"
       images = self.class.image_file_list(Dir.deep_entries(book_dir))
+      puts "After step 2, #{Time.now - start}"
       update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
+      puts "After step 3, #{Time.now - start}"
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
       return
