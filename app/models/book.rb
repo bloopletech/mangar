@@ -1,8 +1,8 @@
 require 'item_preview_uploader'
 
 class Book < Item
-  PREVIEW_WIDTH = 212
-  PREVIEW_HEIGHT = 333
+  PREVIEW_WIDTH = 211
+  PREVIEW_HEIGHT = 332
 
   PREVIEW_SMALL_WIDTH = 98
   PREVIEW_SMALL_HEIGHT = 154
@@ -88,7 +88,7 @@ CMD
     begin
       start = Time.now
       puts "Rethumbnailing #{self.id}"
-      book_dir = File.expand_path("#{Mangar.books_dir}/#{path}")
+      book_dir = "#{Mangar.books_dir}/#{self.path}"
       puts "After step 1, #{Time.now - start}"
       images = self.class.image_file_list(Dir.deep_entries(book_dir))
       puts "After step 2, #{Time.now - start}"

@@ -21,14 +21,16 @@
         #end) %><%= link_to(image_tag("icons/delete.png", :title => 'Delete this item'), item_url(item), :method => 'delete', :confirm => "Are you sure you want to delete #{item.title}?", :remote => true) %>
     </div>
     <%= link_to(image_tag(is_mobile_device? ? item.preview.thumbnail.small.url : item.preview.thumbnail.url), send("#{item.type.downcase}_url", item), :target => '_blank') %>
-    <div class="info">
-      <%= item_title(item, true) %>
-      <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.pages %>&nbsp;&nbsp;
-      <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
-      <div class="tag_list"><%= h item.tag_list %></div>
-      <%= form_for item.becomes(Item), :remote => true do |f| %>
+    <div class="info-wrapper">
+      <div class="info">
+        <%= item_title(item, true) %>
+        <div class="tag_list"><%= h item.tag_list %></div>
+        <%= form_for item.becomes(Item), :remote => true do |f| %>
           <%= f.text_field :tag_list, :class => 'input' %>
         <% end %>
+        <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.pages %>&nbsp;&nbsp;
+        <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
+      </div>
     </div>
   </div>
 </li>
