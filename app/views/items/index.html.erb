@@ -21,7 +21,7 @@
     <%= form_tag(items_url, { :method => :get, :id => 'search_form' }) do %>
       <%= text_field_tag 'search', params[:search] %>
       <%= selector("sort", ItemsController::SORT_OPTIONS) %>
-      <%= selector("sort_direction", [['Descending', 'DESC'], ['Ascending', 'ASC']]) %>
+      <%= selector("sort_direction", [['Descending', 'DESC'], ['Ascending', 'ASC'], ['Random', 'RAND']]) %>
       <%= link_to("Clear search", items_path) %>
     <% end %>
   </div>

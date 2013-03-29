@@ -1,4 +1,4 @@
-body { padding: 0; }
+body { padding: 0; background-color: #333333; }
 #videos-show body { background-color: #000000; }
 #books-show img { display: block; max-width: 100%; margin: 0 auto 0 auto; }
 #videos-show #video-link { display: block; font-size: 200%; color: #ffffff; text-align: center; margin-top: 200px; }

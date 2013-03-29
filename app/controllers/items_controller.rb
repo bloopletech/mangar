@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   SORT_OPTIONS = [['Published', 'published_on'], ['A-Z', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']]
 
   def index
-    @items = _search_results.order("#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
+    @items = _search_results.order(params[:sort_direction] == "RAND" ? "RANDOM()" : "#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
     
     @tags = Item.tag_counts_on(:tags).order("name ASC")
   end
