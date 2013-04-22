@@ -15,7 +15,6 @@
       <%= link_to(image_tag("icons/information.png") + "Info", info_items_path, :class => 'colorbox') %>
       <%= link_to("Tag cloud", {}, :id => 'tag_cloud_link') %>
       <%= link_to("Bulk Export", bulk_export_items_path(params.except(:action)), :method => 'get', :remote => true) %>
-      <!--<%= link_to("Change Collection", collections_path(:from_items => 'true'), :class => 'colorbox') %>-->
     </div>
   
     <%= form_tag(items_url, { :method => :get, :id => 'search_form' }) do %>

@@ -2,13 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
-  before_filter :ensure_mangar_setup
-
-  private
-  def ensure_mangar_setup
-    redirect_to collections_path if Mangar.dir.nil?
-  end
-  
   public
   #Hacked in from https://github.com/brendanlim/mobile-fu
   MOBILE_USER_AGENTS ='palm|blackberry|nokia|phone|midp|mobi|symbian|chtml|ericsson|minimo|' +

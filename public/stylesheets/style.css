@@ -49,8 +49,6 @@ input[type="text"], select { padding: 1px; }
 #item #info { float: left; width: 315px; }
 #item .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }
 
-#collections-index body { padding: 10px; }
-
 /*
 #items-index body {
  background-image: -webkit-gradient(

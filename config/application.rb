@@ -54,33 +54,18 @@ module Mangar
     config.filter_parameters += [:password]
   end
 
+  mattr_accessor :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir, :exported_dir, :import_dir
 
-  DEFAULT_DB_CONFIG = { :adapter => 'sqlite3', :pool => 5, :timeout => 5000 }
-  COLLECTION_DB_CONFIG = DEFAULT_DB_CONFIG.merge(:database => File.expand_path("~/.mangar.sqlite3"))
+  Mangar.dir = File.expand_path("~/.mangar/")
 
-  mattr_accessor :collection, :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir, :exported_dir, :import_dir
+  Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
+  Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
+  Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
+  Mangar.import_dir = File.expand_path("#{Mangar.dir}/import")
+  Mangar.exported_dir = File.expand_path("#{Mangar.dir}/exported")
+  Mangar.deleted_dir = File.expand_path("#{Mangar.dir}/deleted")
 
-  def self.configure(collection)
-    Mangar.collection = collection
-    Mangar.dir = collection.path
-    Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
-    Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
-    Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
-    Mangar.import_dir = File.expand_path("#{Mangar.dir}/import")
-    Mangar.exported_dir = File.expand_path("#{Mangar.dir}/exported")
-    Mangar.deleted_dir = File.expand_path("#{Mangar.dir}/deleted")
-
-    Dir.mkdir(Mangar.mangar_dir) if !File.exists?(Mangar.mangar_dir)
-    [Mangar.books_dir, Mangar.videos_dir, Mangar.import_dir, Mangar.deleted_dir, Mangar.exported_dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
-
-    db_config = DEFAULT_DB_CONFIG.merge(:database => "#{Mangar.mangar_dir}/db.sqlite3")
-
-    ActiveRecord::Base.establish_connection(db_config)
-    ActiveRecord::Migrator.migrate("db/migrate/")
-    ActiveRecord::Base.establish_connection(db_config)
-
-    collection.opened!
-  end
+  [Mangar.dir, Mangar.mangar_dir, Mangar.books_dir, Mangar.videos_dir, Mangar.import_dir, Mangar.deleted_dir, Mangar.exported_dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
 end
 
 module CarrierWave
