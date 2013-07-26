@@ -88,7 +88,17 @@ class ItemsController < ApplicationController
       results = Item
 
       results = results.where("opens > 0") if included_terms.delete 's:read'
+      results = results.where("opens = 0") if excluded_terms.delete 's:read'
+      results = results.where("opens <= 3") if included_terms.delete 's:readish'
+      results = results.where("opens > 3") if excluded_terms.delete 's:readish'
       results = results.where("opens = 0") if included_terms.delete 's:unread'
+      results = results.where("opens > 0") if excluded_terms.delete 's:unread'
+      results = results.where("pages >= 150") if included_terms.delete 's:tank'
+      results = results.where("pages < 150") if excluded_terms.delete 's:tank'
+      results = results.where("pages >= 80") if included_terms.delete 's:long'
+      results = results.where("pages < 80") if excluded_terms.delete 's:long'
+      results = results.where("pages <= 30") if included_terms.delete 's:short'
+      results = results.where("pages > 30") if excluded_terms.delete 's:short'
       #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
 
       unless excluded_terms.empty?
