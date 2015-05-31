@@ -1,4 +1,4 @@
-Mangar::Application.routes.draw do |map|
+Mangar::Application.routes.draw do
   resources :items do
     member do
       get :more_info
@@ -8,7 +8,7 @@ Mangar::Application.routes.draw do |map|
       get :bulk_export
       get :info
       get :quit
-    end    
+    end
   end
 
   resources :books, :only => [:show]
@@ -17,7 +17,7 @@ Mangar::Application.routes.draw do |map|
   root :to => "items#index"
 
   match '/stylesheets/dynamic.css' => 'items#dynamic_stylesheet'
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

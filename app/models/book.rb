@@ -16,7 +16,7 @@ class Book < Item
   COMPRESSED_FILE_EXTS = %w(.zip .rar .cbz .cbr)
   ZIP_EXTS = %w(.zip .cbz)
   RAR_EXTS = %w(.rar .cbr)
-  
+
   VALID_EXTS = COMPRESSED_FILE_EXTS
 
   #Iterate recursively over all files/dirs
@@ -36,7 +36,7 @@ CMD
     path_list = path_list.split("\n").map { |e| e.gsub(/^\.\//, '') }.reject { |e| e[0, 1] == '.' }
 
     path_list.each { |path| self.import(path) }
-    
+
     system("cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")
   end
 
@@ -44,9 +44,9 @@ CMD
     real_path = File.expand_path("#{Mangar.import_dir}/#{relative_path}")
     relative_dir = relative_path.gsub('/', '__').gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
     destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
-    
+
     last_modified = File.mtime(real_path)
-    
+
     FileUtils.mkdir_p(destination_dir)
 
     begin
@@ -64,7 +64,7 @@ CMD
     images = image_file_list(Dir.deep_entries(destination_dir))
 
     title = File.basename(relative_dir).gsub(/_/, ' ').gsub(/ +/, ' ').strip
-    
+
     Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
      :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
 
