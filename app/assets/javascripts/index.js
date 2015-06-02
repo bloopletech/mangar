@@ -16,7 +16,7 @@ var update_items = function()
 $(update_items);
 
 $(function()
-{ 
+{
   $(".selector li a").click(function(event) {
     event.preventDefault();
   });
@@ -29,7 +29,7 @@ $(function()
   {
     event.preventDefault();
   });
-  
+
   $("#tag_cloud_link").mouseenter(function(event)
   {
     $("#tag_cloud").show();
@@ -40,6 +40,6 @@ $(function()
     $("#tag_cloud").hide();
   });
 
-  $("#items .colorbox").colorbox({ width: 590, height: 390 });
-  $("#header .colorbox").colorbox({ width: 590, height: 390 });
+  //$("#items .colorbox").colorbox({ width: 590, height: 390 });
+  //$("#header .colorbox").colorbox({ width: 590, height: 390 });
 });

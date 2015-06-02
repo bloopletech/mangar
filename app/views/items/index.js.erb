@@ -1,0 +1,7 @@
+$("#items").append("<%= escape_javascript(render partial: 'item', collection: @items) %>");
+update_items();
+//$('li.page_#{@items.current_page} a.colorbox').colorbox({ width: 590, height: 390 });
+<% if is_last_page?(@items) %>
+  last_page = true;
+  $("#items").append("<%= escape_javascript(render partial: 'end_of_results') %>");
+<% end %>

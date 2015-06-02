@@ -3,10 +3,10 @@
   <head>
     <title><%= @page_title ? "#{@page_title}: " : "" %>Manga Reader</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <%= include_stylesheets :common, :media => 'all' %>
+    <%= stylesheet_link_tag 'application', :media => 'all' %>
     <%= stylesheet_link_tag 'dynamic' %>
     <%= stylesheet_link_tag 'mobile' if is_mobile_device? %>
-    <%= include_javascripts :common %>
+    <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tag %>
     <meta name="HandheldFriendly" content="true" />
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />

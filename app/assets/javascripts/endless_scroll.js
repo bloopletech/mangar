@@ -10,7 +10,8 @@ function checkScroll()
 
     current_page++;
 
-    $.get($.param.querystring(location.href, { 'page' : current_page }), {}, function(req)
+    var url = new URI().removeQuery('page').addQuery('page', current_page).href();
+    $.get(url, {}, function(req)
     {
       scroll_lock = false;
     }, 'script');
@@ -21,7 +22,8 @@ function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 1000;
 }
 
-$(function()
-{
-  setInterval("checkScroll()", 250);
+$(function() {
+  setInterval(checkScroll, 250);
+  console.log('checking');
 });
+console.log('executed');
