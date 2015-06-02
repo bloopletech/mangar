@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
 
   def index
     @items = _search_results.order(params[:sort_direction] == "RAND" ? "RANDOM()" : "#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
-    
+
     @tags = Item.tag_counts_on(:tags).order("name ASC")
   end
 
@@ -41,7 +41,7 @@ class ItemsController < ApplicationController
   def import_and_update
     #Thread.new do #Temporarily remopve threading as it seems to be causing import problems
       Video.import_and_update
-      Book.import_and_update
+      BooksImporter.new.import_and_update
     #end
   end
 

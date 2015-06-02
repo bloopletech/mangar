@@ -1,4 +1,3 @@
-task :import_and_update do
-  require 'config/environment'
-  Book.import_and_update
+task import_and_update: :environment do
+  BooksImporter.new.import_and_update
 end
