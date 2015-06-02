@@ -1,7 +1,7 @@
 <% content_for :head do %>
   <%= javascript_include_tag 'show' %>
   <script type="text/javascript">
-  var pages = <%= raw @book.page_paths.map { |path| URI.escape(path).gsub('+', '%2B') }.to_json %>;
+  var pages = <%= raw @book.page_paths.to_json %>;
   </script>
 <% end %>
 

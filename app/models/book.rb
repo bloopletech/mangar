@@ -105,6 +105,6 @@ CMD
   end
 
   def self.image_file_list(file_list)
-    file_list.select { |e| File.image?(e) }.sort_by { |s| s.split(/(\d+)/).map { |p| Integer(p, 10) rescue p }.reject { |p| p == "" } }
+    file_list.select { |e| File.image?(e) }.sort_by { |p| Naturally.normalize(File.basename(p)) }
   end
 end
