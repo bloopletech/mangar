@@ -4,7 +4,7 @@ var current_page = 1;
 
 function checkScroll()
 {
-  if(!last_page && !scroll_lock && nearBottomOfPage())
+  if(!last_page && !scroll_lock && utils.nearBottomOfPage())
   {
     scroll_lock = true;
 
@@ -18,12 +18,6 @@ function checkScroll()
   }
 }
 
-function nearBottomOfPage() {
-  return scrollDistanceFromBottom() < 1000;
-}
-
 $(function() {
   setInterval(checkScroll, 250);
-  console.log('checking');
 });
-console.log('executed');

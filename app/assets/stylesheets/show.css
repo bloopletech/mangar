@@ -1,5 +1,109 @@
-body { padding: 0; background-color: #333333; }
-#videos-show body { background-color: #000000; }
-#books-show img { display: block; max-width: 100%; margin: 0 auto 0 auto; }
 #videos-show #video-link { display: block; font-size: 200%; color: #ffffff; text-align: center; margin-top: 200px; }
 video { width: 100%; max-height: 100%; }
+
+#books-show { height: 100%; }
+
+#books-show body {
+  background-color: #333333;
+  min-height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#books-show img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto 0 auto;
+}
+
+@media (min-width: 992px) {
+  #books-show img {
+    max-width: auto;
+    max-height: 100%;
+  }
+}
+
+#books-show #return-to-index {
+  padding: 5px;
+}
+
+#books-show #return-to-index a {
+  color: #ffffff;
+}
+
+.paginator {
+  position: fixed;
+  width: 100px;
+  z-index: 10000;
+
+  opacity: 0;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+
+  /* Internet Explorer 10 */
+  display: -ms-flexbox;
+  -ms-flex-pack: center;
+  -ms-flex-align: center;
+
+  /* Firefox */
+  display: -moz-box;
+  -moz-box-pack: center;
+  -moz-box-align: center;
+
+  /* Safari, Opera, and Chrome */
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+
+  /* W3C */
+  display: box;
+  box-pack: center;
+  box-align: center;
+}
+
+.paginator:active {
+  background-color: #000000;
+  opacity: 0.4;
+}
+
+.paginator:hover {
+  cursor: pointer;
+}
+
+#page-back {
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#page-next {
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#page-back-10 {
+  bottom: 0;
+  left: 0;
+  height: 100px;
+  z-index: 10001;
+}
+
+#page-next-10 {
+  bottom: 0;
+  right: 0;
+  height: 100px;
+  z-index: 10001;
+}
+
+#page-home {
+  top: 0;
+  left: 0;
+  height: 100px;
+  z-index: 10001;
+}
