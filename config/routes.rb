@@ -16,8 +16,6 @@ Mangar::Application.routes.draw do
 
   root :to => "items#index"
 
-  match '/assets/dynamic.css' => 'items#dynamic_stylesheet'
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

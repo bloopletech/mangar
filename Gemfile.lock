@@ -69,6 +69,7 @@ GEM
       json (>= 1.7)
       mime-types (>= 1.16)
     erubis (2.7.0)
+    execjs (2.5.2)
     hike (1.2.3)
     i18n (0.7.0)
     journey (1.0.4)
@@ -112,6 +113,9 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.44)
+    uglifier (2.7.1)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     will_paginate (3.0.7)
 
 PLATFORMS
@@ -130,6 +134,7 @@ DEPENDENCIES
   sendfile (= 1.2.2)
   sqlite3 (= 1.3.10)
   test-unit (~> 3.0)
+  uglifier
   will_paginate (~> 3.0.6)
 
 BUNDLED WITH
