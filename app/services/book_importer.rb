@@ -5,52 +5,72 @@ class BookImporter
 
   VALID_EXTS = COMPRESSED_FILE_EXTS
 
-  def initialize(relative_path)
-    @relative_path = relative_path
+  def initialize(path)
+    @path = Pathname.new(path)
+  end
+
+  def relative_path
+    @path.relative_path_from(Pathname.new(Mangar.import_dir))
+  end
+
+  def destination_dir
+    Pathname.new(Mangar.books_dir) + relative_path
   end
 
   def import
-    real_path = File.expand_path("#{Mangar.import_dir}/#{@relative_path}")
-    relative_dir = @relative_path.gsub('/', '__').gsub(/#{VALID_EXTS.map { |e| Regexp.escape(e) }.join('|')}$/, '')
-    destination_dir = File.expand_path("#{Mangar.books_dir}/#{relative_dir}")
-
-    last_modified = File.mtime(real_path)
-
-    FileUtils.mkdir_p(destination_dir)
-
-    begin
-      if COMPRESSED_FILE_EXTS.include?(File.extname(@relative_path))
-        data_from_compressed_file(real_path, destination_dir)
-      else
-        return if Dir.deep_entries(real_path).empty?
-        data_from_directory(real_path, destination_dir)
-      end
-    rescue Exception => e
-      Rails.logger.error(e.message)
-      Rails.logger.error(e.backtrace)
-      return
+    if @path.children.any? { |c| c.directory? }
+      raise "has child directories; will retry later"
     end
 
-    images = Book.image_file_list(Dir.deep_entries(destination_dir))
+    last_modified = @path.mtime
 
-    title = File.basename(relative_dir).gsub(/_/, ' ').gsub(/ +/, ' ').strip
+    import_path
 
-    Book.create!(:title => title, :path => relative_dir, :published_on => last_modified,
-     :preview => File.open("#{destination_dir}/#{images.first}"), :pages => images.length, :sort_key => Item.sort_key(title)) unless images.empty?
+    return if images.empty?
 
-    FileUtils.rm_r(real_path) if File.exists?(real_path)
+    Book.create!(
+      title: title,
+      path: relative_path.to_s,
+      published_on: last_modified,
+      preview: File.open(images.first),
+      pages: images.length,
+      sort_key: Item.sort_key(title)
+    )
   end
 
-  def data_from_compressed_file(real_path, destination_dir)
-    if ZIP_EXTS.include?(File.extname(real_path))
-      system("unzip #{File.escape_name(real_path)} -d #{File.escape_name(destination_dir)}")
-    elsif RAR_EXTS.include?(File.extname(real_path))
-      system("cd #{File.escape_name(destination_dir)} && unrar e #{File.escape_name(real_path)}")
+  def images
+    @images ||= Book.image_file_list(destination_dir.children.map(&:to_s))
+  end
+
+  def title
+    relative_path.to_s.gsub("/", " / ").gsub(/_/, ' ').gsub(/ +/, ' ').strip
+  end
+
+  def import_path
+    destination_dir.dirname.mkpath
+
+    if COMPRESSED_FILE_EXTS.include?(@path.extname)
+      #data_from_compressed_file
+    else
+      data_from_directory
     end
   end
 
-  #dir should be findable from CWD or absolute; no trailing slash
-  def data_from_directory(real_path, destination_dir)
-    File.rename(real_path, destination_dir)
+  def data_from_compressed_file
+    if ZIP_EXTS.include?(@path.extname)
+      system("unzip #{File.escape_name(@path)} -d #{File.escape_name(destination_dir)}")
+    elsif RAR_EXTS.include?(@path.extname)
+      system("cd #{File.escape_name(destination_dir)} && unrar e #{File.escape_name(@path)}")
+    end
+    @path.unlink if @path.exist?
+  end
+
+  def data_from_directory
+    @path.rename(destination_dir)
+  rescue Errno::ENOTEMPTY
+    @path.children.select { |c| c.file? }.each do |c|
+      c.rename(destination_dir + c.basename)
+    end
+    @path.unlink if @path.children.empty?
   end
 end

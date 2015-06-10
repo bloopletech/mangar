@@ -10,7 +10,7 @@ class Book < Item
   #default_scope :order => 'published_on DESC'
 
   def page_paths
-    self.class.image_file_list(Dir.deep_entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
+    self.class.image_file_list(Dir.entries(real_path)).map { |e| "/system/books/#{path}/#{e}" }
   end
 
   def rethumbnail
