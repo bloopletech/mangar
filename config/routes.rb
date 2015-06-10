@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Mangar::Application.routes.draw do
   resources :items do
     member do
@@ -15,4 +17,6 @@ Mangar::Application.routes.draw do
   resources :videos, only: [:show]
 
   root to: "items#index"
+
+  mount Sidekiq::Web => '/sidekiq'
 end

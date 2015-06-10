@@ -2,10 +2,13 @@ source 'http://rubygems.org'
 
 gem 'rack'
 gem 'rails', git: 'git://github.com/rails/rails.git', branch: '3-2-stable'
-
-gem 'sqlite3', '1.3.10'
-
+gem 'pg'
 gem 'puma'
+
+gem 'foreman'
+gem 'sidekiq'
+gem 'sidekiq-failures'
+gem 'sinatra', :require => nil
 gem 'will_paginate', '~> 3.0.6'
 gem 'rmagick', '2.15.0'
 gem 'acts-as-taggable-on', '2.3.3'
