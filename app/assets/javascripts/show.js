@@ -2,7 +2,7 @@ $(function()
 {
   $(window).bind('hashchange', function()
   {
-    var index = utils.page();
+    var index = utils.page() - 1;
 
     $("#image").attr('src', "/images/blank.png");
     window.scrollTo(0, 0);
@@ -18,19 +18,19 @@ $(function()
 
   $("#page-back").click(function(e) {
     e.stopPropagation();
-    utils.page(utils.page() - 1, pages.length - 1);
+    utils.page(utils.page() - 1, pages.length);
   });
   $("#page-back-10").click(function(e) {
     e.stopPropagation();
-    utils.page(utils.page() - 10, pages.length - 1);
+    utils.page(utils.page() - 10, pages.length);
   });
   $("#page-next").click(function(e) {
     e.stopPropagation();
-    utils.page(utils.page() + 1, pages.length - 1);
+    utils.page(utils.page() + 1, pages.length);
   });
   $("#page-next-10").click(function(e) {
     e.stopPropagation();
-    utils.page(utils.page() + 10, pages.length - 1);
+    utils.page(utils.page() + 10, pages.length);
   });
   $("#page-home").click(function(e) {
     e.stopPropagation();

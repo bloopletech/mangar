@@ -23,3 +23,8 @@ group :assets do
   gem 'uglifier'
   gem 'jquery-rails'
 end
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
+  gem 'byebug'
+end
