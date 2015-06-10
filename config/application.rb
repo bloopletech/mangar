@@ -70,7 +70,7 @@ module Mangar
 
   mattr_accessor :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir, :exported_dir, :import_dir
 
-  Mangar.dir = File.expand_path("~/.mangar/")
+  Mangar.dir = File.realpath(File.expand_path("~/.mangar/"))
 
   Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
   Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
@@ -91,4 +91,4 @@ module CarrierWave
 end
 
 require Rails.root.join('lib/file_extensions')
-require Rails.root.join('lib/dir_extensions')
+require Rails.root.join('lib/core_ext/pathname')
