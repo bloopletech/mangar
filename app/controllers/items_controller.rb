@@ -78,7 +78,7 @@ class ItemsController < ApplicationController
 
   private
   def _search_results
-    params[:sort] ||= 'created_at'
+    params[:sort] ||= 'published_on'
     params[:sort_direction] ||= 'DESC'
     if !params[:search].blank?
       included_terms, excluded_terms = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
