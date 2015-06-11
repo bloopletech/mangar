@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  layout 'application'
+  layout :set_layout
+
+  def set_layout
+    request.xhr? ? false : 'application'
+  end
 
   public
   #Hacked in from https://github.com/brendanlim/mobile-fu

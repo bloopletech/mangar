@@ -16,7 +16,6 @@ class ItemsController < ApplicationController
 
   def more_info
     @item = Item.find(params[:id])
-    render :layout => 'secondary'
   end
 
   def update
@@ -47,7 +46,7 @@ class ItemsController < ApplicationController
 
   def info
     if Item.count == 0
-      render :text => 'No items yet', :layout => 'secondary'
+      render text: 'No items yet'
     end
 
     @oldest_book = Book.order('published_on ASC').first
@@ -63,7 +62,6 @@ class ItemsController < ApplicationController
     @shortest_video = Video.order('pages ASC').first
     @most_popular_video = Video.order('opens DESC').first
     @least_popular_video = Video.order('opens ASC').first
-    render :layout => 'secondary'
   end
 
 
