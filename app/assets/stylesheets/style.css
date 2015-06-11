@@ -31,8 +31,13 @@ input[type="text"], select { padding: 1px; }
 #items li .emblems, #items li .actions { display: block; position: absolute; top: 0; right: 0; padding: 1px; line-height: 0; background-color: #ffffff; }
 #items li .actions { display: none; right: auto; left: 0; width: 32px; }
 #items li .wrapper { position: relative; }
-#items li .wrapper > a { color: #000000; text-decoration: none; }
-#items li .info-wrapper { position: absolute; bottom: 0; background-color: #ffffff; }
+#items li .info-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+}
 #items li .info { padding: 2px; }
 #items li .info img { vertical-align: middle; }
 #items .tag_list { min-height: 1.2em; }
@@ -42,12 +47,10 @@ input[type="text"], select { padding: 1px; }
 #items li.no_results { color: #ffffff; width: auto; float: none; text-align: center; padding: 40px 0; }
 /*#items .tags form { display: none; }*/
 
-#items li:hover .wrapper { position: absolute; top: 0; left: 0; background-color: #ffffff; }
 #items li:hover .actions { display: block; }
 
 #item .title_image { float: left; margin-right: 15px; }
 #item #info { float: left; width: 315px; }
-#item .actions { margin-top: 15px; border-top: 1px solid #a0a0a0; padding-top: 15px; }
 
 /*
 #items-index body {
