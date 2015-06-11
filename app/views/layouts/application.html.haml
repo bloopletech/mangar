@@ -1,0 +1,15 @@
+!!!
+%html{ id: "#{controller.controller_name}-#{controller.action_name}" }
+  %head
+    %meta{ charset: "utf-8" }
+    %title
+      = @page_title ? "#{@page_title}: " : ""
+      Manga Reader
+    %link{ rel: "shortcut icon", href: "/favicon.ico", type: "image/x-icon" }
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag 'application'
+    = csrf_meta_tag
+    %meta{ name: "HandheldFriendly", content: "true" }
+    %meta{ name: "viewport", content: "width=device-width, height=device-height, user-scalable=no" }
+    = yield :head
+  %body= yield

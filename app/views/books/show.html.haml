@@ -1,0 +1,12 @@
+= content_for :head do
+  = javascript_include_tag 'show'
+  :javascript
+    var pages = #{raw @book.page_paths.to_json};
+
+%img#image{ src: '/images/blank.png' }
+
+#page-back.paginator ◀
+#page-next.paginator ▶
+#page-back-10.paginator ◀◀
+#page-next-10.paginator ▶▶
+#page-home.paginator ❌

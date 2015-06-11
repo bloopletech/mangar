@@ -12,7 +12,7 @@
     <%# tag.taggings is a hack, if we ever tag a different model, will need to restrict to books. %>
     <div class="actions">
       <ul>
-        <li><%= link_to("Open item", send("#{@item.type.downcase}_url", @item), :target => '_blank') %></li>
+        <li><%= link_to("Open item", send("#{@item.type.downcase}_path", @item), :target => '_blank') %></li>
         <li><%= link_to("Search google for the title", "http://google.com/search?q=#{CGI::escape @item.title}", :target => "_blank") %></li>
       </ul>
     </div>

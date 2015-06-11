@@ -17,6 +17,7 @@ gem 'rubyzip', '0.9.4'
 gem 'sendfile', '1.2.2'
 gem 'formtastic', :git => 'git://github.com/justinfrench/formtastic.git', :ref => '038357cae3fbe4ce9d64'
 gem 'naturally', '>= 1.0.3', '<= 1.3.1'
+gem 'haml'
 
 gem 'test-unit', '~> 3.0'
 
