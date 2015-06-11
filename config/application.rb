@@ -70,22 +70,22 @@ module Mangar
 
   mattr_accessor :dir, :mangar_dir, :books_dir, :videos_dir, :deleted_dir, :exported_dir, :import_dir
 
-  Mangar.dir = File.realpath(File.expand_path("~/.mangar/"))
+  Mangar.dir = Pathname.new("~/.mangar").expand_path.realpath
 
-  Mangar.mangar_dir = File.expand_path("#{Mangar.dir}/mangar-data")
-  Mangar.books_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/books")
-  Mangar.videos_dir = File.expand_path("#{Mangar.mangar_dir}/public/system/videos")
-  Mangar.import_dir = File.expand_path("#{Mangar.dir}/import")
-  Mangar.exported_dir = File.expand_path("#{Mangar.dir}/exported")
-  Mangar.deleted_dir = File.expand_path("#{Mangar.dir}/deleted")
+  Mangar.mangar_dir = Mangar.dir + "mangar-data"
+  Mangar.books_dir = Mangar.mangar_dir + "public/system/books"
+  Mangar.videos_dir = Mangar.mangar_dir + "public/system/videos"
+  Mangar.import_dir = Mangar.dir + "import"
+  Mangar.exported_dir = Mangar.dir + "exported"
+  Mangar.deleted_dir = Mangar.dir + "deleted"
 
-  [Mangar.dir, Mangar.mangar_dir, Mangar.books_dir, Mangar.videos_dir, Mangar.import_dir, Mangar.deleted_dir, Mangar.exported_dir].each { |d| FileUtils.mkdir_p(d) unless File.exists?(d) }
+  [Mangar.dir, Mangar.mangar_dir, Mangar.books_dir, Mangar.videos_dir, Mangar.import_dir, Mangar.deleted_dir, Mangar.exported_dir].each { |d| d.mkpath }
 end
 
 module CarrierWave
   class << self
     def root
-      "#{Mangar.mangar_dir}/public"
+      (Mangar.mangar_dir + "public").to_s
     end
   end
 end

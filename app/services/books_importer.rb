@@ -5,7 +5,7 @@ class BooksImporter
   #Else skip/recurse into dir.
   #Do not call more than once at a time
   def import_and_update
-    path_list = Pathname.new(Mangar.import_dir).realpath.descendant_directories
+    path_list = Mangar.import_dir.descendant_directories
     path_list.each { |path| BookImportWorker.perform_async(path.to_s) }
 
     #system("cd #{File.escape_name(Mangar.import_dir)} && find . -depth -type d -empty -exec rmdir {} \\;")

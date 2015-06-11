@@ -10,11 +10,11 @@ class BookImporter
   end
 
   def relative_path
-    @path.relative_path_from(Pathname.new(Mangar.import_dir))
+    @path.relative_path_from(Mangar.import_dir)
   end
 
   def destination_dir
-    Pathname.new(Mangar.books_dir) + relative_path
+    Mangar.books_dir + relative_path
   end
 
   def import
@@ -66,6 +66,11 @@ class BookImporter
   end
 
   def data_from_directory
+    move_directory
+    FileUtils.chmod_R(0755, destination_dir.to_s)
+  end
+
+  def move_directory
     @path.rename(destination_dir)
   rescue Errno::ENOTEMPTY
     @path.children.select { |c| c.file? }.each do |c|

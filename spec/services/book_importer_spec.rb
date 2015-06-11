@@ -6,7 +6,7 @@ RSpec.describe BookImporter do
   describe '#relative_path' do
     let(:path) { File.realpath('spec/fixtures/import/temp/child') }
     before do
-      allow(Mangar).to receive(:import_dir).and_return(File.realpath('spec/fixtures/import'))
+      allow(Mangar).to receive(:import_dir).and_return(Pathname.new('spec/fixtures/import').realpath)
     end
 
     specify do
@@ -29,8 +29,8 @@ RSpec.describe BookImporter do
   describe '#destination_dir' do
     let(:path) { File.realpath('spec/fixtures/import/temp/child') }
     before do
-      allow(Mangar).to receive(:import_dir).and_return(File.realpath('spec/fixtures/import'))
-      allow(Mangar).to receive(:books_dir).and_return('spec/fixtures/books')
+      allow(Mangar).to receive(:import_dir).and_return(Pathname.new('spec/fixtures/import').realpath)
+      allow(Mangar).to receive(:books_dir).and_return(Pathname.new('spec/fixtures/books'))
     end
 
     specify do

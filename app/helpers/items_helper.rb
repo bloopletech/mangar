@@ -27,4 +27,8 @@ module ItemsHelper
     out << hidden_field_tag(name, params[name])
     raw out
   end
+
+  def escape_path(path)
+    path.split('/').map { |component| Rack::Utils.escape_path(component) }.join('/')
+  end
 end

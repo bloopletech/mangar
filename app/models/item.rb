@@ -14,7 +14,7 @@ class Item < ActiveRecord::Base
 
   def delete_original
     begin
-      FileUtils.mkdir_p(File.dirname("#{Mangar.deleted_dir}/#{path}"))
+      (Mangar.deleted_dir + path).dirname.mkpath
       File.rename(real_path, "#{Mangar.deleted_dir}/#{path}")
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
@@ -24,7 +24,7 @@ class Item < ActiveRecord::Base
 
   def export
     begin
-      FileUtils.mkdir_p(File.dirname("#{Mangar.exported_dir}/#{path}"))
+      (Mangar.exported_dir + path).dirname.mkpath
       FileUtils.cp_r(real_path, "#{Mangar.exported_dir}/#{path}")
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)

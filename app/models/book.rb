@@ -17,11 +17,11 @@ class Book < Item
     begin
       start = Time.now
       puts "Rethumbnailing #{self.id}"
-      book_dir = "#{Mangar.books_dir}/#{self.path}"
+      book_dir = Mangar.books_dir + path
       puts "After step 1, #{Time.now - start}"
-      images = self.class.image_file_list(Dir.deep_entries(book_dir))
+      images = self.class.image_file_list(book_dir.children)
       puts "After step 2, #{Time.now - start}"
-      update_attribute(:preview, File.open("#{book_dir}/#{images.first}", "r"))
+      update_attribute(:preview, File.open(images.first, "r"))
       puts "After step 3, #{Time.now - start}"
     rescue Exception => e
       ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)

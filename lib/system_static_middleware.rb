@@ -6,7 +6,7 @@ module Mangar
 
     def initialize(app)
       @app = app
-      @file_server = ::Rack::File.new("#{Mangar.mangar_dir}/public")
+      @file_server = ::Rack::File.new((Mangar.mangar_dir + "public").to_s)
     end
 
     def call(env)
