@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101117123828) do
+ActiveRecord::Schema.define(:version => 20150611112937) do
 
   create_table "collections", :force => true do |t|
     t.string   "path"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20101117123828) do
     t.text     "filename"
     t.text     "preview"
     t.integer  "opens",                         :default => 0
-    t.integer  "pages",                         :default => 0
+    t.integer  "page_count",                    :default => 0
     t.datetime "published_on"
     t.datetime "created_at"
     t.datetime "updated_at"

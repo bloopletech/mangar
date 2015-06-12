@@ -2,7 +2,7 @@
   <div class="wrapper">
     <%
     many_opens = item.opens >= 10
-    many_pages = item.pages >= 50
+    many_pages = item.page_count >= 50
     %>
     <% if many_opens || many_pages %>
       <div class="emblems">
@@ -28,7 +28,7 @@
         <%= form_for item.becomes(Item), :remote => true do |f| %>
           <%= f.text_field :tag_list, :class => 'input' %>
         <% end %>
-        <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.pages %>&nbsp;&nbsp;
+        <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.page_count %>&nbsp;&nbsp;
         <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
       </div>
     </div>

@@ -2,7 +2,7 @@
   <%= image_tag(@item.preview.thumbnail.url, :class => 'title_image') %>
   <div id="info">
     <span class="title"><%= h @item.title %></span><br>
-    Pages <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= @item.pages %><br>
+    Pages <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= @item.page_count %><br>
     Opens <%= image_tag("icons/application_go.png", :title => "Opens") %>: <%= @item.opens %><br>
     Published: <%= @item.published_on %><br>
     Added: <%= @item.created_at %><br>

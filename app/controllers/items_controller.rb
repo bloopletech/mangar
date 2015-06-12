@@ -51,15 +51,15 @@ class ItemsController < ApplicationController
 
     @oldest_book = Book.order('published_on ASC').first
     @newest_book = Book.order('published_on DESC').first
-    @longest_book = Book.order('pages DESC').first
-    @shortest_book = Book.order('pages ASC').first
+    @longest_book = Book.order('page_count DESC').first
+    @shortest_book = Book.order('page_count ASC').first
     @most_popular_book = Book.order('opens DESC').first
     @least_popular_book = Book.order('opens ASC').first
 
     @oldest_video = Video.order('published_on ASC').first
     @newest_video = Video.order('published_on DESC').first
-    @longest_video = Video.order('pages DESC').first
-    @shortest_video = Video.order('pages ASC').first
+    @longest_video = Video.order('page_count DESC').first
+    @shortest_video = Video.order('page_count ASC').first
     @most_popular_video = Video.order('opens DESC').first
     @least_popular_video = Video.order('opens ASC').first
   end
@@ -91,12 +91,12 @@ class ItemsController < ApplicationController
       results = results.where("opens > 3") if excluded_terms.delete 's:readish'
       results = results.where("opens = 0") if included_terms.delete 's:unread'
       results = results.where("opens > 0") if excluded_terms.delete 's:unread'
-      results = results.where("pages >= 150") if included_terms.delete 's:tank'
-      results = results.where("pages < 150") if excluded_terms.delete 's:tank'
-      results = results.where("pages >= 80") if included_terms.delete 's:long'
-      results = results.where("pages < 80") if excluded_terms.delete 's:long'
-      results = results.where("pages <= 30") if included_terms.delete 's:short'
-      results = results.where("pages > 30") if excluded_terms.delete 's:short'
+      results = results.where("page_count >= 150") if included_terms.delete 's:tank'
+      results = results.where("page_count < 150") if excluded_terms.delete 's:tank'
+      results = results.where("page_count >= 80") if included_terms.delete 's:long'
+      results = results.where("page_count < 80") if excluded_terms.delete 's:long'
+      results = results.where("page_count <= 30") if included_terms.delete 's:short'
+      results = results.where("page_count > 30") if excluded_terms.delete 's:short'
       #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
 
       unless excluded_terms.empty?
