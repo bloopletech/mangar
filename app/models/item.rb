@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
   mount_uploader :preview, ItemPreviewUploader
 
   def real_path
-    File.expand_path("#{Mangar.send("#{self.class.name.underscore.pluralize}_dir")}/#{path}")
+    Mangar.send("#{self.class.name.underscore.pluralize}_dir") + path
   end
 
   def open

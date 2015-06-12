@@ -1,7 +1,7 @@
 = content_for :head do
   = javascript_include_tag 'show'
   :javascript
-    var pages = #{raw @book.page_paths.map { |path| escape_path(path) }.to_json};
+    var pages = #{raw @book.page_urls.map { |path| escape_path(path) }.to_json};
 
 %img#image{ src: '/images/blank.png' }
 
