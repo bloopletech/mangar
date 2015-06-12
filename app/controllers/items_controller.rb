@@ -2,16 +2,15 @@ require 'acts-as-taggable-on/version'
 raise "Wrong ActsAsTaggableOn version!" unless ActsAsTaggableOn::VERSION == "2.3.3" #Needed to ensure our joins_values hack doesn't fail silently in new versions of AATO
 
 class ItemsController < ApplicationController
-  SORT_OPTIONS = [['Published', 'published_on'], ['A-Z', 'sort_key'], ['Last opened at', 'last_opened_at'], ['Date added', 'created_at'], ['Pages', 'pages'], ['Popularity', 'opens']]
-
   def index
-    @items = _search_results.order(params[:sort_direction] == "RAND" ? "RANDOM()" : "#{params[:sort]} #{params[:sort_direction]}").paginate(:page => params[:page], :per_page => 100)
+    @query = ItemsQuery.new(params[:query])
+    @items = @query.results.paginate(page: params[:page], per_page: 100)
 
     @tags = Item.tag_counts_on(:tags).order("name ASC")
   end
 
   def bulk_export
-    _search_results.each { |i| i.export }
+    ItemsQuery.new(params[:query]).results.each { |i| i.export }
   end
 
   def more_info
@@ -72,56 +71,5 @@ class ItemsController < ApplicationController
 
   def dynamic_stylesheet
     self.formats = [:css]
-  end
-
-  private
-  def _search_results
-    params[:sort] ||= 'published_on'
-    params[:sort_direction] ||= 'DESC'
-    if !params[:search].blank?
-      included_terms, excluded_terms = ActsAsTaggableOn::TagList.from(params[:search]).partition { |t| t.gsub!(/^-/, ''); $& != '-' }
-      included_tags = included_terms.empty? ? [] : ActsAsTaggableOn::Tag.named_any(included_terms)
-      excluded_tags = excluded_terms.empty? ? [] : ActsAsTaggableOn::Tag.named_any(excluded_terms)
-
-      results = Item
-
-      results = results.where("opens > 0") if included_terms.delete 's:read'
-      results = results.where("opens = 0") if excluded_terms.delete 's:read'
-      results = results.where("opens <= 3") if included_terms.delete 's:readish'
-      results = results.where("opens > 3") if excluded_terms.delete 's:readish'
-      results = results.where("opens = 0") if included_terms.delete 's:unread'
-      results = results.where("opens > 0") if excluded_terms.delete 's:unread'
-      results = results.where("page_count >= 150") if included_terms.delete 's:tank'
-      results = results.where("page_count < 150") if excluded_terms.delete 's:tank'
-      results = results.where("page_count >= 80") if included_terms.delete 's:long'
-      results = results.where("page_count < 80") if excluded_terms.delete 's:long'
-      results = results.where("page_count <= 30") if included_terms.delete 's:short'
-      results = results.where("page_count > 30") if excluded_terms.delete 's:short'
-      #results = results.where("COUNT(taggings.id) > 0") if included_tags.delete 's:tagged'
-
-      unless excluded_terms.empty?
-        results = results.tagged_with(excluded_tags, :exclude => true) unless excluded_tags.empty?
-        results = results.where(excluded_terms.map { |t| "NOT items.title LIKE #{qt t}" }.join(" AND "))
-      end
-
-      unless included_terms.empty?
-        included_terms_sql = included_terms.map { |t| "items.title LIKE #{qt t}" }.join(" AND ")
-        if included_tags.empty?
-          results = results.where(included_terms_sql)
-        else
-          results = results.tagged_with(included_tags)
-          results.joins_values.first.insert(0, "LEFT ")
-          results = results.where("tag_id NOTNULL OR (#{included_terms_sql})")
-        end
-      end
-
-      results
-    else
-      Item
-    end
-  end
-
-  def qt(term)
-    Item.connection.quote("%#{term}%")
   end
 end

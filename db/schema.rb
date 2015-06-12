@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150611112937) do
+ActiveRecord::Schema.define(:version => 20150612083701) do
 
   create_table "collections", :force => true do |t|
     t.string   "path"
@@ -36,6 +36,13 @@ ActiveRecord::Schema.define(:version => 20150611112937) do
     t.datetime "last_opened_at"
     t.string   "sort_key"
     t.string   "type"
+  end
+
+  create_table "preferences", :force => true do |t|
+    t.text     "name"
+    t.text     "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "taggings", :force => true do |t|

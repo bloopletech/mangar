@@ -16,6 +16,8 @@ Mangar::Application.routes.draw do
   resources :books, only: [:show]
   resources :videos, only: [:show]
 
+  resources :preferences
+
   root to: "items#index"
 
   mount Sidekiq::Web => '/sidekiq'

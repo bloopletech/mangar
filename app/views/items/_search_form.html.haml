@@ -1,0 +1,13 @@
+= form_tag(items_path, { method: :get, id: 'search_form', class: 'form-inline' }) do
+  = simple_fields_for :query, @query do |f|
+    = f.input_field :search, class: 'input-large'
+    = f.input_field :sort, as: :select, collection: ItemsQuery::SORTS, include_blank: 'Sort By', class: 'input-medium'
+    = f.input_field :sort_direction, as: :select, collection: ItemsQuery::SORT_DIRECTIONS, include_blank: 'Sort Direction', class: 'input-medium'
+  = link_to("Clear search", items_path)
+
+  -#
+    .btn-group
+      %button.btn{ type: "button" }
+        %i.icon-arrow-up
+      %button.btn{ type: "button" }
+        %i.icon-arrow-down

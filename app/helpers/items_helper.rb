@@ -19,7 +19,7 @@ module ItemsHelper
   end
 
   def selector(name, options)
-    out = %Q{<ul class="selector" data-name="#{name}">}
+    out = %Q{<ul class="dropdown-menu">}
     options.each do |(description, value)|
       out << %Q{<li data-value="#{value}"#{params[name] == value ? " class='selected'" : ""}>#{link_to(description, items_path(name.to_sym => value))}</li>}
     end

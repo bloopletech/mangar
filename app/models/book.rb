@@ -14,7 +14,7 @@ class Book < Item
   end
 
   def page_urls
-    page_paths.map { |e| "/system/books/#{path}/#{e}" }
+    page_paths.map { |path| "/system/books/#{path.relative_path_from(Mangar.books_dir)}" }
   end
 
   def rethumbnail

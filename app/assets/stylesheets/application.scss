@@ -1,0 +1,10 @@
+$baseFontSize: 16px;
+$baseLineHeight: 22px;
+$textColor: #000000;
+
+@import "bootstrap";
+@import "style";
+@import "lib/featherlight.min";
+@import "index";
+@import "show";
+@import "thumbnail_sizes";

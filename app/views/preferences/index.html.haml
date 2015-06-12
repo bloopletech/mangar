@@ -1,0 +1,26 @@
+.container
+  .page-header
+    %h1 Preferences
+
+  %p= link_to("New Preference", new_preference_path, class: 'btn')
+
+  - if @preferences.empty?
+    %p No preferences yet.
+  - else
+    %table.table.table-bordered
+      %tr
+        %th Name
+        %th Value
+        %th
+
+      - @preferences.each do |preference|
+        %tr
+          %td= preference.name
+          %td= preference.value
+          %td
+            .btn-group
+              = link_to("Edit", edit_preference_path(preference), class: 'btn')
+              %button.btn.dropdown-toggle{ data: { toggle: 'dropdown' } }
+                %span.caret
+              %ul.dropdown-menu
+                %li= link_to("Delete", preference_path(preference), method: 'delete', confirm: 'Are you sure?')

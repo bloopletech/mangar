@@ -17,11 +17,7 @@ $(update_items);
 
 $(function()
 {
-  $(".selector li a").click(function(event) {
-    event.preventDefault();
-  });
-  $(".selector li").click(function(event) {
-    $("#" + $(this).parent().data("name")).val($(this).data("value"));
+  $("#search_form select").change(function(event) {
     $('#search_form').submit();
   });
 

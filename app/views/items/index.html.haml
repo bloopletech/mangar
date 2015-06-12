@@ -13,11 +13,7 @@
       = link_to("Tag cloud", {}, id: 'tag_cloud_link')
       = link_to("Bulk Export", bulk_export_items_path(params.except(:action)), method: 'get', remote: true)
 
-    = form_tag(items_path, { method: :get, id: 'search_form' }) do
-      = text_field_tag 'search', params[:search]
-      = selector("sort", ItemsController::SORT_OPTIONS)
-      = selector("sort_direction", [['Descending', 'DESC'], ['Ascending', 'ASC'], ['Random', 'RAND']])
-      = link_to("Clear search", items_path)
+    = render partial: 'search_form'
 
   .clear
   - if @items.empty? || is_last_page?(@items)
