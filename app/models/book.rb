@@ -1,8 +1,8 @@
 require 'item_preview_uploader'
 
 class Book < Item
-  PREVIEW_WIDTH = 211
-  PREVIEW_HEIGHT = 332
+  PREVIEW_WIDTH = 197
+  PREVIEW_HEIGHT = 310
 
   PREVIEW_SMALL_WIDTH = 98
   PREVIEW_SMALL_HEIGHT = 154
@@ -27,9 +27,9 @@ class Book < Item
       puts "After step 2, #{Time.now - start}"
       update_attribute(:preview, File.open(images.first, "r"))
       puts "After step 3, #{Time.now - start}"
-    rescue Exception => e
-      ActionDispatch::ShowExceptions.new(Mangar::Application.instance).send(:log_error, e)
-      return
+    rescue => e
+      Rails.logger.error(e.message)
+      Rails.logger.error(e.backtrace)
     end
   end
 
