@@ -1,5 +1,5 @@
 #items-index {
-  ul { margin: 0; }
+  > ul { margin: 0; }
 
   #header { padding: 10px; }
   #search_form {
@@ -89,7 +89,9 @@
     input {
       width: 100%;
     }
+  }
 
+  #item {
     .title_image {
       float: left;
       margin-right: 15px;
@@ -97,7 +99,8 @@
 
     #info {
       float: left;
-      width: 315px;
+      width: 360px;
     }
   }
+
 }

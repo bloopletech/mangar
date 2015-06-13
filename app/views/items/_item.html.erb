@@ -22,14 +22,18 @@
     </div>
     <%= link_to(image_tag(item.preview.thumbnail.url), send("#{item.type.downcase}_path", item), :target => '_blank') %>
     <div class="info-wrapper">
-      <div class="info">
+      <div class="info clearfix">
         <%= item_title(item, true) %>
+        <!--
         <div class="tag_list"><%= h item.tag_list %></div>
         <%= form_for item.becomes(Item), :remote => true do |f| %>
           <%= f.text_field :tag_list, :class => 'input' %>
         <% end %>
+        -->
+        <div class="pull-right">
+          <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span>
+        </div>
         <%= image_tag("icons/page_white.png", :title => "Pages") %> <%= item.page_count %>&nbsp;&nbsp;
-        <%= image_tag("icons/application_go.png", :title => "Opens") %> <span class="opens"><%= item.opens %></span><br>
       </div>
     </div>
   </div>
