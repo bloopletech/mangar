@@ -1,22 +1,4 @@
-var update_items = function()
-{
-  $("#items .tag_list").each(function()
-  {
-    var div = $(this);
-    div.click(function(event)
-    {
-      div.next().show().find(".input").focus();
-      div.hide();
-    });
-
-    div.next().hide();
-  });
-};
-
-$(update_items);
-
-$(function()
-{
+$(function() {
   $("#search_form select").change(function(event) {
     $('#search_form').submit();
   });
@@ -36,6 +18,22 @@ $(function()
     $("#tag_cloud").hide();
   });
 
-  //$("#items .colorbox").colorbox({ width: 590, height: 390 });
-  //$("#header .colorbox").colorbox({ width: 590, height: 390 });
+  $(document).on("click", "#items .title", function(event) {
+    $(this).next().show().find("textarea").val($(this).text()).focus();
+    $(this).hide();
+  });
+
+  $(document).on("keydown", "#items textarea", function(event) {
+    var form = $(this).parents("form");
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      form.submit();
+    }
+    else if(event.keyCode == 27) {
+      event.preventDefault();
+      form.hide();
+      form.prev().show();
+      $(this).val(form.prev().text());
+    }
+  });
 });

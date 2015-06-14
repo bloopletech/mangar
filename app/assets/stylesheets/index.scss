@@ -86,8 +86,21 @@
       }
     }
 
-    input {
-      width: 100%;
+    .title {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    form {
+      display: none;
+      margin-bottom: 0;
+
+      textarea {
+        width: 179px;
+        height: 100px;
+        margin-bottom: 0;
+      }
     }
   }
 
