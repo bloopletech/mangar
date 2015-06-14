@@ -33,7 +33,7 @@ class BookImporter
       path: relative_path.to_s,
       published_on: last_modified,
       preview: File.open(images.first),
-      pages: images.length,
+      page_count: images.length,
       sort_key: Item.sort_key(title)
     )
   end
