@@ -1,0 +1,28 @@
+%li{ id: dom_id(item), class: "page_#{@items.current_page} #{item.class.name.downcase}" }
+  .wrapper
+    - many_opens = item.opens >= 10
+    - many_pages = item.page_count >= 50
+    - if many_opens || many_pages
+      .emblems
+        - if many_opens
+          = image_tag("icons/award_star_bronze_1.png", title: "Has been read 10 or more times.")
+        - if many_pages
+          = image_tag("icons/book.png", title: "Has 50 or more pages")
+      .actions
+        = link_to(image_tag("icons/zoom.png", title: "More information about this item"), more_info_item_path(item), data: { featherlight: 'ajax' })
+        = link_to(image_tag("icons/delete.png", title: 'Delete this item'), item_path(item), method: 'delete', confirm: "Are you sure you want to delete #{item.title}?", remote: true)
+    = link_to(image_tag(item.preview.thumbnail.url), send("#{item.type.downcase}_path", item), target: '_blank')
+    .info-wrapper
+      .info.clearfix
+        = item_title(item, true)
+        -#
+          <div class="tag_list"><%= h item.tag_list %></div>
+          <%= form_for item.becomes(Item), :remote => true do |f| %>
+            <%= f.text_field :tag_list, :class => 'input' %>
+          <% end %>
+        .pull-right
+          = image_tag("icons/application_go.png", title: "Opens")
+          %span.opens= item.opens
+        = image_tag("icons/page_white.png", :title => "Pages")
+        = item.page_count
+        &nbsp;&nbsp;
