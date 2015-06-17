@@ -1,0 +1,11 @@
+- if @items.empty? || is_last_page?(@items)
+  :javascript
+    last_page = true;
+
+- if @items.empty?
+  %li.no_results No results found.
+- elsif is_last_page?(@items)
+  %li.book
+    .last_page_message End of results.
+- else
+  = render partial: 'item', collection: @items

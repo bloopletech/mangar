@@ -1,5 +1,0 @@
-$("#items").append("<%= escape_javascript(render partial: 'item', collection: @items) %>");
-<% if is_last_page?(@items) %>
-  last_page = true;
-  $("#items").append("<%= escape_javascript(render partial: 'end_of_results') %>");
-<% end %>

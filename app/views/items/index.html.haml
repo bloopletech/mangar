@@ -17,13 +17,5 @@
     = render partial: 'search_form'
 
   .clear
-  - if @items.empty? || is_last_page?(@items)
-    :javascript
-      last_page = true;
-  %ul#items
-    = render partial: 'item', collection: @items
-    - if @items.empty?
-      %li.no_results No results found.
-    - elsif is_last_page?(@items)
-      = render partial: 'end_of_results'
+  %ul#items= render partial: 'items'
   .clear

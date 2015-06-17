@@ -7,6 +7,7 @@ class ItemsController < ApplicationController
     @items = @query.results.paginate(page: params[:page], per_page: 100)
 
     @tags = Item.tag_counts_on(:tags).order("name ASC")
+    render partial: 'items' if request.xhr?
   end
 
   def bulk_export
